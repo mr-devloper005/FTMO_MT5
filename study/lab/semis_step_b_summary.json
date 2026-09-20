@@ -1,0 +1,1004 @@
+{
+  "meta": {
+    "totalRows": 2156,
+    "distinctCombos": 2156,
+    "strategies": [
+      "DAILY_SWING_SMA200",
+      "DONCHIAN_BREAKOUT",
+      "EMA_REGIME_LS",
+      "EMA_RSI_PULLBACK",
+      "FOUR_REGIME",
+      "GOLD_MASTER_TREND",
+      "MEAN_REVERSION",
+      "MTF_GREEN_STACK",
+      "REGIME_SWITCH_LS",
+      "SIMPLE_PULLBACK",
+      "TREND_PULLBACK_STACK",
+      "TREND_REGIME",
+      "TREND_REGIME_PULLBACK",
+      "VOL_BREAKOUT_TREND"
+    ],
+    "meaningfulRows": 449,
+    "meaningfulBeatsBH": 17,
+    "lowTradeRows": 1693,
+    "flatBenchmarkRows": 42,
+    "highConcentrationRows": 1016
+  },
+  "per_symbol": {
+    "AMAT": {
+      "totalCombos": 154,
+      "meaningfulCombos": 40,
+      "meaningfulBeatsBH": 5,
+      "beatRatePct": 12.5,
+      "best": {
+        "timeframe": "1h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 8177.41,
+        "vsBHPct": 8.18,
+        "trades": 11,
+        "net": 28070.84,
+        "bh": 19893.43,
+        "topTradeShare": 36.6,
+        "sharpe": 2.213937294036678,
+        "pf": 1.95
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -1332301.24,
+        "trades": 25,
+        "net": 598597.79,
+        "bh": 1930899.03
+      },
+      "tradeCountRange": [
+        0,
+        184
+      ]
+    },
+    "AMD": {
+      "totalCombos": 154,
+      "meaningfulCombos": 27,
+      "meaningfulBeatsBH": 1,
+      "beatRatePct": 3.7,
+      "best": {
+        "timeframe": "30m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 19363.71,
+        "vsBHPct": 19.36,
+        "trades": 10,
+        "net": 6081.35,
+        "bh": -13282.36,
+        "topTradeShare": 26.6,
+        "sharpe": 1.0858774423632624,
+        "pf": 1.61
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -7164030.6,
+        "trades": 21,
+        "net": 9334083.93,
+        "bh": 16498114.53
+      },
+      "tradeCountRange": [
+        0,
+        199
+      ]
+    },
+    "ARM": {
+      "totalCombos": 154,
+      "meaningfulCombos": 32,
+      "meaningfulBeatsBH": 3,
+      "beatRatePct": 9.4,
+      "best": {
+        "timeframe": "1h",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": 72098.67,
+        "vsBHPct": 72.1,
+        "trades": 17,
+        "net": 89980.72,
+        "bh": 17882.05,
+        "topTradeShare": 42.9,
+        "sharpe": 4.550609861064273,
+        "pf": 3.23
+      },
+      "worst": {
+        "timeframe": "5m",
+        "strategy": "MTF_GREEN_STACK",
+        "vsBH": -378835.74,
+        "trades": 192,
+        "net": -385840.54,
+        "bh": -7004.8
+      },
+      "tradeCountRange": [
+        0,
+        192
+      ]
+    },
+    "CRDO": {
+      "totalCombos": 154,
+      "meaningfulCombos": 36,
+      "meaningfulBeatsBH": 0,
+      "beatRatePct": 0.0,
+      "best": {
+        "timeframe": "30m",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -2483.85,
+        "vsBHPct": -2.48,
+        "trades": 13,
+        "net": -11599.32,
+        "bh": -9115.47,
+        "topTradeShare": 65.9,
+        "sharpe": -0.5482220316144014,
+        "pf": 0.67
+      },
+      "worst": {
+        "timeframe": "1d",
+        "strategy": "DONCHIAN_BREAKOUT",
+        "vsBH": -2547849.08,
+        "trades": 14,
+        "net": -1567010.84,
+        "bh": 980838.24
+      },
+      "tradeCountRange": [
+        0,
+        189
+      ]
+    },
+    "DELL": {
+      "totalCombos": 154,
+      "meaningfulCombos": 32,
+      "meaningfulBeatsBH": 0,
+      "beatRatePct": 0.0,
+      "best": {
+        "timeframe": "5m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -8374.02,
+        "vsBHPct": -8.37,
+        "trades": 15,
+        "net": -5629.59,
+        "bh": 2744.43,
+        "topTradeShare": 85.4,
+        "sharpe": -5.7774713874581325,
+        "pf": 0.32
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -6665497.79,
+        "trades": 10,
+        "net": -2895102.53,
+        "bh": 3770395.26
+      },
+      "tradeCountRange": [
+        0,
+        179
+      ]
+    },
+    "LITE": {
+      "totalCombos": 154,
+      "meaningfulCombos": 35,
+      "meaningfulBeatsBH": 2,
+      "beatRatePct": 5.7,
+      "best": {
+        "timeframe": "2h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 99784.97,
+        "vsBHPct": 99.78,
+        "trades": 13,
+        "net": 250112.83,
+        "bh": 150327.86,
+        "topTradeShare": 13.4,
+        "sharpe": 4.860356454921354,
+        "pf": null
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -7190585.89,
+        "trades": 10,
+        "net": -2750858.1,
+        "bh": 4439727.79
+      },
+      "tradeCountRange": [
+        0,
+        198
+      ]
+    },
+    "MRVL": {
+      "totalCombos": 154,
+      "meaningfulCombos": 34,
+      "meaningfulBeatsBH": 0,
+      "beatRatePct": 0.0,
+      "best": {
+        "timeframe": "15m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -3222.56,
+        "vsBHPct": -3.22,
+        "trades": 12,
+        "net": 16165.99,
+        "bh": 19388.55,
+        "topTradeShare": 30.7,
+        "sharpe": 2.8615478032581194,
+        "pf": 2.0
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -2446992.92,
+        "trades": 11,
+        "net": -1087346.54,
+        "bh": 1359646.38
+      },
+      "tradeCountRange": [
+        0,
+        190
+      ]
+    },
+    "MU": {
+      "totalCombos": 154,
+      "meaningfulCombos": 28,
+      "meaningfulBeatsBH": 1,
+      "beatRatePct": 3.6,
+      "best": {
+        "timeframe": "15m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 4790.84,
+        "vsBHPct": 4.79,
+        "trades": 11,
+        "net": 16666.99,
+        "bh": 11876.15,
+        "topTradeShare": 33.4,
+        "sharpe": 4.51014949526972,
+        "pf": 2.85
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -1662254.42,
+        "trades": 45,
+        "net": 1568444.75,
+        "bh": 3230699.17
+      },
+      "tradeCountRange": [
+        0,
+        181
+      ]
+    },
+    "NBIS": {
+      "totalCombos": 154,
+      "meaningfulCombos": 38,
+      "meaningfulBeatsBH": 1,
+      "beatRatePct": 2.6,
+      "best": {
+        "timeframe": "1h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 74317.91,
+        "vsBHPct": 74.32,
+        "trades": 12,
+        "net": 126931.41,
+        "bh": 52613.5,
+        "topTradeShare": 31.5,
+        "sharpe": 5.814939076394356,
+        "pf": 14.84
+      },
+      "worst": {
+        "timeframe": "1d",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -2823150.05,
+        "trades": 32,
+        "net": -1827300.07,
+        "bh": 995849.98
+      },
+      "tradeCountRange": [
+        0,
+        209
+      ]
+    },
+    "NVDA": {
+      "totalCombos": 154,
+      "meaningfulCombos": 41,
+      "meaningfulBeatsBH": 0,
+      "beatRatePct": 0.0,
+      "best": {
+        "timeframe": "2h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -16732.21,
+        "vsBHPct": -16.74,
+        "trades": 12,
+        "net": -1357.0,
+        "bh": 15375.21,
+        "topTradeShare": 47.3,
+        "sharpe": 0.16974606845398146,
+        "pf": 0.93
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -16228961.44,
+        "trades": 17,
+        "net": 22651986.69,
+        "bh": 38880948.13
+      },
+      "tradeCountRange": [
+        0,
+        177
+      ]
+    },
+    "SMH": {
+      "totalCombos": 154,
+      "meaningfulCombos": 34,
+      "meaningfulBeatsBH": 2,
+      "beatRatePct": 5.9,
+      "best": {
+        "timeframe": "1h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 12242.53,
+        "vsBHPct": 12.24,
+        "trades": 11,
+        "net": 24950.71,
+        "bh": 12708.18,
+        "topTradeShare": 35.6,
+        "sharpe": 3.211094598153667,
+        "pf": 10.77
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "DONCHIAN_BREAKOUT",
+        "vsBH": -1270851.75,
+        "trades": 11,
+        "net": 663510.81,
+        "bh": 1934362.56
+      },
+      "tradeCountRange": [
+        0,
+        175
+      ]
+    },
+    "SNDK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 20,
+      "meaningfulBeatsBH": 1,
+      "beatRatePct": 5.0,
+      "best": {
+        "timeframe": "5m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 24232.24,
+        "vsBHPct": 24.23,
+        "trades": 14,
+        "net": 17230.73,
+        "bh": -7001.51,
+        "topTradeShare": 19.2,
+        "sharpe": 15.132327325606044,
+        "pf": 17.53
+      },
+      "worst": {
+        "timeframe": "4h",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -2782328.35,
+        "trades": 18,
+        "net": 380183.99,
+        "bh": 3162512.34
+      },
+      "tradeCountRange": [
+        0,
+        193
+      ]
+    },
+    "TSM": {
+      "totalCombos": 154,
+      "meaningfulCombos": 25,
+      "meaningfulBeatsBH": 0,
+      "beatRatePct": 0.0,
+      "best": {
+        "timeframe": "15m",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -12381.49,
+        "vsBHPct": -12.38,
+        "trades": 10,
+        "net": -7860.38,
+        "bh": 4521.11,
+        "topTradeShare": 89.0,
+        "sharpe": -4.240870833442545,
+        "pf": 0.17
+      },
+      "worst": {
+        "timeframe": "1w",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": -3033836.15,
+        "trades": 10,
+        "net": -1340316.46,
+        "bh": 1693519.69
+      },
+      "tradeCountRange": [
+        0,
+        185
+      ]
+    },
+    "WDC": {
+      "totalCombos": 154,
+      "meaningfulCombos": 27,
+      "meaningfulBeatsBH": 1,
+      "beatRatePct": 3.7,
+      "best": {
+        "timeframe": "1h",
+        "strategy": "MEAN_REVERSION",
+        "vsBH": 97447.33,
+        "vsBHPct": 97.45,
+        "trades": 12,
+        "net": 115909.93,
+        "bh": 18462.6,
+        "topTradeShare": 19.7,
+        "sharpe": 5.953464739406212,
+        "pf": 15.54
+      },
+      "worst": {
+        "timeframe": "6h",
+        "strategy": "EMA_REGIME_LS",
+        "vsBH": -1115541.15,
+        "trades": 16,
+        "net": -424111.7,
+        "bh": 691429.45
+      },
+      "tradeCountRange": [
+        0,
+        180
+      ]
+    }
+  },
+  "per_timeframe": {
+    "5m": {
+      "totalCombos": 196,
+      "meaningfulCombos": 55,
+      "beatRatePctOfMeaningful": 3.6,
+      "beatRatePctOfAll": 32.1,
+      "avgVsBHPct": -26.35,
+      "avgTrades": 20.0,
+      "avgSharpe": -8.583,
+      "avgTopTradeShare": 38.4,
+      "flatBenchmarkRows": 28
+    },
+    "15m": {
+      "totalCombos": 196,
+      "meaningfulCombos": 36,
+      "beatRatePctOfMeaningful": 5.6,
+      "beatRatePctOfAll": 14.3,
+      "avgVsBHPct": -23.0,
+      "avgTrades": 4.9,
+      "avgSharpe": -3.119,
+      "avgTopTradeShare": 32.9,
+      "flatBenchmarkRows": 14
+    },
+    "30m": {
+      "totalCombos": 196,
+      "meaningfulCombos": 33,
+      "beatRatePctOfMeaningful": 15.2,
+      "beatRatePctOfAll": 50.0,
+      "avgVsBHPct": -5.14,
+      "avgTrades": 4.9,
+      "avgSharpe": -2.424,
+      "avgTopTradeShare": 34.3,
+      "flatBenchmarkRows": 0
+    },
+    "1h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 55,
+      "beatRatePctOfMeaningful": 12.7,
+      "beatRatePctOfAll": 5.6,
+      "avgVsBHPct": -64.76,
+      "avgTrades": 6.8,
+      "avgSharpe": -0.677,
+      "avgTopTradeShare": 36.8,
+      "flatBenchmarkRows": 0
+    },
+    "2h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 49,
+      "beatRatePctOfMeaningful": 2.0,
+      "beatRatePctOfAll": 4.6,
+      "avgVsBHPct": -111.99,
+      "avgTrades": 5.8,
+      "avgSharpe": 0.625,
+      "avgTopTradeShare": 46.9,
+      "flatBenchmarkRows": 0
+    },
+    "4h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 47,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 0.5,
+      "avgVsBHPct": -393.32,
+      "avgTrades": 5.9,
+      "avgSharpe": 1.118,
+      "avgTopTradeShare": 48.2,
+      "flatBenchmarkRows": 0
+    },
+    "6h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 41,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 0.5,
+      "avgVsBHPct": -444.14,
+      "avgTrades": 5.5,
+      "avgSharpe": 1.036,
+      "avgTopTradeShare": 49.3,
+      "flatBenchmarkRows": 0
+    },
+    "8h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 46,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 0.5,
+      "avgVsBHPct": -453.19,
+      "avgTrades": 5.6,
+      "avgSharpe": 0.842,
+      "avgTopTradeShare": 49.1,
+      "flatBenchmarkRows": 0
+    },
+    "12h": {
+      "totalCombos": 196,
+      "meaningfulCombos": 20,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 0.5,
+      "avgVsBHPct": -513.88,
+      "avgTrades": 3.3,
+      "avgSharpe": 1.19,
+      "avgTopTradeShare": 51.9,
+      "flatBenchmarkRows": 0
+    },
+    "1d": {
+      "totalCombos": 196,
+      "meaningfulCombos": 40,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 4.6,
+      "avgVsBHPct": -580.21,
+      "avgTrades": 4.8,
+      "avgSharpe": 0.611,
+      "avgTopTradeShare": 53.9,
+      "flatBenchmarkRows": 0
+    },
+    "1w": {
+      "totalCombos": 196,
+      "meaningfulCombos": 27,
+      "beatRatePctOfMeaningful": 0.0,
+      "beatRatePctOfAll": 0.5,
+      "avgVsBHPct": -3749.07,
+      "avgTrades": 4.0,
+      "avgSharpe": 0.323,
+      "avgTopTradeShare": 46.4,
+      "flatBenchmarkRows": 0
+    }
+  },
+  "per_strategy": {
+    "DAILY_SWING_SMA200": {
+      "totalCombos": 154,
+      "meaningfulCombos": 6,
+      "beatRatePctOfMeaningful": 0.0,
+      "avgVsBHPct": -639.53,
+      "avgTopTradeShare": 46.2,
+      "pctHighConcentration(>=50)": 48.7,
+      "avgTrades": 3.4
+    },
+    "DONCHIAN_BREAKOUT": {
+      "totalCombos": 154,
+      "meaningfulCombos": 70,
+      "beatRatePctOfMeaningful": 0.0,
+      "avgVsBHPct": -421.23,
+      "avgTopTradeShare": 73.6,
+      "pctHighConcentration(>=50)": 87.7,
+      "avgTrades": 9.0
+    },
+    "EMA_REGIME_LS": {
+      "totalCombos": 154,
+      "meaningfulCombos": 145,
+      "beatRatePctOfMeaningful": 1.4,
+      "avgVsBHPct": -556.4,
+      "avgTopTradeShare": 68.3,
+      "pctHighConcentration(>=50)": 79.2,
+      "avgTrades": 25.3
+    },
+    "EMA_RSI_PULLBACK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -801.46,
+      "avgTopTradeShare": 0.0,
+      "pctHighConcentration(>=50)": 0.0,
+      "avgTrades": 0.0
+    },
+    "FOUR_REGIME": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -803.78,
+      "avgTopTradeShare": 1.9,
+      "pctHighConcentration(>=50)": 1.9,
+      "avgTrades": 0.2
+    },
+    "GOLD_MASTER_TREND": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -801.46,
+      "avgTopTradeShare": 0.0,
+      "pctHighConcentration(>=50)": 0.0,
+      "avgTrades": 0.0
+    },
+    "MEAN_REVERSION": {
+      "totalCombos": 154,
+      "meaningfulCombos": 84,
+      "beatRatePctOfMeaningful": 14.3,
+      "avgVsBHPct": -1286.62,
+      "avgTopTradeShare": 50.9,
+      "pctHighConcentration(>=50)": 42.2,
+      "avgTrades": 9.6
+    },
+    "MTF_GREEN_STACK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 12,
+      "beatRatePctOfMeaningful": 0.0,
+      "avgVsBHPct": -825.19,
+      "avgTopTradeShare": 5.7,
+      "pctHighConcentration(>=50)": 6.5,
+      "avgTrades": 17.1
+    },
+    "REGIME_SWITCH_LS": {
+      "totalCombos": 154,
+      "meaningfulCombos": 60,
+      "beatRatePctOfMeaningful": 3.3,
+      "avgVsBHPct": -220.54,
+      "avgTopTradeShare": 77.7,
+      "pctHighConcentration(>=50)": 83.8,
+      "avgTrades": 8.2
+    },
+    "SIMPLE_PULLBACK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -181.58,
+      "avgTopTradeShare": 66.4,
+      "pctHighConcentration(>=50)": 66.9,
+      "avgTrades": 1.9
+    },
+    "TREND_PULLBACK_STACK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -214.86,
+      "avgTopTradeShare": 70.3,
+      "pctHighConcentration(>=50)": 70.8,
+      "avgTrades": 1.8
+    },
+    "TREND_REGIME": {
+      "totalCombos": 154,
+      "meaningfulCombos": 72,
+      "beatRatePctOfMeaningful": 1.4,
+      "avgVsBHPct": -312.57,
+      "avgTopTradeShare": 79.0,
+      "pctHighConcentration(>=50)": 88.3,
+      "avgTrades": 10.7
+    },
+    "TREND_REGIME_PULLBACK": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -801.5,
+      "avgTopTradeShare": 0.0,
+      "pctHighConcentration(>=50)": 0.0,
+      "avgTrades": 0.0
+    },
+    "VOL_BREAKOUT_TREND": {
+      "totalCombos": 154,
+      "meaningfulCombos": 0,
+      "beatRatePctOfMeaningful": null,
+      "avgVsBHPct": -234.25,
+      "avgTopTradeShare": 81.0,
+      "pctHighConcentration(>=50)": 83.8,
+      "avgTrades": 3.7
+    }
+  },
+  "topOutliersByVsBH": [
+    {
+      "symbol": "ARM",
+      "timeframe": "2h",
+      "strategy": "DONCHIAN_BREAKOUT",
+      "vsBH": 123399.7,
+      "vsBHPct": 123.4,
+      "trades": 4,
+      "bh": 95565.52,
+      "topTradeShare": 67.6,
+      "beatsBH": true
+    },
+    {
+      "symbol": "LITE",
+      "timeframe": "2h",
+      "strategy": "MEAN_REVERSION",
+      "vsBH": 99784.97,
+      "vsBHPct": 99.78,
+      "trades": 13,
+      "bh": 150327.86,
+      "topTradeShare": 13.4,
+      "beatsBH": true
+    },
+    {
+      "symbol": "WDC",
+      "timeframe": "1h",
+      "strategy": "MEAN_REVERSION",
+      "vsBH": 97447.33,
+      "vsBHPct": 97.45,
+      "trades": 12,
+      "bh": 18462.6,
+      "topTradeShare": 19.7,
+      "beatsBH": true
+    },
+    {
+      "symbol": "NBIS",
+      "timeframe": "1h",
+      "strategy": "MEAN_REVERSION",
+      "vsBH": 74317.91,
+      "vsBHPct": 74.32,
+      "trades": 12,
+      "bh": 52613.5,
+      "topTradeShare": 31.5,
+      "beatsBH": true
+    },
+    {
+      "symbol": "ARM",
+      "timeframe": "1h",
+      "strategy": "EMA_REGIME_LS",
+      "vsBH": 72098.67,
+      "vsBHPct": 72.1,
+      "trades": 17,
+      "bh": 17882.05,
+      "topTradeShare": 42.9,
+      "beatsBH": true
+    },
+    {
+      "symbol": "LITE",
+      "timeframe": "1h",
+      "strategy": "MEAN_REVERSION",
+      "vsBH": 52273.11,
+      "vsBHPct": 52.28,
+      "trades": 10,
+      "bh": 11553.75,
+      "topTradeShare": 18.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "ARM",
+      "timeframe": "4h",
+      "strategy": "DONCHIAN_BREAKOUT",
+      "vsBH": 38840.66,
+      "vsBHPct": 38.84,
+      "trades": 6,
+      "bh": 68626.25,
+      "topTradeShare": 70.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 37688.09,
+      "vsBHPct": 37.69,
+      "trades": 1,
+      "bh": -27730.35,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "ARM",
+      "timeframe": "2h",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 32648.47,
+      "vsBHPct": 32.64,
+      "trades": 2,
+      "bh": 95565.52,
+      "topTradeShare": 79.2,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "EMA_RSI_PULLBACK",
+      "vsBH": 27730.35,
+      "vsBHPct": 27.73,
+      "trades": 0,
+      "bh": -27730.35,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "GOLD_MASTER_TREND",
+      "vsBH": 27730.35,
+      "vsBHPct": 27.73,
+      "trades": 0,
+      "bh": -27730.35,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "MTF_GREEN_STACK",
+      "vsBH": 27730.35,
+      "vsBHPct": 27.73,
+      "trades": 0,
+      "bh": -27730.35,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "TREND_REGIME_PULLBACK",
+      "vsBH": 27730.35,
+      "vsBHPct": 27.73,
+      "trades": 0,
+      "bh": -27730.35,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "ARM",
+      "timeframe": "30m",
+      "strategy": "EMA_RSI_PULLBACK",
+      "vsBH": 27240.4,
+      "vsBHPct": 27.24,
+      "trades": 0,
+      "bh": -27240.4,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "ARM",
+      "timeframe": "30m",
+      "strategy": "FOUR_REGIME",
+      "vsBH": 27240.4,
+      "vsBHPct": 27.24,
+      "trades": 0,
+      "bh": -27240.4,
+      "topTradeShare": 0.0,
+      "beatsBH": true
+    }
+  ],
+  "topOutliersByConcentration_amongBeaters": [
+    {
+      "symbol": "AMAT",
+      "timeframe": "5m",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 12616.92,
+      "trades": 1,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "5m",
+      "strategy": "TREND_PULLBACK_STACK",
+      "vsBH": 9615.92,
+      "trades": 1,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "15m",
+      "strategy": "DONCHIAN_BREAKOUT",
+      "vsBH": 1766.97,
+      "trades": 5,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "15m",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 7069.92,
+      "trades": 2,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "15m",
+      "strategy": "TREND_PULLBACK_STACK",
+      "vsBH": 3546.4,
+      "trades": 2,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "15m",
+      "strategy": "VOL_BREAKOUT_TREND",
+      "vsBH": 3887.53,
+      "trades": 4,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "DONCHIAN_BREAKOUT",
+      "vsBH": 17293.5,
+      "trades": 7,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "REGIME_SWITCH_LS",
+      "vsBH": 6464.21,
+      "trades": 13,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 37688.09,
+      "trades": 1,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "TREND_PULLBACK_STACK",
+      "vsBH": 17702.56,
+      "trades": 3,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "30m",
+      "strategy": "VOL_BREAKOUT_TREND",
+      "vsBH": 11277.63,
+      "trades": 3,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "2h",
+      "strategy": "DAILY_SWING_SMA200",
+      "vsBH": 6803.05,
+      "trades": 2,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "12h",
+      "strategy": "DAILY_SWING_SMA200",
+      "vsBH": 1650.92,
+      "trades": 2,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "1d",
+      "strategy": "DAILY_SWING_SMA200",
+      "vsBH": 9225.4,
+      "trades": 4,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    },
+    {
+      "symbol": "AMAT",
+      "timeframe": "1d",
+      "strategy": "SIMPLE_PULLBACK",
+      "vsBH": 3484.63,
+      "trades": 2,
+      "topTradeShare": 100.0,
+      "beatsBH": true
+    }
+  ]
+}

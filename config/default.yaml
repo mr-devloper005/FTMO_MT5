@@ -1,0 +1,105 @@
+# ============================================================================
+# FTMO MT5 Trading System - 2-Step Challenge Configuration
+# Account: $100,000 USD
+# ============================================================================
+# IMPORTANT: MT5 credentials must be set via environment variables or .env file
+#   MT5_LOGIN=<your_account_number>
+#   MT5_SERVER=<your_server>
+#   MT5_PASSWORD=<your_password>
+# ============================================================================
+
+ftmo:
+  # ---- Account Parameters ----
+  initial_capital: 100000.00
+
+  # Challenge type: TWO_STEP or ONE_STEP
+  challenge_type: "TWO_STEP"
+
+  # ---- Phase 1 Targets ----
+  # Profit target: 10% of initial capital ($10,000)
+  profit_target_pct: 10.0
+
+  # ---- Loss Limits (FTMO 2-Step Rules) ----
+  # Maximum Daily Loss: 5% of initial capital ($5,000)
+  # Formula: MDL_limit = Balance_at_midnight_Prague - (5% * $100,000)
+  # Breach condition: equity <= MDL_limit at ANY point = INSTANT VIOLATION
+  mdl_pct: 5.0
+
+  # Maximum Overall Loss: 10% of initial capital ($10,000)
+  # 2-Step is STATIC: equity cannot drop below $90,000 at any time
+  ml_pct: 10.0
+
+  # ---- Risk State Thresholds ----
+  # These control the graduated risk response (as % of MDL limit consumed)
+  #   NORMAL  -> CAUTION:  at 60% of daily limit used ($3,000 daily loss)
+  #   CAUTION -> RISK_OFF: at 80% of daily limit used ($4,000 daily loss)
+  #   RISK_OFF -> HALT:    at 90% of daily limit used ($4,500 daily loss)
+  # The remaining 10% ($500) is the safety buffer for slippage/spread widening
+  caution_threshold_pct: 60.0
+  risk_off_threshold_pct: 80.0
+
+  # ---- Pre-Midnight Safety ----
+  # Minutes before Prague midnight to evaluate position flattening
+  # This prevents the overnight position trap (FTMO #1 failure mode)
+  pre_midnight_flatten_minutes: 30
+
+  # ---- Order Identification ----
+  magic: 234000
+
+  # ---- Position Limits ----
+  max_concurrent_positions: 5
+  max_lots_per_symbol: 5.0
+
+mt5:
+  # Credentials loaded from environment variables (never hardcode here)
+  # Set via .env file or environment:
+  #   MT5_LOGIN, MT5_SERVER, MT5_PASSWORD
+  login: 0
+  server: ""
+  password: ""
+
+  # ---- Trading Instruments ----
+  # FTMO x OANDA uses .sim suffix; standard FTMO does not
+  # Adjust based on your specific FTMO account type
+  symbols:
+    - "EURUSD"
+    - "GBPUSD"
+    - "USDJPY"
+    - "XAUUSD"
+    - "US30"
+
+system:
+  # Market data tick processing interval (milliseconds)
+  tick_interval_ms: 100
+
+  # Agent heartbeat monitoring interval (seconds)
+  heartbeat_interval_s: 5
+
+  # Max consecutive agent restarts before system HALT
+  max_agent_restarts: 3
+
+  # Logging level
+  log_level: "INFO"
+
+observability:
+  # OpenTelemetry OTLP gRPC endpoint (leave empty to disable)
+  otel_endpoint: ~
+
+  # Health check HTTP server port
+  # Endpoints: /health (liveness), /ready (readiness), /metrics (Prometheus)
+  metrics_port: 8080
+
+ml:
+  # Meta-labeler acceptance threshold (0.0-1.0)
+  # Signals with P(correct) below this are rejected
+  meta_label_threshold: 0.60
+
+  # Model promotion gates (from PRD)
+  pbo_threshold: 0.30        # PBO < 0.30 required
+  dsr_threshold: 0.95        # DSR > 0.95 required
+  wfo_oos_sharpe: 0.50       # WFO OOS Sharpe > 0.50 required
+
+  # Drift detection
+  drift_detection_enabled: true
+  psi_alert_threshold: 0.15  # Alert at PSI > 0.15
+  psi_retrain_threshold: 0.20  # Retrain at PSI > 0.20

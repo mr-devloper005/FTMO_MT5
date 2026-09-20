@@ -1,0 +1,37 @@
+
+  /NQ 1h   11,352 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA150 band 0.0%     net $   128,040  vs B&H $   -71,530
+    best on the first 70%       : EMA100 long trail 2.0       net $    85,282  vs B&H $   -35,998
+    ...that one on the last 30% :                             net $    37,670  vs B&H $   -40,520
+
+  /NQ 2h   5,933 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA100 band 0.0%     net $    96,010  vs B&H $  -103,560
+    best on the first 70%       : regime SMA100 band 0.0%     net $    68,335  vs B&H $   -51,085
+    ...that one on the last 30% :                             net $    42,445  vs B&H $   -37,690
+
+  /NQ 4h   3,078 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA250 band 2.0%     net $   120,705  vs B&H $   -78,865
+    best on the first 70%       : regime SMA300 band 2.0%     net $    63,890  vs B&H $   -56,910
+    ...that one on the last 30% :                             net $    65,510  vs B&H $   -13,250
+
+  /NQ 6h   2,094 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA250 band 0.0%     net $   123,095  vs B&H $   -76,475
+    best on the first 70%       : regime SMA250 band 2.0%     net $    76,650  vs B&H $   -44,855
+    ...that one on the last 30% :                             net $    28,010  vs B&H $   -50,045
+
+  /NQ 8h   1,605 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA300 band 0.5%     net $   149,635  vs B&H $   -49,935
+    best on the first 70%       : regime SMA100 band 2.0%     net $    92,895  vs B&H $   -26,160
+    ...that one on the last 30% :                             net $    44,645  vs B&H $   -35,845
+
+  /NQ 12h   1,108 bars   55 variations   B&H $199,570
+    best over the whole history : regime SMA300 band 2.0%     net $   132,035  vs B&H $   -67,535
+    best on the first 70%       : regime SMA300 band 0.0%     net $    92,765  vs B&H $   -26,290
+    ...that one on the last 30% :                             net $      -355  vs B&H $   -80,845
+
+  /NQ 1d   6,550 bars   55 variations   B&H $516,995
+    best over the whole history : regime SMA200 band 1.0%     net $   522,595  vs B&H $     5,600  BEAT
+    best on the first 70%       : regime SMA250 band 0.5%     net $    90,955  vs B&H $    25,785  BEAT
+    ...that one on the last 30% :                             net $   346,585  vs B&H $  -105,375
+
+  385 variations run · 1 beat buy & hold over the full history

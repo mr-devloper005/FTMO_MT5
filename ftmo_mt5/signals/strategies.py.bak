@@ -1,0 +1,379 @@
+"""Pluggable strategies.
+
+A strategy is two methods:
+
+    prepare(candles, params) -> state      computed once over the whole series
+    evaluate(candles, i, state) -> Verdict decided for bar i alone
+
+`prepare` exists so indicators are computed once per run instead of once per
+bar, and it is safe precisely because every indicator series is index-aligned:
+`state` at index i only ever contains values derived from candles 0..i.
+
+Adding a strategy means writing a class with those two methods and registering
+it in `STRATEGIES`. The engine, the backtest and the panel all pick it up with
+no further changes.
+"""
+
+__all__ = ["Strategy", "Verdict", "STRATEGIES", "get_strategy", "list_strategies"]
+
+from dataclasses import dataclass, field
+from typing import Any, Optional, Protocol, Sequence
+
+from ftmo_mt5.marketdata.base import Candle
+from ftmo_mt5.signals import indicators as ind
+from ftmo_mt5.signals import patterns as pat
+
+
+@dataclass
+class Verdict:
+    """A strategy's decision at one bar."""
+
+    signal: str = "FLAT"                       # BUY | SELL | FLAT
+    reasons: list[str] = field(default_factory=list)
+    indicators: dict[str, Any] = field(default_factory=dict)
+
+
+class Strategy(Protocol):
+    name: str
+
+    def describe(self, params: dict) -> dict:
+        """Name, description and the parameters this strategy accepts."""
+
+    def prepare(self, candles: Sequence[Candle], params: dict) -> dict:
+        """Precompute index-aligned indicator series for the whole run."""
+
+    def evaluate(self, candles: Sequence[Candle], i: int, state: dict) -> Verdict:
+        """Decide bar `i` using only state derived from candles 0..i."""
+
+
+def _param(params: dict, key: str, default, cast=float):
+    """Read one parameter, falling back to the default on anything unusable."""
+    if not params or key not in params or params[key] in (None, ""):
+        return default
+    try:
+        return cast(params[key])
+    except (TypeError, ValueError):
+        return default
+
+
+class EmaRsiPatternStrategy:
+    """Trend alignment (EMA), momentum confirmation (RSI), candlestick trigger.
+
+    BUY when price is above the fast EMA, the fast EMA is above the slow EMA,
+    RSI is above its threshold, and a bullish pattern prints on the bar.
+    SELL is the mirror image. Anything else is FLAT.
+
+    These are the initial default rules, not a fixed definition of the system:
+    every period, threshold and the pattern requirement itself is a parameter.
+    """
+
+    name = "EMA_RSI_PATTERN"
+
+    DEFAULTS = {
+        "fast_period": 20,
+        "slow_period": 50,
+        "rsi_period": 14,
+        "rsi_buy_above": 50.0,
+        "rsi_sell_below": 50.0,
+        "atr_period": 14,
+        "require_pattern": True,
+    }
+
+    def describe(self, params: Optional[dict] = None) -> dict:
+        merged = {**self.DEFAULTS, **(params or {})}
+        return {
+            "name": self.name,
+            "label": "EMA + RSI + Candlestick pattern",
+            "description": ("Trend from a fast/slow EMA pair, momentum from RSI, "
+                            "entry timed by a candlestick pattern."),
+            "parameters": [
+                {"key": "fast_period", "label": "Fast EMA", "type": "int",
+                 "default": self.DEFAULTS["fast_period"], "value": merged["fast_period"]},
+                {"key": "slow_period", "label": "Slow EMA", "type": "int",
+                 "default": self.DEFAULTS["slow_period"], "value": merged["slow_period"]},
+                {"key": "rsi_period", "label": "RSI period", "type": "int",
+                 "default": self.DEFAULTS["rsi_period"], "value": merged["rsi_period"]},
+                {"key": "rsi_buy_above", "label": "RSI buy above", "type": "float",
+                 "default": self.DEFAULTS["rsi_buy_above"], "value": merged["rsi_buy_above"]},
+                {"key": "rsi_sell_below", "label": "RSI sell below", "type": "float",
+                 "default": self.DEFAULTS["rsi_sell_below"], "value": merged["rsi_sell_below"]},
+                {"key": "atr_period", "label": "ATR period", "type": "int",
+                 "default": self.DEFAULTS["atr_period"], "value": merged["atr_period"]},
+                {"key": "require_pattern", "label": "Require candlestick pattern",
+                 "type": "bool", "default": True, "value": bool(merged["require_pattern"])},
+            ],
+        }
+
+    def prepare(self, candles: Sequence[Candle], params: dict) -> dict:
+        closes = [c.close for c in candles]
+        fast = int(_param(params, "fast_period", self.DEFAULTS["fast_period"], int))
+        slow = int(_param(params, "slow_period", self.DEFAULTS["slow_period"], int))
+        rsi_p = int(_param(params, "rsi_period", self.DEFAULTS["rsi_period"], int))
+        atr_p = int(_param(params, "atr_period", self.DEFAULTS["atr_period"], int))
+
+        require = params.get("require_pattern", self.DEFAULTS["require_pattern"])
+        if isinstance(require, str):
+            require = require.strip().lower() not in ("0", "false", "no", "")
+
+        return {
+            "ema_fast": ind.ema(closes, fast),
+            "ema_slow": ind.ema(closes, slow),
+            "rsi": ind.rsi(closes, rsi_p),
+            "atr": ind.atr(candles, atr_p),
+            "fast_period": fast,
+            "slow_period": slow,
+            "rsi_buy_above": _param(params, "rsi_buy_above", self.DEFAULTS["rsi_buy_above"]),
+            "rsi_sell_below": _param(params, "rsi_sell_below", self.DEFAULTS["rsi_sell_below"]),
+            "require_pattern": bool(require),
+        }
+
+    def evaluate(self, candles: Sequence[Candle], i: int, state: dict) -> Verdict:
+        fast = state["ema_fast"][i]
+        slow = state["ema_slow"][i]
+        rsi_now = state["rsi"][i]
+        atr_now = state["atr"][i]
+
+        # Not enough history yet — no opinion, and importantly no default BUY.
+        if fast is None or slow is None or rsi_now is None:
+            return Verdict("FLAT", ["Insufficient history for indicators"])
+
+        close = candles[i].close
+        found = pat.detect_all(candles, i)
+        bullish = [p for p in found if p in pat.BULLISH]
+        bearish = [p for p in found if p in pat.BEARISH]
+
+        readings = {
+            "ema_fast": fast, "ema_slow": slow, "rsi": rsi_now,
+            "atr": atr_now, "patterns": found,
+        }
+
+        want_pattern = state["require_pattern"]
+        buy_above = state["rsi_buy_above"]
+        sell_below = state["rsi_sell_below"]
+
+        long_conditions = [
+            (close > fast, f"Price {close:.2f} above EMA{state['fast_period']} {fast:.2f}"),
+            (fast > slow, f"EMA{state['fast_period']} above EMA{state['slow_period']}"),
+            (rsi_now > buy_above, f"RSI {rsi_now:.1f} above {buy_above:g}"),
+            (bool(bullish) or not want_pattern,
+             f"Bullish pattern: {', '.join(bullish)}" if bullish else "Pattern not required"),
+        ]
+        if all(ok for ok, _ in long_conditions):
+            return Verdict("BUY", [why for _, why in long_conditions], readings)
+
+        short_conditions = [
+            (close < fast, f"Price {close:.2f} below EMA{state['fast_period']} {fast:.2f}"),
+            (fast < slow, f"EMA{state['fast_period']} below EMA{state['slow_period']}"),
+            (rsi_now < sell_below, f"RSI {rsi_now:.1f} below {sell_below:g}"),
+            (bool(bearish) or not want_pattern,
+             f"Bearish pattern: {', '.join(bearish)}" if bearish else "Pattern not required"),
+        ]
+        if all(ok for ok, _ in short_conditions):
+            return Verdict("SELL", [why for _, why in short_conditions], readings)
+
+        return Verdict("FLAT", [], readings)
+
+
+STRATEGIES: dict[str, Strategy] = {
+    EmaRsiPatternStrategy.name: EmaRsiPatternStrategy(),
+}
+
+
+def get_strategy(name: str) -> Strategy:
+    key = (name or "EMA_RSI_PATTERN").strip().upper()
+    strategy = STRATEGIES.get(key)
+    if strategy is None:
+        raise ValueError(
+            f"Unknown strategy '{name}'. Available: {', '.join(sorted(STRATEGIES))}."
+        )
+    return strategy
+
+
+def list_strategies() -> list[dict]:
+    return [s.describe({}) for s in STRATEGIES.values()]
+
+
+class DonchianBreakoutStrategy:
+    """Buy a new N-bar high, leave on a new M-bar low.
+
+    The oldest systematic trend rule there is — the one the Turtles traded. It
+    holds no opinion about value: a market making new highs is assumed to keep
+    doing so until it makes a new low. Nothing here is symmetric with the exit,
+    because a trend takes longer to build than to break.
+    """
+
+    name = "DONCHIAN_BREAKOUT"
+    DEFAULTS = {"entry_lookback": 55, "exit_lookback": 20}
+
+    def describe(self, params: Optional[dict] = None) -> dict:
+        merged = {**self.DEFAULTS, **(params or {})}
+        return {
+            "name": self.name,
+            "label": "Donchian breakout (trend following)",
+            "description": ("Enter on a new high of the entry window, exit on a "
+                            "new low of the shorter exit window."),
+            "parameters": [
+                {"key": "entry_lookback", "label": "Entry high (bars)", "type": "int",
+                 "default": 55, "value": merged["entry_lookback"]},
+                {"key": "exit_lookback", "label": "Exit low (bars)", "type": "int",
+                 "default": 20, "value": merged["exit_lookback"]},
+            ],
+        }
+
+    def prepare(self, candles: Sequence[Candle], params: dict) -> dict:
+        entry = int(_param(params, "entry_lookback", 55, int))
+        exit_n = int(_param(params, "exit_lookback", 20, int))
+        highs = [c.high for c in candles]
+        lows = [c.low for c in candles]
+
+        # Rolling extremes of the bars BEFORE the current one: a bar cannot
+        # break out above a level its own high helped set.
+        top: list[Optional[float]] = [None] * len(candles)
+        bottom: list[Optional[float]] = [None] * len(candles)
+        for i in range(len(candles)):
+            if i >= entry:
+                top[i] = max(highs[i - entry:i])
+            if i >= exit_n:
+                bottom[i] = min(lows[i - exit_n:i])
+
+        return {"top": top, "bottom": bottom, "entry": entry, "exit": exit_n}
+
+    def evaluate(self, candles: Sequence[Candle], i: int, state: dict) -> Verdict:
+        top, bottom = state["top"][i], state["bottom"][i]
+        if top is None:
+            return Verdict("FLAT", ["Not enough history for the breakout window"])
+
+        close = candles[i].close
+        readings = {"entry_high": top, "exit_low": bottom}
+
+        if close > top:
+            return Verdict("BUY", [
+                f"Close {close:.2f} above the {state['entry']}-bar high {top:.2f}"
+            ], readings)
+        if bottom is not None and close < bottom:
+            return Verdict("SELL", [
+                f"Close {close:.2f} below the {state['exit']}-bar low {bottom:.2f}"
+            ], readings)
+        return Verdict("FLAT", [], readings)
+
+
+class TrendRegimeStrategy:
+    """Hold the market while it is above its long average; stand aside below it.
+
+    Not a trading strategy so much as a participation rule. It never tries to
+    time an entry — it owns the market almost all the time and exists purely to
+    be absent during sustained declines. Its case against buy-and-hold is made
+    in drawdown, not in return.
+    """
+
+    name = "TREND_REGIME"
+    DEFAULTS = {"regime_period": 200, "buffer_pct": 0.0}
+
+    def describe(self, params: Optional[dict] = None) -> dict:
+        merged = {**self.DEFAULTS, **(params or {})}
+        return {
+            "name": self.name,
+            "label": "Trend regime filter (long or flat)",
+            "description": ("Long while price holds above its long moving average, "
+                            "flat below it. Designed to sidestep bear markets."),
+            "parameters": [
+                {"key": "regime_period", "label": "Regime average (bars)", "type": "int",
+                 "default": 200, "value": merged["regime_period"]},
+                {"key": "buffer_pct", "label": "Re-entry buffer %", "type": "float",
+                 "default": 0.0, "value": merged["buffer_pct"]},
+            ],
+        }
+
+    def prepare(self, candles: Sequence[Candle], params: dict) -> dict:
+        period = int(_param(params, "regime_period", 200, int))
+        buffer_pct = _param(params, "buffer_pct", 0.0)
+        return {
+            "sma": ind.sma([c.close for c in candles], period),
+            "period": period,
+            "buffer": buffer_pct / 100.0,
+        }
+
+    def evaluate(self, candles: Sequence[Candle], i: int, state: dict) -> Verdict:
+        line = state["sma"][i]
+        if line is None:
+            return Verdict("FLAT", ["Not enough history for the regime average"])
+
+        close = candles[i].close
+        readings = {"sma": line, "distance_pct": (close / line - 1) * 100}
+        # A buffer stops the position flipping on every wobble across the line.
+        up = line * (1 + state["buffer"])
+        down = line * (1 - state["buffer"])
+
+        if close > up:
+            return Verdict("BUY",
+                           [f"Close {close:.2f} above the {state['period']}-bar average {line:.2f}"],
+                           readings)
+        if close < down:
+            return Verdict("SELL",
+                           [f"Close {close:.2f} below the {state['period']}-bar average {line:.2f}"],
+                           readings)
+        return Verdict("FLAT", [], readings)
+
+
+class DipBuyStrategy:
+    """Buy weakness inside an uptrend; leave when the trend itself breaks.
+
+    The opposite reflex to a breakout: an established uptrend that has pulled
+    back is treated as a discount rather than a warning. The long average is
+    what keeps it from buying a genuine collapse.
+    """
+
+    name = "TREND_DIP"
+    DEFAULTS = {"regime_period": 200, "rsi_period": 14, "rsi_entry": 35.0, "rsi_exit": 65.0}
+
+    def describe(self, params: Optional[dict] = None) -> dict:
+        merged = {**self.DEFAULTS, **(params or {})}
+        return {
+            "name": self.name,
+            "label": "Buy the dip in an uptrend",
+            "description": ("Buy when RSI is oversold while price is above its long "
+                            "average; exit when RSI recovers or the trend breaks."),
+            "parameters": [
+                {"key": "regime_period", "label": "Trend average (bars)", "type": "int",
+                 "default": 200, "value": merged["regime_period"]},
+                {"key": "rsi_period", "label": "RSI period", "type": "int",
+                 "default": 14, "value": merged["rsi_period"]},
+                {"key": "rsi_entry", "label": "Buy when RSI below", "type": "float",
+                 "default": 35.0, "value": merged["rsi_entry"]},
+                {"key": "rsi_exit", "label": "Exit when RSI above", "type": "float",
+                 "default": 65.0, "value": merged["rsi_exit"]},
+            ],
+        }
+
+    def prepare(self, candles: Sequence[Candle], params: dict) -> dict:
+        closes = [c.close for c in candles]
+        return {
+            "sma": ind.sma(closes, int(_param(params, "regime_period", 200, int))),
+            "rsi": ind.rsi(closes, int(_param(params, "rsi_period", 14, int))),
+            "entry": _param(params, "rsi_entry", 35.0),
+            "exit": _param(params, "rsi_exit", 65.0),
+        }
+
+    def evaluate(self, candles: Sequence[Candle], i: int, state: dict) -> Verdict:
+        line, rsi_now = state["sma"][i], state["rsi"][i]
+        if line is None or rsi_now is None:
+            return Verdict("FLAT", ["Not enough history"])
+
+        close = candles[i].close
+        readings = {"sma": line, "rsi": rsi_now}
+
+        if close > line and rsi_now < state["entry"]:
+            return Verdict("BUY", [
+                f"Uptrend intact — close {close:.2f} above {line:.2f}",
+                f"RSI {rsi_now:.1f} below {state['entry']:g} — pulled back",
+            ], readings)
+        if rsi_now > state["exit"] or close < line:
+            why = (f"RSI {rsi_now:.1f} above {state['exit']:g}" if rsi_now > state["exit"]
+                   else f"Trend broken — close {close:.2f} below {line:.2f}")
+            return Verdict("SELL", [why], readings)
+        return Verdict("FLAT", [], readings)
+
+
+STRATEGIES[DonchianBreakoutStrategy.name] = DonchianBreakoutStrategy()
+STRATEGIES[TrendRegimeStrategy.name] = TrendRegimeStrategy()
+STRATEGIES[DipBuyStrategy.name] = DipBuyStrategy()

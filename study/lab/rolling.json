@@ -1,0 +1,219 @@
+[
+ {
+  "label": "EMA crossover + RSI (L/S)",
+  "symbol": "/CL",
+  "tf": "1d",
+  "periods": {
+   "1 week": {
+    "windows": 1351,
+    "beat": 626,
+    "tied": 2,
+    "beatPct": 46.3,
+    "strategyProfitablePct": 38.0,
+    "bhProfitablePct": 53.3,
+    "medianDiff": -181,
+    "meanDiff": 53,
+    "worstDiff": -32427,
+    "bestDiff": 27260
+   },
+   "1 month": {
+    "windows": 312,
+    "beat": 143,
+    "tied": 0,
+    "beatPct": 45.8,
+    "strategyProfitablePct": 49.4,
+    "bhProfitablePct": 53.8,
+    "medianDiff": -495,
+    "meanDiff": 251,
+    "worstDiff": -22110,
+    "bestDiff": 39117
+   }
+  }
+ },
+ {
+  "label": "MACD + ADX trend",
+  "symbol": "/CL",
+  "tf": "6h",
+  "periods": {
+   "1 week": {
+    "windows": 103,
+    "beat": 52,
+    "tied": 0,
+    "beatPct": 50.5,
+    "strategyProfitablePct": 40.8,
+    "bhProfitablePct": 50.5,
+    "medianDiff": 155,
+    "meanDiff": 433,
+    "worstDiff": -12910,
+    "bestDiff": 16580
+   },
+   "1 month": {
+    "windows": 23,
+    "beat": 15,
+    "tied": 0,
+    "beatPct": 65.2,
+    "strategyProfitablePct": 69.6,
+    "bhProfitablePct": 39.1,
+    "medianDiff": 2460,
+    "meanDiff": 2553,
+    "worstDiff": -19545,
+    "bestDiff": 34595
+   }
+  }
+ },
+ {
+  "label": "Multi-timeframe EMA trend",
+  "symbol": "/CL",
+  "tf": "8h",
+  "periods": {
+   "1 week": {
+    "windows": 103,
+    "beat": 48,
+    "tied": 0,
+    "beatPct": 46.6,
+    "strategyProfitablePct": 44.7,
+    "bhProfitablePct": 50.5,
+    "medianDiff": -450,
+    "meanDiff": 283,
+    "worstDiff": -17275,
+    "bestDiff": 40380
+   },
+   "1 month": {
+    "windows": 23,
+    "beat": 11,
+    "tied": 0,
+    "beatPct": 47.8,
+    "strategyProfitablePct": 60.9,
+    "bhProfitablePct": 39.1,
+    "medianDiff": -2188,
+    "meanDiff": 1762,
+    "worstDiff": -13179,
+    "bestDiff": 35591
+   }
+  }
+ },
+ {
+  "label": "Turtle 20/10 long+short",
+  "symbol": "/CL",
+  "tf": "1d",
+  "periods": {
+   "1 week": {
+    "windows": 1351,
+    "beat": 630,
+    "tied": 1,
+    "beatPct": 46.6,
+    "strategyProfitablePct": 41.3,
+    "bhProfitablePct": 53.3,
+    "medianDiff": -160,
+    "meanDiff": 28,
+    "worstDiff": -52740,
+    "bestDiff": 65450
+   },
+   "1 month": {
+    "windows": 312,
+    "beat": 130,
+    "tied": 0,
+    "beatPct": 41.7,
+    "strategyProfitablePct": 44.6,
+    "bhProfitablePct": 53.8,
+    "medianDiff": -1130,
+    "meanDiff": 142,
+    "worstDiff": -23846,
+    "bestDiff": 37890
+   }
+  }
+ },
+ {
+  "label": "Trend regime band L/S",
+  "symbol": "/CL",
+  "tf": "1h",
+  "periods": {
+   "1 week": {
+    "windows": 103,
+    "beat": 50,
+    "tied": 0,
+    "beatPct": 48.5,
+    "strategyProfitablePct": 56.3,
+    "bhProfitablePct": 50.5,
+    "medianDiff": -60,
+    "meanDiff": 319,
+    "worstDiff": -14105,
+    "bestDiff": 19670
+   },
+   "1 month": {
+    "windows": 23,
+    "beat": 14,
+    "tied": 0,
+    "beatPct": 60.9,
+    "strategyProfitablePct": 52.2,
+    "bhProfitablePct": 39.1,
+    "medianDiff": 2625,
+    "meanDiff": 1848,
+    "worstDiff": -15060,
+    "bestDiff": 37665
+   }
+  }
+ },
+ {
+  "label": "Daily 200-SMA swing",
+  "symbol": "/NQ",
+  "tf": "1d",
+  "periods": {
+   "1 week": {
+    "windows": 1348,
+    "beat": 657,
+    "tied": 5,
+    "beatPct": 48.7,
+    "strategyProfitablePct": 43.5,
+    "bhProfitablePct": 58.2,
+    "medianDiff": -20,
+    "meanDiff": -9,
+    "worstDiff": -32115,
+    "bestDiff": 38360
+   },
+   "1 month": {
+    "windows": 311,
+    "beat": 146,
+    "tied": 0,
+    "beatPct": 46.9,
+    "strategyProfitablePct": 50.5,
+    "bhProfitablePct": 60.8,
+    "medianDiff": -90,
+    "meanDiff": -11,
+    "worstDiff": -47955,
+    "bestDiff": 53330
+   }
+  }
+ },
+ {
+  "label": "Trend regime + band (long)",
+  "symbol": "/GC",
+  "tf": "1d",
+  "periods": {
+   "1 week": {
+    "windows": 1350,
+    "beat": 638,
+    "tied": 6,
+    "beatPct": 47.3,
+    "strategyProfitablePct": 41.0,
+    "bhProfitablePct": 56.3,
+    "medianDiff": -60,
+    "meanDiff": -69,
+    "worstDiff": -32520,
+    "bestDiff": 32830
+   },
+   "1 month": {
+    "windows": 311,
+    "beat": 143,
+    "tied": 1,
+    "beatPct": 46.0,
+    "strategyProfitablePct": 42.1,
+    "bhProfitablePct": 56.6,
+    "medianDiff": -200,
+    "meanDiff": -176,
+    "worstDiff": -15035,
+    "bestDiff": 26480
+   }
+  }
+ }
+]

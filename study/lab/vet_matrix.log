@@ -1,0 +1,159 @@
+
+  === Multi-timeframe EMA trend  /CL 8h ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             1601   362     38,299      9,145     29,154  1.22   15.7   10.9  BEAT
+  dev              1120   250      4,617    -13,055     17,672  1.06   10.1   13.1  BEAT
+  oos               481   108     37,010     22,175     14,835  1.40   13.5   18.1  BEAT
+  thirds:
+    third 1          533   117        -46    -16,045     15,999  1.00    9.3  BEAT
+    third 2          533   115      8,119        825      7,294  1.22    7.9  BEAT
+    third 3          533   121     31,092     22,915      8,177  1.31   14.0  BEAT
+  parameter sensitivity:
+    legs 480/1440/2880        330tr     17,346      8,201  1.10  BEAT
+    legs 480/960/2880         322tr     30,517     21,372  1.19  BEAT
+    legs 480/1920/3840        322tr    -16,947    -26,092  0.91
+    trail 1.5 ATR             362tr     38,299     29,154  1.22  BEAT
+    two legs only             537tr     34,347     25,202  1.13  BEAT
+  direction:
+    long+short                362tr     38,299     29,154  1.22  BEAT
+    long only                 187tr     19,616     10,471  1.23  BEAT
+    short only                175tr     18,682      9,538  1.21  BEAT
+  slippage ticks:
+    1 tick                    362tr     38,299     29,154  1.22  BEAT
+    2 tick                    363tr     30,772     21,647  1.17  BEAT
+    4 tick                    363tr     16,412      7,327  1.09  BEAT
+    8 tick                    363tr    -12,308    -21,313  0.94
+
+  === MACD + ADX trend  /CL 6h ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             2085    36     53,710      9,145     44,565  2.22   28.5   28.6  BEAT
+  dev              1459    24      7,320    -14,405     21,725  1.35   11.6   20.5  BEAT
+  oos               626    10     48,720     23,535     25,185  3.43   29.5   39.4  BEAT
+  thirds:
+    third 1          695    10      2,710    -14,635     17,345  1.23   11.6  BEAT
+    third 2          695    13      4,135     -1,555      5,690  1.53    7.6  BEAT
+    third 3          695    13     45,885     25,285     20,600  2.93   30.1  BEAT
+  parameter sensitivity:
+    ADX in 20                  63tr     16,915      7,770  1.20  BEAT
+    ADX in 30                  28tr    -13,590    -22,735  0.80
+    ADX out 10                 29tr     71,635     62,490  2.83  BEAT
+    ADX out 20                 40tr     26,860     17,715  1.44  BEAT
+    MACD 8/21/5                37tr     49,215     40,070  2.03  BEAT
+    MACD 16/34/12              34tr     59,220     50,075  2.44  BEAT
+  direction:
+    long+short                 36tr     53,710     44,565  2.22  BEAT
+    long only                  14tr      6,790     -2,355  1.17
+    short only                 20tr     29,000     19,855  4.82  BEAT
+  slippage ticks:
+    1 tick                     36tr     53,710     44,565  2.22  BEAT
+    2 tick                     36tr     52,990     43,865  2.20  BEAT
+    4 tick                     36tr     51,550     42,465  2.15  BEAT
+    8 tick                     36tr     48,670     39,665  2.05  BEAT
+
+  === Volatility squeeze breakout  /CL 1d ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             6531   116     88,002     51,645     36,357  1.53   17.7   15.6  BEAT
+  dev              4571    86     65,520     28,695     36,825  1.55   17.7   21.5  BEAT
+  oos              1960    28     14,398     22,845     -8,447  1.30   22.0   30.0
+  thirds:
+    third 1         2177    35      8,186     24,365    -16,179  1.18   17.5
+    third 2         2177    41     62,929      4,095     58,834  2.25   15.6  BEAT
+    third 3         2177    33     19,867     23,395     -3,528  1.38   21.2
+  parameter sensitivity:
+    squeeze 15%                77tr     42,652     -8,993  1.40
+    squeeze 35%               163tr     51,100       -545  1.20
+    range 10                  156tr     80,318     28,673  1.34  BEAT
+    range 30                   90tr     68,474     16,829  1.54  BEAT
+    trend EMA 50              138tr     91,473     39,828  1.45  BEAT
+    trend EMA 200             102tr     62,159     10,514  1.40  BEAT
+  direction:
+    long+short                116tr     88,002     36,357  1.53  BEAT
+    long only                  71tr     35,651    -15,994  1.34
+    short only                 45tr     51,450       -195  1.82
+  slippage ticks:
+    1 tick                    116tr     88,002     36,357  1.53  BEAT
+    2 tick                    116tr     85,692     34,067  1.51  BEAT
+    4 tick                    116tr     81,072     29,487  1.47  BEAT
+    8 tick                    116tr     71,842     20,337  1.41  BEAT
+
+  === Turtle 20/10 long+short  /CL 1d ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             6531   227     87,604     51,645     35,959  1.21   41.3    8.2  BEAT
+  dev              4571   166     33,475     28,695      4,780  1.12   41.3   13.4  BEAT
+  oos              1960    62     40,080     22,845     17,235  1.27   38.8   17.7  BEAT
+  thirds:
+    third 1         2177    74     58,636     24,365     34,271  1.63   36.9  BEAT
+    third 2         2177    84    -31,361      4,095    -35,456  0.82   68.9
+    third 3         2177    70     44,061     23,395     20,666  1.27   37.9  BEAT
+  parameter sensitivity:
+    entry 30                  187tr     95,484     43,839  1.28  BEAT
+    entry 40                  155tr     68,756     17,111  1.23  BEAT
+    exit 15                   198tr    153,081    101,436  1.37  BEAT
+    exit 20                   174tr    131,774     80,129  1.34  BEAT
+    entry 55 exit 20          120tr     43,695     -7,950  1.15
+  direction:
+    long+short                227tr     87,604     35,959  1.21  BEAT
+    long only                 120tr     51,318       -327  1.26
+    short only                107tr     36,286    -15,359  1.16
+  slippage ticks:
+    1 tick                    227tr     87,604     35,959  1.21  BEAT
+    2 tick                    227tr     83,884     32,259  1.20  BEAT
+    4 tick                    227tr     75,779     24,194  1.18  BEAT
+    8 tick                    229tr     48,596     -2,909  1.11
+
+  === Multi-timeframe EMA trend  /CL 4h ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             3061   662     29,688      9,145     20,543  1.12   43.6    9.6  BEAT
+  dev              2142   467    -39,282    -13,885    -25,397  0.69   40.9    3.2
+  oos               919   195     68,417     23,015     45,402  1.55   14.7   14.0  BEAT
+  thirds:
+    third 1         1020   229    -23,474    -15,025     -8,449  0.65   25.5
+    third 2         1020   212    -16,120       -535    -15,585  0.70   17.5
+    third 3         1020   214     67,884     24,535     43,349  1.53   14.8  BEAT
+  parameter sensitivity:
+    legs 240/720/1440         612tr     20,108     10,963  1.09  BEAT
+    legs 240/480/1440         569tr     63,567     54,422  1.31  BEAT
+    legs 240/960/1920         603tr     26,239     17,094  1.11  BEAT
+  direction:
+    long+short                662tr     29,688     20,543  1.12  BEAT
+    long only                 332tr     14,301      5,156  1.12  BEAT
+    short only                330tr     15,386      6,241  1.12  BEAT
+  slippage ticks:
+    1 tick                    662tr     29,688     20,543  1.12  BEAT
+    2 tick                    662tr     16,527      7,402  1.06  BEAT
+    4 tick                    662tr     -9,553    -18,638  0.97
+    8 tick                    663tr    -62,944    -71,949  0.80
+
+  === EMA crossover + RSI, long only  /CL 1d ===
+  window           bars    tr        net        B&H     vs B&H    PF    DD%  top1%
+  full             6531   142     76,944     51,645     25,299  1.23   18.7    5.4  BEAT
+  dev              4571   109     44,371     28,695     15,676  1.20   18.7    4.5  BEAT
+  oos              1960    34     37,665     22,845     14,820  1.36   18.9   15.6  BEAT
+  thirds:
+    third 1         2177    62     31,390     24,365      7,025  1.26   16.8  BEAT
+    third 2         2177    37    -10,166      4,095    -14,261  0.89   29.4
+    third 3         2177    38     32,599     23,395      9,204  1.29   19.5  BEAT
+  parameter sensitivity:
+    EMA 15/40                 147tr    101,456     49,811  1.31  BEAT
+    EMA 30/80                 137tr     64,914     13,268  1.20  BEAT
+    no pattern                226tr     59,676      8,031  1.12  BEAT
+  direction:
+    long+short                250tr    121,569     69,924  1.19  BEAT
+    long only                 142tr     76,944     25,299  1.23  BEAT
+    short only                108tr     44,626     -7,019  1.15
+  slippage ticks:
+    1 tick                    142tr     76,944     25,299  1.23  BEAT
+    2 tick                    142tr     75,474     23,849  1.23  BEAT
+    4 tick                    142tr     68,383     16,798  1.20  BEAT
+    8 tick                    140tr     61,147      9,642  1.18  BEAT
+
+
+  ==================== GATE SUMMARY ====================
+
+  cell     strategy                          full       dev        oos  OOS PF  thirds  params   cost  verdict
+  /CL 8h   Multi-timeframe EMA trend       29,154    17,672     14,835    1.40     3/3     4/5     4t  SURVIVED
+  /CL 6h   MACD + ADX trend                44,565    21,725     25,185    3.43     3/3     5/6     8t  SURVIVED
+  /CL 1d   Volatility squeeze breakout     36,357    36,825     -8,447    1.30     1/3     4/6     8t  FAILED OUT-OF-SAMPLE
+  /CL 1d   Turtle 20/10 long+short         35,959     4,780     17,235    1.27     2/3     4/5     4t  SURVIVED
+  /CL 4h   Multi-timeframe EMA trend       20,543   -25,397     45,402    1.55     1/3     3/3     2t  PARTIAL
+  /CL 1d   EMA crossover + RSI, long o     25,299    15,676     14,820    1.36     2/3     3/3     8t  SURVIVED

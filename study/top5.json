@@ -1,0 +1,32 @@
+[
+ {
+  "tf": "15m",
+  "no": 1,
+  "name": "EMA trend following",
+  "score": 70.9
+ },
+ {
+  "tf": "1h",
+  "no": 10,
+  "name": "ATR-managed trend (master)",
+  "score": 67.1
+ },
+ {
+  "tf": "1h",
+  "no": 5,
+  "name": "EMA crossover + RSI confirmation",
+  "score": 63.4
+ },
+ {
+  "tf": "15m",
+  "no": 10,
+  "name": "ATR-managed trend (master)",
+  "score": 62.2
+ },
+ {
+  "tf": "15m",
+  "no": 7,
+  "name": "Breakout + trend filter (four regime)",
+  "score": 61.6
+ }
+]

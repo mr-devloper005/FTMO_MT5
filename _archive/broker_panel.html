@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broker Hub | Yash — MT5 · tastytrade</title>
+<style>
+  :root {
+    --bg: #0b0e13;
+    --panel: #121722;
+    --panel-2: #171d2a;
+    --border: #232b3a;
+    --text: #e6ebf5;
+    --muted: #7d8799;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --amber: #f59e0b;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px; max-width: 1400px; margin: 0 auto;
+  }
+  header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+  h1 { font-size: 20px; font-weight: 650; letter-spacing: -0.2px; }
+  h1 span { color: var(--blue); }
+  .clock { margin-left: auto; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.9px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
+
+  .grid { display: grid; gap: 16px; }
+  .brokers { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 26px; }
+
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); }
+  .stat .value { font-size: 24px; font-weight: 640; font-family: var(--mono); margin-top: 6px; }
+
+  .broker-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .broker-name { font-weight: 640; font-size: 15px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .dot.on { background: var(--green); box-shadow: 0 0 0 3px rgba(34,197,94,.15); }
+  .dot.off { background: var(--red); box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
+  .detail { color: var(--muted); font-size: 12px; font-family: var(--mono); word-break: break-word; }
+
+  .figs { display: flex; gap: 22px; margin: 14px 0 12px; flex-wrap: wrap; }
+  .fig .k { font-size: 10px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+  .fig .v { font-family: var(--mono); font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+  button {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 13px; font-size: 12px; font-weight: 560; cursor: pointer;
+  }
+  button:hover:not(:disabled) { border-color: var(--blue); color: #fff; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.buy { background: rgba(34,197,94,.13); border-color: rgba(34,197,94,.45); color: var(--green); }
+  button.sell { background: rgba(239,68,68,.13); border-color: rgba(239,68,68,.45); color: var(--red); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 9px 10px; border-bottom: 1px solid rgba(35,43,58,.55); font-size: 13px; }
+  td.mono, th.mono { font-family: var(--mono); }
+  tr:last-child td { border-bottom: none; }
+  .empty { color: var(--muted); text-align: center; padding: 26px; font-size: 13px; }
+
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 10px; font-weight: 650; letter-spacing: .4px; }
+  .tag.mt5 { background: rgba(59,130,246,.16); color: #7cb0ff; }
+  .tag.ib { background: rgba(245,158,11,.16); color: #fbbf24; }
+  .tag.webull { background: rgba(34,197,94,.14); color: #4ade80; }
+  .tag.tasty { background: rgba(168,85,247,.16); color: #c084fc; }
+  .tag.long { background: rgba(34,197,94,.16); color: var(--green); }
+  .tag.short { background: rgba(239,68,68,.16); color: var(--red); }
+
+  .ticket { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-top: 6px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 10px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+  input, select {
+    background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    border-radius: 7px; padding: 7px 9px; font-family: var(--mono); font-size: 13px; min-width: 96px;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--blue); }
+
+  .toast {
+    position: fixed; right: 20px; bottom: 20px; max-width: 380px;
+    background: var(--panel); border: 1px solid var(--border); border-left-width: 3px;
+    border-radius: 9px; padding: 12px 15px; font-size: 13px; opacity: 0;
+    transform: translateY(8px); transition: .22s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: none; }
+  .toast.ok { border-left-color: var(--green); }
+  .toast.err { border-left-color: var(--red); }
+  .pos-neg { color: var(--red); } .pos-pos { color: var(--green); }
+
+  .searchbar { position: relative; margin-bottom: 20px; }
+  .searchbar input {
+    width: 100%; padding: 11px 14px; font-size: 14px; font-family: inherit;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; color: var(--text);
+  }
+  .searchbar input:focus { outline: none; border-color: var(--blue); }
+  .results {
+    position: absolute; top: 46px; left: 0; right: 0; z-index: 20; display: none;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    max-height: 320px; overflow-y: auto;
+  }
+  .results.open { display: block; }
+  .results div.row {
+    padding: 9px 14px; display: flex; gap: 10px; align-items: center; cursor: pointer;
+    border-bottom: 1px solid rgba(35,43,58,.55); font-size: 13px;
+  }
+  .results div.row:last-child { border-bottom: none; }
+  .results div.row:hover { background: var(--panel-2); }
+  .results .sym { font-weight: 640; min-width: 92px; font-family: var(--mono); }
+  .results .desc { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .chart-tools { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .chart-tools button { padding: 4px 10px; font-size: 11px; }
+  .chart-tools button.on { border-color: var(--blue); color: #fff; }
+  #chart { width: 100%; display: block; }
+  section { margin-bottom: 26px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Yash<span>BrokerHub</span></h1>
+  <span class="detail">MetaTrader 5 &middot; tastytrade</span>
+  <span class="clock" id="clock">--:--:--</span>
+</header>
+
+<section class="searchbar">
+  <input id="symSearch" type="text" placeholder="Search any symbol across both brokers — AAPL, EURUSD, XAUUSD…" autocomplete="off">
+  <div id="symResults" class="results"></div>
+</section>
+
+<section class="grid stats" id="stats"></section>
+
+<section>
+  <h2>Brokers</h2>
+  <div class="grid brokers" id="brokers"></div>
+</section>
+
+<section>
+  <h2>Chart <span id="chartLabel" class="detail"></span></h2>
+  <div class="card">
+    <div class="chart-tools">
+      <span id="chartTf">
+        <button data-tf="M5">5M</button><button data-tf="M15" class="on">15M</button><button data-tf="H1">1H</button><button data-tf="D1">1D</button>
+      </span>
+      <span id="chartMeta" class="detail"></span>
+    </div>
+    <canvas id="chart" height="260"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Quote comparison</h2>
+  <div class="card"><table id="quotes">
+    <thead><tr><th>Symbol</th><th>Broker</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Spread</th></tr></thead>
+    <tbody><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Open positions — all brokers</h2>
+  <div class="card"><table id="positions">
+    <thead><tr><th>Broker</th><th>Symbol</th><th>Side</th><th class="mono">Volume</th><th class="mono">Open</th><th class="mono">P&amp;L</th><th></th></tr></thead>
+    <tbody><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>History — all brokers</h2>
+  <div class="card"><table id="history">
+    <thead><tr><th>Broker</th><th>Symbol</th><th>Side</th><th class="mono">Volume</th><th class="mono">Price</th><th class="mono">P&amp;L</th><th>Time</th></tr></thead>
+    <tbody><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
+  </table></div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+const $ = id => document.getElementById(id);
+
+let brokers = [];
+
+function toast(msg, ok = true) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (ok ? 'ok' : 'err');
+  setTimeout(() => t.className = 'toast', 4200);
+}
+
+const money = n => (n < 0 ? '-' : '') + '$' + Math.abs(Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// Precision is per-instrument: 2dp renders EURUSD as a useless "1.15", while
+// 5dp renders AAPL as "244.35000". Only FX pairs get the long tail.
+function digits(sym) {
+  if (['US30', 'US100'].includes(sym)) return 1;
+  if (['XAUUSD', 'BTCUSD', 'ETHUSD'].includes(sym)) return 2;
+  if (sym.includes('JPY')) return 3;
+  const isFxPair = /^[A-Z]{6}$/.test(sym);
+  return isFxPair ? 5 : 2;
+}
+
+async function api(path, opts) {
+  const r = await fetch(API + path, opts);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
+  return r.json();
+}
+
+async function loadBrokers() {
+  brokers = await api('/api/brokers');
+  $('brokers').innerHTML = brokers.map(b => `
+    <div class="card">
+      <div class="broker-head">
+        <span class="dot ${b.connected ? 'on' : 'off'}"></span>
+        <span class="broker-name">${b.label}</span>
+        <span class="tag ${b.key}">${b.key.toUpperCase()}</span>
+      </div>
+      <div class="detail">${b.detail || ''}</div>
+      <div class="figs" id="figs-${b.key}">
+        <div class="fig"><div class="k">Balance</div><div class="v">--</div></div>
+        <div class="fig"><div class="k">Equity</div><div class="v">--</div></div>
+        <div class="fig"><div class="k">Free margin</div><div class="v">--</div></div>
+      </div>
+      <div class="ticket">
+        <div class="field"><label>Symbol</label>
+          <select id="sym-${b.key}">${(b.symbols || []).map(s => `<option>${s}</option>`).join('')}</select>
+        </div>
+        <div class="field"><label>Volume</label><input id="vol-${b.key}" value="0.01" size="6"></div>
+        <button class="buy" ${b.connected ? '' : 'disabled'} onclick="send('${b.key}','buy')">Buy</button>
+        <button class="sell" ${b.connected ? '' : 'disabled'} onclick="send('${b.key}','sell')">Sell</button>
+        ${b.connected ? '' : `<button onclick="reconnect('${b.key}')">Connect</button>`}
+      </div>
+    </div>`).join('');
+
+  brokers.filter(b => b.connected).forEach(loadAccount);
+}
+
+async function loadAccount(b) {
+  try {
+    const a = await api(`/api/${b.key}/account`);
+    const el = $(`figs-${b.key}`);
+    if (el) el.querySelectorAll('.v').forEach((n, i) => n.textContent = money([a.balance, a.equity, a.free_margin][i]));
+  } catch (e) { /* the card already shows the disconnected state */ }
+}
+
+async function reconnect(key) {
+  toast(`Connecting ${key.toUpperCase()}…`);
+  try {
+    const r = await api(`/api/${key}/connect`, { method: 'POST' });
+    toast(r.connected ? `${key.toUpperCase()} connected` : `${key.toUpperCase()}: ${r.detail}`, r.connected);
+    loadBrokers();
+  } catch (e) { toast(String(e.message || e), false); }
+}
+
+async function send(key, side) {
+  const symbol = $(`sym-${key}`).value;
+  const volume = parseFloat($(`vol-${key}`).value);
+  if (!(volume > 0)) return toast('Volume must be greater than zero', false);
+  if (!confirm(`${side.toUpperCase()} ${volume} ${symbol} on ${key.toUpperCase()}?`)) return;
+  try {
+    const r = await api(`/api/${key}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symbol, side, volume })
+    });
+    toast(r.success ? `${key.toUpperCase()} ${side} ${volume} ${symbol} — order #${r.order}` : `Rejected: ${r.comment}`, r.success);
+    refresh();
+  } catch (e) { toast(String(e.message || e), false); }
+}
+
+async function closePos(key, ticket) {
+  if (!confirm(`Close position #${ticket} on ${key.toUpperCase()}?`)) return;
+  try {
+    const r = await api(`/api/${key}/close/${ticket}`, { method: 'POST' });
+    toast(r.success === false ? `Failed: ${r.error || r.comment}` : `Closed #${ticket}`, r.success !== false);
+    refresh();
+  } catch (e) { toast(String(e.message || e), false); }
+}
+
+async function loadPortfolio() {
+  const p = await api('/api/portfolio');
+  $('stats').innerHTML = `
+    <div class="card stat"><div class="label">Total equity</div><div class="value">${money(p.total_equity)}</div></div>
+    <div class="card stat"><div class="label">Open positions</div><div class="value">${p.open_positions}</div></div>
+    <div class="card stat"><div class="label">Brokers online</div><div class="value">${brokers.filter(b => b.connected).length} / ${brokers.length}</div></div>`;
+
+  const tbody = $('positions').querySelector('tbody');
+  tbody.innerHTML = p.positions.length ? p.positions.map(x => `
+    <tr>
+      <td><span class="tag ${x.broker}">${x.broker.toUpperCase()}</span></td>
+      <td style="font-weight:600">${x.symbol}</td>
+      <td><span class="tag ${x.type.toLowerCase()}">${x.type}</span></td>
+      <td class="mono">${Number(x.volume).toFixed(2)}</td>
+      <td class="mono">${Number(x.open_price).toFixed(digits(x.symbol))}</td>
+      <td class="mono ${x.profit >= 0 ? 'pos-pos' : 'pos-neg'}">${x.profit >= 0 ? '+' : ''}${money(x.profit)}</td>
+      <td><button onclick="closePos('${x.broker}',${x.ticket})">Close</button></td>
+    </tr>`).join('') : '<tr><td colspan="7" class="empty">No open positions on any broker</td></tr>';
+}
+
+async function loadQuotes() {
+  const online = brokers.filter(b => b.connected).map(b => b.key);
+  const data = {};
+  await Promise.all(online.map(async k => { try { data[k] = await api(`/api/${k}/quotes`); } catch { data[k] = {}; } }));
+
+  const tbody = $('quotes').querySelector('tbody');
+  if (!online.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No broker online</td></tr>'; return; }
+
+  // Each broker lists a different universe — MT5 forex and CFDs, Webull US
+  // equities — so group by symbol and show every venue quoting it rather than
+  // forcing one shared row shape.
+  const bySymbol = new Map();
+  for (const k of online) {
+    for (const [sym, q] of Object.entries(data[k] || {})) {
+      if (!q) continue;
+      if (!bySymbol.has(sym)) bySymbol.set(sym, []);
+      bySymbol.get(sym).push({ broker: k, ...q });
+    }
+  }
+  if (!bySymbol.size) { tbody.innerHTML = '<tr><td colspan="5" class="empty">No quotes — market closed, or no data entitlement</td></tr>'; return; }
+
+  const rows = [];
+  for (const sym of [...bySymbol.keys()].sort()) {
+    const quotes = bySymbol.get(sym);
+    const d = digits(sym);
+    quotes.forEach((q, idx) => rows.push(`<tr>
+      <td style="font-weight:600">${idx === 0 ? sym : ''}</td>
+      <td><span class="tag ${q.broker}">${q.broker.toUpperCase()}</span></td>
+      <td class="mono">${q.bid.toFixed(d)}</td>
+      <td class="mono">${q.ask.toFixed(d)}</td>
+      <td class="mono" style="color:var(--muted)">${(q.ask - q.bid).toFixed(d)}</td>
+    </tr>`));
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+async function refresh() {
+  try {
+    await loadBrokers(); await loadPortfolio(); await loadQuotes();
+    loadHistory().catch(() => {});
+    drawChart();
+  } catch (e) { console.error(e); }
+}
+
+// ===== SEARCH — one box, every connected broker =====
+let searchTimer = null;
+$('symSearch').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  const q = e.target.value.trim();
+  if (q.length < 1) { $('symResults').className = 'results'; return; }
+  // Debounced: each keystroke would otherwise fan out to every broker's API.
+  searchTimer = setTimeout(() => runSearch(q), 350);
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.searchbar')) $('symResults').className = 'results';
+});
+
+async function runSearch(q) {
+  const box = $('symResults');
+  box.innerHTML = '<div class="row"><span class="desc">Searching…</span></div>';
+  box.className = 'results open';
+  try {
+    const rows = await api(`/api/search?q=${encodeURIComponent(q)}&limit=12`);
+    if (!rows.length) { box.innerHTML = '<div class="row"><span class="desc">No symbols found</span></div>'; return; }
+    box.innerHTML = rows.map(r => `
+      <div class="row" onclick="pickSymbol('${r.broker}','${r.symbol.replace(/'/g, "")}')">
+        <span class="tag ${r.broker}">${r.broker.toUpperCase()}</span>
+        <span class="sym">${r.symbol}</span>
+        <span class="desc">${(r.description || '').slice(0, 60)}</span>
+      </div>`).join('');
+  } catch (e) {
+    box.innerHTML = `<div class="row"><span class="desc">${e.message || e}</span></div>`;
+  }
+}
+
+// Picking a result points the chart at it AND loads it into that broker's
+// ticket, so the symbol you looked up is the one you can trade.
+function pickSymbol(broker, symbol) {
+  $('symResults').className = 'results';
+  $('symSearch').value = '';
+  const sel = $(`sym-${broker}`);
+  if (sel) {
+    if (![...sel.options].some(o => o.value === symbol)) sel.add(new Option(symbol, symbol));
+    sel.value = symbol;
+  }
+  loadChart(broker, symbol);
+}
+
+// ===== CHART =====
+let chartState = { broker: null, symbol: null, tf: 'M15', bars: [] };
+
+$('chartTf').addEventListener('click', e => {
+  const tf = e.target.dataset.tf;
+  if (!tf) return;
+  [...$('chartTf').children].forEach(b => b.classList.toggle('on', b === e.target));
+  chartState.tf = tf;
+  if (chartState.symbol) loadChart(chartState.broker, chartState.symbol);
+});
+
+async function loadChart(broker, symbol) {
+  chartState.broker = broker; chartState.symbol = symbol;
+  $('chartLabel').textContent = `${symbol} · ${broker.toUpperCase()} · ${chartState.tf}`;
+  $('chartMeta').textContent = 'loading…';
+  try {
+    const bars = await api(`/api/${broker}/ohlcv/${encodeURIComponent(symbol)}?timeframe=${chartState.tf}&count=120`);
+    chartState.bars = bars;
+    $('chartMeta').textContent = bars.length ? `${bars.length} bars` : 'no data';
+    drawChart();
+  } catch (e) {
+    $('chartMeta').textContent = String(e.message || e);
+    chartState.bars = []; drawChart();
+  }
+}
+
+function drawChart() {
+  const cv = $('chart'), ctx = cv.getContext('2d');
+  const w = cv.clientWidth, h = cv.height;
+  cv.width = w * devicePixelRatio; cv.height = h * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0, 0, w, h);
+
+  const bars = chartState.bars;
+  if (!bars.length) {
+    ctx.fillStyle = '#7d8799'; ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Search a symbol to chart it', w / 2, h / 2);
+    return;
+  }
+
+  const pad = { l: 8, r: 58, t: 10, b: 8 };
+  const hi = Math.max(...bars.map(b => b.high)), lo = Math.min(...bars.map(b => b.low));
+  const span = (hi - lo) || 1;
+  const x = i => pad.l + (i + 0.5) * ((w - pad.l - pad.r) / bars.length);
+  const y = v => pad.t + (1 - (v - lo) / span) * (h - pad.t - pad.b);
+
+  ctx.strokeStyle = 'rgba(35,43,58,.7)'; ctx.lineWidth = 1;
+  ctx.fillStyle = '#7d8799'; ctx.font = '10px ui-monospace, monospace'; ctx.textAlign = 'left';
+  const d = digits(chartState.symbol);
+  for (let k = 0; k <= 4; k++) {
+    const v = lo + (span * k / 4), yy = Math.round(y(v)) + 0.5;
+    ctx.beginPath(); ctx.moveTo(pad.l, yy); ctx.lineTo(w - pad.r, yy); ctx.stroke();
+    ctx.fillText(v.toFixed(d), w - pad.r + 6, yy + 3);
+  }
+
+  const bw = Math.max(1.5, (w - pad.l - pad.r) / bars.length * 0.62);
+  bars.forEach((b, i) => {
+    const up = b.close >= b.open;
+    ctx.strokeStyle = ctx.fillStyle = up ? '#22c55e' : '#ef4444';
+    ctx.beginPath();
+    ctx.moveTo(Math.round(x(i)) + 0.5, y(b.high));
+    ctx.lineTo(Math.round(x(i)) + 0.5, y(b.low));
+    ctx.stroke();
+    const top = y(Math.max(b.open, b.close));
+    ctx.fillRect(x(i) - bw / 2, top, bw, Math.max(1, Math.abs(y(b.close) - y(b.open))));
+  });
+}
+window.addEventListener('resize', () => chartState.bars.length && drawChart());
+
+// ===== HISTORY (all brokers) =====
+async function loadHistory() {
+  const online = brokers.filter(b => b.connected).map(b => b.key);
+  const rows = (await Promise.all(online.map(async k => {
+    try { return await api(`/api/${k}/history?count=25`); } catch { return []; }
+  }))).flat();
+
+  rows.sort((a, b) => String(b.time).localeCompare(String(a.time)));
+  const tbody = $('history').querySelector('tbody');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No closed trades yet</td></tr>'; return; }
+
+  tbody.innerHTML = rows.slice(0, 40).map(r => {
+    const d = digits(r.symbol || '');
+    const t = r.time ? new Date(r.time) : null;
+    const pnl = Number(r.profit) || 0;
+    return `<tr>
+      <td><span class="tag ${r.broker}">${r.broker.toUpperCase()}</span></td>
+      <td style="font-weight:600">${r.symbol || '--'}</td>
+      <td><span class="tag ${r.type === 'sell' ? 'short' : 'long'}">${(r.type || '').toUpperCase()}</span></td>
+      <td class="mono">${Number(r.volume).toFixed(2)}</td>
+      <td class="mono">${Number(r.price).toFixed(d)}</td>
+      <td class="mono ${pnl >= 0 ? 'pos-pos' : 'pos-neg'}">${pnl >= 0 ? '+' : ''}${money(pnl)}</td>
+      <td style="color:var(--muted);font-size:11px">${t && !isNaN(t) ? t.toLocaleString() : '--'}</td>
+    </tr>`;
+  }).join('');
+}
+
+setInterval(() => $('clock').textContent = new Date().toLocaleTimeString('en-GB'), 1000);
+setInterval(() => { loadPortfolio().catch(() => {}); brokers.filter(b => b.connected).forEach(loadAccount); }, 5000);
+setInterval(() => loadQuotes().catch(() => {}), 10000);
+refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+  /NQ 5m    11,754 bars   B&H      -11,595   running beats: 9
+  /NQ 15m    3,937 bars   B&H      -11,595   running beats: 26
+  /NQ 30m    1,961 bars   B&H         -290   running beats: 43
+  /NQ 1h    11,352 bars   B&H      199,570   running beats: 43
+  /NQ 2h     5,933 bars   B&H      199,570   running beats: 43
+  /NQ 4h     3,078 bars   B&H      199,570   running beats: 43
+  /NQ 6h     2,094 bars   B&H      199,570   running beats: 43
+  /NQ 8h     1,605 bars   B&H      199,570   running beats: 43
+  /NQ 12h    1,108 bars   B&H      199,570   running beats: 43
+  /NQ 1d     6,550 bars   B&H      516,995   running beats: 43
+  /GC 5m    11,791 bars   B&H       58,235   running beats: 43
+  /GC 15m    3,938 bars   B&H       58,265   running beats: 43
+  /GC 30m    1,963 bars   B&H       57,725   running beats: 43
+  /GC 1h    11,385 bars   B&H      212,405   running beats: 43
+  /GC 2h     5,950 bars   B&H      212,405   running beats: 43
+  /GC 4h     3,086 bars   B&H      212,405   running beats: 43
+  /GC 6h     2,096 bars   B&H      212,405   running beats: 48
+  /GC 8h     1,608 bars   B&H      212,405   running beats: 52
+  /GC 12h    1,108 bars   B&H      212,405   running beats: 52
+  /GC 1d     6,522 bars   B&H      438,615   running beats: 52
+  /CL 5m    11,791 bars   B&H       12,635   running beats: 52
+  /CL 15m    3,938 bars   B&H       12,635   running beats: 53
+  /CL 30m    1,962 bars   B&H       12,615   running beats: 54
+  /CL 1h    11,242 bars   B&H        9,145   running beats: 63
+  /CL 2h     5,888 bars   B&H        9,145   running beats: 65
+  /CL 4h     3,061 bars   B&H        9,145   running beats: 69
+  /CL 6h     2,085 bars   B&H        9,145   running beats: 74
+  /CL 8h     1,601 bars   B&H        9,145   running beats: 82
+  /CL 12h    1,107 bars   B&H        9,145   running beats: 84
+  /CL 1d     6,531 bars   B&H       51,645   running beats: 89
+
+  690 runs, 89 beat buy & hold

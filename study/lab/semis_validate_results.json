@@ -1,0 +1,5851 @@
+[
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "AMAT",
+    "timeframe": "1h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 261,
+    "sourceVsBH": 8177.41,
+    "sourceTrades": 11,
+    "sourceTopTradeShare": 36.6,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 11,
+      "variationsHeldPct": 50.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "37% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": 28070.84,
+    "fullBh": 19893.43,
+    "fullVsBH": 8177.41,
+    "fullTrades": 11,
+    "fullTopTradeShare": 36.6,
+    "fullSharpe": 2.213937294036678,
+    "devBeatsBH": false,
+    "devTrades": 7,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 41366.68,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 6937.66,
+        "bh": 19893.43,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -13635.820000000003,
+        "bh": 19893.43,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -24687.88,
+        "bh": 19893.43,
+        "beats": false
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": 8759.81,
+        "bh": 9818.82,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": -14724.31,
+        "bh": 39598.92,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": 28642.15,
+        "bh": -3088.94,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 1,
+        "net": 1517.71,
+        "bh": -9215.9,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": -1665.7,
+        "bh": -22456.44,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 50.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 13,
+        "net": -32123.13,
+        "vsBH": -52016.56,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 12,
+        "net": 12069.61,
+        "vsBH": -7823.82,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 12,
+        "net": 31489.3,
+        "vsBH": 11595.87,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 11,
+        "net": 26266.43,
+        "vsBH": 6373.0,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 11,
+        "net": 34459.99,
+        "vsBH": 14566.56,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 7,
+        "net": 2143.24,
+        "vsBH": -17750.19,
+        "beats": false
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "AMD",
+    "timeframe": "30m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 178,
+    "sourceVsBH": 19363.71,
+    "sourceTrades": 10,
+    "sourceTopTradeShare": 26.6,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 10,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 5,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": 6081.35,
+    "fullBh": -13282.36,
+    "fullVsBH": 19363.71,
+    "fullTrades": 10,
+    "fullTopTradeShare": 26.6,
+    "fullSharpe": 1.0858774423632624,
+    "devBeatsBH": true,
+    "devTrades": 5,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 6716.8,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 1820.0300000000007,
+        "bh": -13282.36,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -5760.99,
+        "bh": -13282.36,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -9334.34,
+        "bh": -13282.36,
+        "beats": true
+      }
+    ],
+    "foldsWon": 5,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": 261.66,
+        "bh": -2034.55,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 2,
+        "net": -901.52,
+        "bh": -3431.84,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 1,
+        "net": 4133.17,
+        "bh": 3319.34,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 3,
+        "net": 5392.51,
+        "bh": -2553.41,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 1,
+        "net": -65.88,
+        "bh": -4444.66,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 17,
+        "net": -8997.95,
+        "vsBH": 4284.41,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 12,
+        "net": -8899.32,
+        "vsBH": 4383.04,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 10,
+        "net": 317.71,
+        "vsBH": 13600.07,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 7,
+        "net": -365.81,
+        "vsBH": 12916.55,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 7,
+        "net": 6720.38,
+        "vsBH": 20002.74,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 5,
+        "net": 13101.68,
+        "vsBH": 26384.04,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only."
+    ]
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "ARM",
+    "timeframe": "1h",
+    "strategy": "EMA_REGIME_LS",
+    "shares": 505,
+    "sourceVsBH": 72098.67,
+    "sourceTrades": 17,
+    "sourceTopTradeShare": 42.9,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 17,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample but fails out-of-sample \u2014 the usual shape of a rule fitted to its own history.",
+      "43% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": 89980.72,
+    "fullBh": 17882.05,
+    "fullVsBH": 72098.67,
+    "fullTrades": 17,
+    "fullTopTradeShare": 42.9,
+    "fullSharpe": 4.550609861064273,
+    "devBeatsBH": true,
+    "devTrades": 7,
+    "oosBeatsBH": false,
+    "oosTrades": 6,
+    "oosVsBH": -11539.25,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 34051.97,
+        "bh": 17882.05,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -31067.78,
+        "bh": 17882.05,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -40376.09999999999,
+        "bh": 17882.05,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 4,
+        "net": 20202.54,
+        "bh": 42420.01,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": -4353.11,
+        "bh": 56606.57,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 1,
+        "net": -1462.44,
+        "bh": -56796.89,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": -22288.19,
+        "bh": -12027.85,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": -2489.65,
+        "bh": -22315.95,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 60,
+        "trades": 34,
+        "net": 30541.5,
+        "vsBH": 12659.45,
+        "beats": true
+      },
+      {
+        "value": 80,
+        "trades": 26,
+        "net": 75607.35,
+        "vsBH": 57725.3,
+        "beats": true
+      },
+      {
+        "value": 90,
+        "trades": 20,
+        "net": 82913.24,
+        "vsBH": 65031.19,
+        "beats": true
+      },
+      {
+        "value": 110,
+        "trades": 12,
+        "net": 86321.98,
+        "vsBH": 68439.93,
+        "beats": true
+      },
+      {
+        "value": 125,
+        "trades": 16,
+        "net": 19301.11,
+        "vsBH": 1419.06,
+        "beats": true
+      },
+      {
+        "value": 150,
+        "trades": 22,
+        "net": -123256.56,
+        "vsBH": -141138.61,
+        "beats": false
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_NONQUALIFYING_no_combo_clears_filter",
+    "symbol": "CRDO",
+    "timeframe": "30m",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 371,
+    "sourceVsBH": 13708.45,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 1,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 4592.98,
+    "fullBh": -9115.47,
+    "fullVsBH": 13708.45,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.9615727735065815,
+    "devBeatsBH": true,
+    "devTrades": 1,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 13797.49,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": -9115.47,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": -9115.47,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": -9115.47,
+        "beats": true
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -11374.86,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -5724.53,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 10046.68,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 278.25,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -6752.2,
+        "beats": true
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 4,
+        "net": -6295.87,
+        "vsBH": 2819.6,
+        "beats": true
+      },
+      {
+        "value": 160,
+        "trades": 4,
+        "net": -4843.41,
+        "vsBH": 4272.06,
+        "beats": true
+      },
+      {
+        "value": 180,
+        "trades": 1,
+        "net": 5550.19,
+        "vsBH": 14665.66,
+        "beats": true
+      },
+      {
+        "value": 220,
+        "trades": 1,
+        "net": -5602.1,
+        "vsBH": 3513.37,
+        "beats": true
+      },
+      {
+        "value": 250,
+        "trades": 2,
+        "net": -4698.71,
+        "vsBH": 4416.76,
+        "beats": true
+      },
+      {
+        "value": 300,
+        "trades": 3,
+        "net": -11688.35,
+        "vsBH": -2572.88,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_a_NONQUALIFYING_no_combo_clears_filter",
+    "symbol": "DELL",
+    "timeframe": "30m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 238,
+    "sourceVsBH": 143.99,
+    "sourceTrades": 7,
+    "sourceTopTradeShare": 44.6,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": false,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 7,
+      "variationsHeldPct": 33.3,
+      "survivesTicks": 4.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats buy & hold by $144 on a $13,295 benchmark \u2014 1.1% of it. That margin is inside the noise of any single assumption in the run.",
+      "7 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 13438.67,
+    "fullBh": 13294.68,
+    "fullVsBH": 143.99,
+    "fullTrades": 7,
+    "fullTopTradeShare": 44.6,
+    "fullSharpe": 1.9909395896829363,
+    "devBeatsBH": false,
+    "devTrades": 4,
+    "oosBeatsBH": true,
+    "oosTrades": 2,
+    "oosVsBH": 8234.8,
+    "survivesTicks": 4.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 3445.0499999999993,
+        "bh": 13294.68,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -7726.67,
+        "bh": 13294.68,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -8948.800000000001,
+        "bh": 13294.68,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": -168.98,
+        "bh": 2860.76,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 1,
+        "net": 455.77,
+        "bh": 4055.52,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 1,
+        "net": 766.36,
+        "bh": 7456.53,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 2,
+        "net": 4272.1,
+        "bh": 4438.7,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 1,
+        "net": -2463.3,
+        "bh": -4024.58,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 33.3,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 16,
+        "net": -27444.55,
+        "vsBH": -40739.23,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 10,
+        "net": -5894.28,
+        "vsBH": -19188.96,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 8,
+        "net": 10275.97,
+        "vsBH": -3018.71,
+        "beats": false
+      },
+      {
+        "value": 55,
+        "trades": 7,
+        "net": 8300.25,
+        "vsBH": -4994.43,
+        "beats": false
+      },
+      {
+        "value": 62,
+        "trades": 7,
+        "net": 21689.87,
+        "vsBH": 8395.19,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 7,
+        "net": 24655.6,
+        "vsBH": 11360.92,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "7 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "LITE",
+    "timeframe": "2h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 282,
+    "sourceVsBH": 99784.97,
+    "sourceTrades": 13,
+    "sourceTopTradeShare": 13.4,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1503.28,
+      "beatsOutOfSample": true,
+      "trades": 13,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": 250112.83,
+    "fullBh": 150327.86,
+    "fullVsBH": 99784.97,
+    "fullTrades": 13,
+    "fullTopTradeShare": 13.4,
+    "fullSharpe": 4.860356454921354,
+    "devBeatsBH": true,
+    "devTrades": 9,
+    "oosBeatsBH": true,
+    "oosTrades": 2,
+    "oosVsBH": 25771.99,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 216511.11,
+        "bh": 150327.86,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 154105.93,
+        "bh": 150327.86,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 100163.57999999999,
+        "bh": 150327.86,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": 26581.33,
+        "bh": 78615.26,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 1,
+        "net": 1171.71,
+        "bh": 44255.67,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": 53901.46,
+        "bh": 23728.9,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": 27803.78,
+        "bh": -48602.69,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 33958.44,
+        "beats": false
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 17,
+        "net": 147554.02,
+        "vsBH": -2773.84,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": 162880.39,
+        "vsBH": 12552.53,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 13,
+        "net": 242865.43,
+        "vsBH": 92537.57,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 12,
+        "net": 262601.22,
+        "vsBH": 112273.36,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 10,
+        "net": 209524.57,
+        "vsBH": 59196.71,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 9,
+        "net": 169401.6,
+        "vsBH": 19073.74,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_NONQUALIFYING_no_combo_clears_filter",
+    "symbol": "MRVL",
+    "timeframe": "30m",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 392,
+    "sourceVsBH": 20193.88,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 1,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 3214.4,
+    "fullBh": -16979.48,
+    "fullVsBH": 20193.88,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.7332055776482218,
+    "devBeatsBH": true,
+    "devTrades": 1,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 2420.6,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": -16979.48,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": -16979.48,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": -16979.48,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -21040.6,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -6213.2,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 9992.08,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -2348.08,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -11473.84,
+        "beats": true
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 5,
+        "net": -10715.32,
+        "vsBH": 6264.16,
+        "beats": true
+      },
+      {
+        "value": 160,
+        "trades": 1,
+        "net": -3853.36,
+        "vsBH": 13126.12,
+        "beats": true
+      },
+      {
+        "value": 180,
+        "trades": 1,
+        "net": 1270.08,
+        "vsBH": 18249.56,
+        "beats": true
+      },
+      {
+        "value": 220,
+        "trades": 1,
+        "net": 3214.4,
+        "vsBH": 20193.88,
+        "beats": true
+      },
+      {
+        "value": 250,
+        "trades": 1,
+        "net": 1270.08,
+        "vsBH": 18249.56,
+        "beats": true
+      },
+      {
+        "value": 300,
+        "trades": 1,
+        "net": -335.16,
+        "vsBH": 16644.32,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "MU",
+    "timeframe": "15m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 121,
+    "sourceVsBH": 4790.84,
+    "sourceTrades": 11,
+    "sourceTopTradeShare": 33.4,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 11,
+      "variationsHeldPct": 50.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "33% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": 16666.99,
+    "fullBh": 11876.15,
+    "fullVsBH": 4790.84,
+    "fullTrades": 11,
+    "fullTopTradeShare": 33.4,
+    "fullSharpe": 4.51014949526972,
+    "devBeatsBH": true,
+    "devTrades": 7,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 6780.08,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 8091.720000000001,
+        "bh": 11876.15,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -1924.6699999999983,
+        "bh": 11876.15,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -7272.709999999999,
+        "bh": 11876.15,
+        "beats": false
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": 2735.81,
+        "bh": 7414.88,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": -1331.61,
+        "bh": -4971.89,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 1,
+        "net": -1622.61,
+        "bh": 18732.62,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": -1126.67,
+        "bh": -13579.83,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 2,
+        "net": 2287.51,
+        "bh": 1790.8,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 50.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 18,
+        "net": 3839.45,
+        "vsBH": -8036.7,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": 1301.81,
+        "vsBH": -10574.34,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 11,
+        "net": 14100.58,
+        "vsBH": 2224.43,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 9,
+        "net": 4973.84,
+        "vsBH": -6902.31,
+        "beats": false
+      },
+      {
+        "value": 62,
+        "trades": 7,
+        "net": 17994.76,
+        "vsBH": 6118.61,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 6,
+        "net": 15424.15,
+        "vsBH": 3548.0,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "NBIS",
+    "timeframe": "1h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 749,
+    "sourceVsBH": 74317.91,
+    "sourceTrades": 12,
+    "sourceTopTradeShare": 31.5,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 12,
+      "variationsHeldPct": 66.7,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample but fails out-of-sample \u2014 the usual shape of a rule fitted to its own history.",
+      "32% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": 126931.41,
+    "fullBh": 52613.5,
+    "fullVsBH": 74317.91,
+    "fullTrades": 12,
+    "fullTopTradeShare": 31.5,
+    "fullSharpe": 5.814939076394356,
+    "devBeatsBH": true,
+    "devTrades": 9,
+    "oosBeatsBH": false,
+    "oosTrades": 2,
+    "oosVsBH": -8498.98,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 84096.09,
+        "bh": 52613.5,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 44593.83,
+        "bh": 52613.5,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 12521.64,
+        "bh": 52613.5,
+        "beats": false
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 1,
+        "net": -729.38,
+        "bh": 64882.13,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": 7778.36,
+        "bh": 30514.27,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": 11052.69,
+        "bh": -52819.48,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 1,
+        "net": 20309.14,
+        "bh": 12058.9,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": -1011.15,
+        "bh": -16852.5,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 66.7,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 16,
+        "net": -3487.35,
+        "vsBH": -56100.85,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 12,
+        "net": 40962.21,
+        "vsBH": -11651.29,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 12,
+        "net": 100136.87,
+        "vsBH": 47523.37,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 7,
+        "net": 56745.15,
+        "vsBH": 4131.65,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 7,
+        "net": 55105.12,
+        "vsBH": 2491.62,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 6,
+        "net": 64708.44,
+        "vsBH": 12094.94,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_NONQUALIFYING_no_combo_clears_filter",
+    "symbol": "NVDA",
+    "timeframe": "5m",
+    "strategy": "EMA_RSI_PULLBACK",
+    "shares": 456,
+    "sourceVsBH": 3071.17,
+    "sourceTrades": 0,
+    "sourceTopTradeShare": 0.0,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 0,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "0 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 0,
+    "fullBh": -3071.17,
+    "fullVsBH": 3071.17,
+    "fullTrades": 0,
+    "fullTopTradeShare": 0.0,
+    "fullSharpe": null,
+    "devBeatsBH": true,
+    "devTrades": 0,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -896.04,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0,
+        "bh": -3071.17,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 0,
+        "bh": -3071.17,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 0,
+        "bh": -3071.17,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -3499.8,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -5191.05,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -1470.6,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 5232.6,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -7300.56,
+        "beats": true
+      }
+    ],
+    "paramKey": "trend_minutes",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 36,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      },
+      {
+        "value": 48,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      },
+      {
+        "value": 54,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      },
+      {
+        "value": 66,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      },
+      {
+        "value": 90,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 3071.17,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "This configuration never traded over this window, so there is no result to read. If it is marked as beating buy & hold, that only means the benchmark lost money while the rule sat out."
+    ]
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "SMH",
+    "timeframe": "1h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 205,
+    "sourceVsBH": 12242.53,
+    "sourceTrades": 11,
+    "sourceTopTradeShare": 35.6,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 11,
+      "variationsHeldPct": 66.7,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "36% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": 24950.71,
+    "fullBh": 12708.18,
+    "fullVsBH": 12242.53,
+    "fullTrades": 11,
+    "fullTopTradeShare": 35.6,
+    "fullSharpe": 3.211094598153667,
+    "devBeatsBH": true,
+    "devTrades": 7,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 13162.01,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 15160.939999999999,
+        "bh": 12708.18,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 6277.25,
+        "bh": 12708.18,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 1684.2999999999993,
+        "bh": 12708.18,
+        "beats": false
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": 6359.11,
+        "bh": 14541.68,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 3,
+        "net": 14275.81,
+        "bh": 12521.72,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 1,
+        "net": 1457.54,
+        "bh": -9813.34,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": -2588.12,
+        "bh": -2542.0,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 2,
+        "net": 11935.31,
+        "bh": -6074.95,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 66.7,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 15,
+        "net": -19762.77,
+        "vsBH": -32470.95,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": 1903.71,
+        "vsBH": -10804.47,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 13,
+        "net": 22663.65,
+        "vsBH": 9955.47,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 9,
+        "net": 13559.89,
+        "vsBH": 851.71,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 9,
+        "net": 17088.06,
+        "vsBH": 4379.88,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 5,
+        "net": 18064.53,
+        "vsBH": 5356.35,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "SNDK",
+    "timeframe": "5m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 62,
+    "sourceVsBH": 24232.24,
+    "sourceTrades": 14,
+    "sourceTopTradeShare": 19.2,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 14,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": 17230.73,
+    "fullBh": -7001.51,
+    "fullVsBH": 24232.24,
+    "fullTrades": 14,
+    "fullTopTradeShare": 19.2,
+    "fullSharpe": 15.132327325606044,
+    "devBeatsBH": true,
+    "devTrades": 9,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 4831.39,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 13725.869999999999,
+        "bh": -7001.51,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 8361.789999999999,
+        "bh": -7001.51,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 3943.67,
+        "bh": -7001.51,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 3,
+        "net": 2677.89,
+        "bh": -928.98,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": 2156.36,
+        "bh": -6182.02,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 1,
+        "net": 2496.12,
+        "bh": -993.86,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": 1846.34,
+        "bh": -574.12,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": -77.81,
+        "bh": 448.26,
+        "beats": false
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 18,
+        "net": 158.4,
+        "vsBH": 7159.91,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 17,
+        "net": 6907.52,
+        "vsBH": 13909.03,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 15,
+        "net": 16266.48,
+        "vsBH": 23267.99,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 14,
+        "net": 17716.03,
+        "vsBH": 24717.54,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 13,
+        "net": 14139.45,
+        "vsBH": 21140.96,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 9,
+        "net": 14614.02,
+        "vsBH": 21615.53,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_a_NONQUALIFYING_no_combo_clears_filter",
+    "symbol": "TSM",
+    "timeframe": "30m",
+    "strategy": "EMA_RSI_PULLBACK",
+    "shares": 219,
+    "sourceVsBH": 7716.46,
+    "sourceTrades": 0,
+    "sourceTopTradeShare": 0.0,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 0,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "0 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 0,
+    "fullBh": -7716.46,
+    "fullVsBH": 7716.46,
+    "fullTrades": 0,
+    "fullTopTradeShare": 0.0,
+    "fullSharpe": null,
+    "devBeatsBH": true,
+    "devTrades": 0,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 3637.59,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0,
+        "bh": -7716.46,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 0,
+        "bh": -7716.46,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 0,
+        "bh": -7716.46,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -7280.66,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -2417.76,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 6142.95,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -3575.18,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -1224.21,
+        "beats": true
+      }
+    ],
+    "paramKey": "trend_minutes",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 36,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 7716.46,
+        "beats": true
+      },
+      {
+        "value": 48,
+        "trades": 1,
+        "net": -2003.85,
+        "vsBH": 5712.61,
+        "beats": true
+      },
+      {
+        "value": 54,
+        "trades": 1,
+        "net": -2003.85,
+        "vsBH": 5712.61,
+        "beats": true
+      },
+      {
+        "value": 66,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 7716.46,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 7716.46,
+        "beats": true
+      },
+      {
+        "value": 90,
+        "trades": 0,
+        "net": 0,
+        "vsBH": 7716.46,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "This configuration never traded over this window, so there is no result to read. If it is marked as beating buy & hold, that only means the benchmark lost money while the rule sat out."
+    ]
+  },
+  {
+    "group": "stepC_a_qualifying",
+    "symbol": "WDC",
+    "timeframe": "1h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 260,
+    "sourceVsBH": 97447.33,
+    "sourceTrades": 12,
+    "sourceTopTradeShare": 19.7,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 12,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": 115909.93,
+    "fullBh": 18462.6,
+    "fullVsBH": 97447.33,
+    "fullTrades": 12,
+    "fullTopTradeShare": 19.7,
+    "fullSharpe": 5.953464739406212,
+    "devBeatsBH": true,
+    "devTrades": 8,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 58319.29,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 91553.12999999999,
+        "bh": 18462.6,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 61194.23999999999,
+        "bh": 18462.6,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 36983.04999999999,
+        "bh": 18462.6,
+        "beats": true
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": 14643.21,
+        "bh": 23205.0,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 3,
+        "net": 21725.6,
+        "bh": 55511.3,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": 26096.86,
+        "bh": -40228.5,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 1,
+        "net": 24356.8,
+        "bh": -4374.53,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 2,
+        "net": 25567.09,
+        "bh": -20607.61,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 14,
+        "net": -11977.59,
+        "vsBH": -30440.19,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": 88487.09,
+        "vsBH": 70024.49,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 12,
+        "net": 74662.26,
+        "vsBH": 56199.66,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 11,
+        "net": 95001.38,
+        "vsBH": 76538.78,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 9,
+        "net": 89364.25,
+        "vsBH": 70901.65,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 6,
+        "net": 53419.9,
+        "vsBH": 34957.3,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "AMAT",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 478,
+    "sourceVsBH": 9225.4,
+    "sourceTrades": 4,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": true,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1264.21,
+      "beatsOutOfSample": false,
+      "trades": 4,
+      "variationsHeldPct": 50.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "4 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 135646.83,
+    "fullBh": 126421.43,
+    "fullVsBH": 9225.4,
+    "fullTrades": 4,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.157925857376503,
+    "devBeatsBH": true,
+    "devTrades": 4,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -100987.05,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -10085.800000000017,
+        "bh": 126421.43,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -10085.800000000017,
+        "bh": 126421.43,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -10085.800000000017,
+        "bh": 126421.43,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -3953.06,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -30582.44,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 3479.84,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 71991.58,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 74979.07,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 50.0,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 6,
+        "net": 108668.52,
+        "vsBH": -17752.91,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 3,
+        "net": 133701.37,
+        "vsBH": 7279.94,
+        "beats": true
+      },
+      {
+        "value": 180,
+        "trades": 3,
+        "net": 132764.48,
+        "vsBH": 6343.05,
+        "beats": true
+      },
+      {
+        "value": 220,
+        "trades": 3,
+        "net": 129987.31,
+        "vsBH": 3565.88,
+        "beats": true
+      },
+      {
+        "value": 250,
+        "trades": 2,
+        "net": 125685.31,
+        "vsBH": -736.12,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 2,
+        "net": -24272.84,
+        "vsBH": -150694.27,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "4 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "AMD",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 588,
+    "sourceVsBH": 23678.76,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": true,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1784.29,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 16.7,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 202107.37,
+    "fullBh": 178428.61,
+    "fullVsBH": 23678.76,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.3184138851171296,
+    "devBeatsBH": true,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -147358.69,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 178428.61,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 178428.61,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 178428.61,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -3369.23,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -38843.28,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 25766.16,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 16111.2,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 165986.53,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 16.7,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 5,
+        "net": 17563.55,
+        "vsBH": -160865.06,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 3,
+        "net": 155567.17,
+        "vsBH": -22861.44,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 5,
+        "net": 175788.48,
+        "vsBH": -2640.13,
+        "beats": false
+      },
+      {
+        "value": 220,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -178428.61,
+        "beats": false
+      },
+      {
+        "value": 250,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -178428.61,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 1,
+        "net": 194457.49,
+        "vsBH": 16028.88,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "ARM",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 773,
+    "sourceVsBH": -72190.49,
+    "sourceTrades": 8,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 8,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "8 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 24720.53,
+    "fullBh": 96911.02,
+    "fullVsBH": -72190.49,
+    "fullTrades": 8,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.47999578432287626,
+    "devBeatsBH": false,
+    "devTrades": 7,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -85509.26,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -51056.66,
+        "bh": 96911.02,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -51056.66,
+        "bh": 96911.02,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -51056.66,
+        "bh": 96911.02,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 14934.36,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -27789.35,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 18211.88,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -32380.97,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 106395.72,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 12,
+        "net": 21052.67,
+        "vsBH": -75858.35,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 11,
+        "net": -74188.68,
+        "vsBH": -171099.7,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 8,
+        "net": 34893.21,
+        "vsBH": -62017.81,
+        "beats": false
+      },
+      {
+        "value": 220,
+        "trades": 6,
+        "net": 38309.86,
+        "vsBH": -58601.16,
+        "beats": false
+      },
+      {
+        "value": 250,
+        "trades": 7,
+        "net": 44702.58,
+        "vsBH": -52208.44,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 6,
+        "net": -39295.46,
+        "vsBH": -136206.48,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "8 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "CRDO",
+    "timeframe": "1d",
+    "strategy": "SIMPLE_PULLBACK",
+    "shares": 4587,
+    "sourceVsBH": -194553.03,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 9808.38,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 786285.21,
+    "fullBh": 980838.24,
+    "fullVsBH": -194553.03,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.3397949200249886,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -274577.84,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 980838.24,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 980838.24,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 980838.24,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 22109.34,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 45961.74,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 501382.06,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -260037.02,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 591860.62,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 1,
+        "net": 786285.21,
+        "vsBH": -194553.03,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "DELL",
+    "timeframe": "1d",
+    "strategy": "TREND_PULLBACK_STACK",
+    "shares": 786,
+    "sourceVsBH": -29679.37,
+    "sourceTrades": 2,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 2627.52,
+      "beatsOutOfSample": false,
+      "trades": 2,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "2 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 233072.58,
+    "fullBh": 262751.95,
+    "fullVsBH": -29679.37,
+    "fullTrades": 2,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.0862747833813498,
+    "devBeatsBH": false,
+    "devTrades": 2,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -257965.21,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -28138.800000000017,
+        "bh": 262751.95,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -28138.800000000017,
+        "bh": 262751.95,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -28138.800000000017,
+        "bh": 262751.95,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -9023.28,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -24719.7,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 15735.72,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 11845.02,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 253595.04,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 2,
+        "net": 233072.58,
+        "vsBH": -29679.37,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 2,
+        "net": 233072.58,
+        "vsBH": -29679.37,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 2,
+        "net": 233072.58,
+        "vsBH": -29679.37,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 2,
+        "net": 233072.58,
+        "vsBH": -29679.37,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 2,
+        "net": 233072.58,
+        "vsBH": -29679.37,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 2,
+        "net": 228215.11,
+        "vsBH": -34536.84,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "2 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "LITE",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 2179,
+    "sourceVsBH": -89208.26,
+    "sourceTrades": 4,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 19721.91,
+      "beatsOutOfSample": false,
+      "trades": 4,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "4 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 1882982.88,
+    "fullBh": 1972191.14,
+    "fullVsBH": -89208.26,
+    "fullTrades": 4,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 2.003944828338375,
+    "devBeatsBH": false,
+    "devTrades": 4,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -1325703.63,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -33055.43000000017,
+        "bh": 1972191.14,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -33055.43000000017,
+        "bh": 1972191.14,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -33055.43000000017,
+        "bh": 1972191.14,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 29830.51,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -7473.96,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 190640.71,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 849287.04,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 813028.51,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 5,
+        "net": 1586911.24,
+        "vsBH": -385279.9,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 4,
+        "net": 1194941.85,
+        "vsBH": -777249.29,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 3,
+        "net": 1220610.36,
+        "vsBH": -751580.78,
+        "beats": false
+      },
+      {
+        "value": 220,
+        "trades": 2,
+        "net": -38982.31,
+        "vsBH": -2011173.45,
+        "beats": false
+      },
+      {
+        "value": 250,
+        "trades": 1,
+        "net": -4543.22,
+        "vsBH": -1976734.36,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -1972191.14,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "4 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "MRVL",
+    "timeframe": "1d",
+    "strategy": "TREND_PULLBACK_STACK",
+    "shares": 1390,
+    "sourceVsBH": -66998.0,
+    "sourceTrades": 2,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 2269.73,
+      "beatsOutOfSample": false,
+      "trades": 2,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "2 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 159975.1,
+    "fullBh": 226973.1,
+    "fullVsBH": -66998.0,
+    "fullTrades": 2,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.8640650124757945,
+    "devBeatsBH": false,
+    "devTrades": 2,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -201327.6,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -38850.5,
+        "bh": 226973.1,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -38850.5,
+        "bh": 226973.1,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -38850.5,
+        "bh": 226973.1,
+        "beats": false
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -6546.9,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -10883.7,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -12607.3,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 23769.0,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 206415.0,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 2,
+        "net": 170205.5,
+        "vsBH": -56767.6,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 2,
+        "net": 159975.1,
+        "vsBH": -66998.0,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 2,
+        "net": 159975.1,
+        "vsBH": -66998.0,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 2,
+        "net": 159975.1,
+        "vsBH": -66998.0,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 2,
+        "net": 159975.1,
+        "vsBH": -66998.0,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 2,
+        "net": 159975.1,
+        "vsBH": -66998.0,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "2 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "MU",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 813,
+    "sourceVsBH": 11788.5,
+    "sourceTrades": 3,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": true,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 6514.65,
+      "beatsOutOfSample": false,
+      "trades": 3,
+      "variationsHeldPct": 66.7,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "3 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 663253.54,
+    "fullBh": 651465.04,
+    "fullVsBH": 11788.5,
+    "fullTrades": 3,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.8524970046705778,
+    "devBeatsBH": true,
+    "devTrades": 3,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -557620.45,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -13170.599999999977,
+        "bh": 651465.04,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -13170.599999999977,
+        "bh": 651465.04,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -13170.599999999977,
+        "bh": 651465.04,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -19674.6,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -16910.4,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 45617.43,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 169364.14,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 460491.35,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 66.7,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 5,
+        "net": 626749.84,
+        "vsBH": -24715.2,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 6,
+        "net": 641863.51,
+        "vsBH": -9601.53,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 4,
+        "net": 656830.84,
+        "vsBH": 5365.8,
+        "beats": true
+      },
+      {
+        "value": 220,
+        "trades": 2,
+        "net": 670302.26,
+        "vsBH": 18837.22,
+        "beats": true
+      },
+      {
+        "value": 250,
+        "trades": 1,
+        "net": 673155.88,
+        "vsBH": 21690.84,
+        "beats": true
+      },
+      {
+        "value": 300,
+        "trades": 1,
+        "net": 667529.92,
+        "vsBH": 16064.88,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "3 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "NBIS",
+    "timeframe": "1d",
+    "strategy": "TREND_PULLBACK_STACK",
+    "shares": 5000,
+    "sourceVsBH": -278050.01,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 9958.5,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 0,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 717799.97,
+    "fullBh": 995849.98,
+    "fullVsBH": -278050.01,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.2389099056073227,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -671174.99,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 995849.98,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 995849.98,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 995849.98,
+        "beats": false
+      }
+    ],
+    "foldsWon": 0,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 92,
+        "trades": 0,
+        "net": 0,
+        "bh": 54300.0,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 92,
+        "trades": 0,
+        "net": 0,
+        "bh": 104499.99,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 92,
+        "trades": 0,
+        "net": 0,
+        "bh": 146049.98,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 92,
+        "trades": 0,
+        "net": 0,
+        "bh": 230500.01,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 96,
+        "trades": 0,
+        "net": 0,
+        "bh": 353799.99,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 1,
+        "net": 717799.97,
+        "vsBH": -278050.01,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 1,
+        "net": 717799.97,
+        "vsBH": -278050.01,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 1,
+        "net": 717799.97,
+        "vsBH": -278050.01,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 1,
+        "net": 717799.97,
+        "vsBH": -278050.01,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 1,
+        "net": 717799.97,
+        "vsBH": -278050.01,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 1,
+        "net": 603949.99,
+        "vsBH": -391899.99,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 464. Daily history runs back decades; the window is rarely the limit.",
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "NVDA",
+    "timeframe": "1d",
+    "strategy": "SIMPLE_PULLBACK",
+    "shares": 1147,
+    "sourceVsBH": -50330.37,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1539.96,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 103665.85,
+    "fullBh": 153996.22,
+    "fullVsBH": -50330.37,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 0.8274175820535039,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -42897.8,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 153996.22,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 153996.22,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 153996.22,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 34777.04,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -12949.63,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 60699.25,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -3291.88,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 52911.1,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 1,
+        "net": 103665.85,
+        "vsBH": -50330.37,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "SMH",
+    "timeframe": "1d",
+    "strategy": "SIMPLE_PULLBACK",
+    "shares": 448,
+    "sourceVsBH": -11052.16,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1537.04,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 142652.16,
+    "fullBh": 153704.32,
+    "fullVsBH": -11052.16,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.2272475666151847,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -90021.12,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 153704.32,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 153704.32,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 153704.32,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 10174.08,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -14981.12,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 31404.8,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 32130.56,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 86114.56,
+        "beats": false
+      }
+    ],
+    "paramKey": "fast_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 12,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      },
+      {
+        "value": 16,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      },
+      {
+        "value": 18,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      },
+      {
+        "value": 22,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      },
+      {
+        "value": 25,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      },
+      {
+        "value": 30,
+        "trades": 1,
+        "net": 142652.16,
+        "vsBH": -11052.16,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "SNDK",
+    "timeframe": "1d",
+    "strategy": "REGIME_SWITCH_LS",
+    "shares": 2777,
+    "sourceVsBH": -490918.05,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 40124.04,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 3521485.8,
+    "fullBh": 4012403.85,
+    "fullVsBH": -490918.05,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 2.1027990969116424,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -2358172.72,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 4012403.85,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 4012403.85,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 4012403.85,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 77,
+        "trades": 0,
+        "net": 0,
+        "bh": -722.02,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 77,
+        "trades": 0,
+        "net": 0,
+        "bh": 153943.0,
+        "beats": false
+      },
+      {
+        "fold": 3,
+        "bars": 77,
+        "trades": 0,
+        "net": 0,
+        "bh": 795679.92,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 77,
+        "trades": 0,
+        "net": 0,
+        "bh": 2794022.99,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 78,
+        "trades": 0,
+        "net": 0,
+        "bh": 279116.01,
+        "beats": false
+      }
+    ],
+    "paramKey": "mid_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      },
+      {
+        "value": 45,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      },
+      {
+        "value": 55,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      },
+      {
+        "value": 62,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      },
+      {
+        "value": 75,
+        "trades": 1,
+        "net": 3521485.8,
+        "vsBH": -490918.05,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "386 bars, but the longest lookback is 200, leaving 186 bars the rule could act on. The window is too short for these settings.",
+      "Asked for 600 bars, served 386. Daily history runs back decades; the window is rarely the limit.",
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "TSM",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 700,
+    "sourceVsBH": -34377.0,
+    "sourceTrades": 1,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": false,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": false,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1939.28,
+      "beatsOutOfSample": false,
+      "trades": 1,
+      "variationsHeldPct": 0.0,
+      "survivesTicks": 0.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 1,
+      "foldsRun": 5
+    },
+    "why": [
+      "Does not beat buy & hold in-sample.",
+      "1 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 159550.99,
+    "fullBh": 193927.99,
+    "fullVsBH": -34377.0,
+    "fullTrades": 1,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.380985562387479,
+    "devBeatsBH": false,
+    "devTrades": 1,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -85603.0,
+    "survivesTicks": 0.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 0.0,
+        "bh": 193927.99,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": 0.0,
+        "bh": 193927.99,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": 0.0,
+        "bh": 193927.99,
+        "beats": false
+      }
+    ],
+    "foldsWon": 1,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 25599.0,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -9891.0,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 52023.99,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 51709.01,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 60675.99,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 0.0,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 4,
+        "net": 70587.99,
+        "vsBH": -123340.0,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 2,
+        "net": 144619.99,
+        "vsBH": -49308.0,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 2,
+        "net": 144619.99,
+        "vsBH": -49308.0,
+        "beats": false
+      },
+      {
+        "value": 220,
+        "trades": 1,
+        "net": -5467.01,
+        "vsBH": -199395.0,
+        "beats": false
+      },
+      {
+        "value": 250,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -193927.99,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -193927.99,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "1 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_b_best_1d",
+    "symbol": "WDC",
+    "timeframe": "1d",
+    "strategy": "DAILY_SWING_SMA200",
+    "shares": 1813,
+    "sourceVsBH": 3174.4,
+    "sourceTrades": 2,
+    "sourceTopTradeShare": 100.0,
+    "sourceBeatsBH": true,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": false,
+      "marginFloor": 7257.27,
+      "beatsOutOfSample": false,
+      "trades": 2,
+      "variationsHeldPct": 33.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats buy & hold by $3,174 on a $725,727 benchmark \u2014 0.4% of it. That margin is inside the noise of any single assumption in the run.",
+      "2 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 728901.36,
+    "fullBh": 725726.96,
+    "fullVsBH": 3174.4,
+    "fullTrades": 2,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": 1.9236251554810129,
+    "devBeatsBH": true,
+    "devTrades": 2,
+    "oosBeatsBH": false,
+    "oosTrades": 0,
+    "oosVsBH": -520838.65,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -11074.589999999967,
+        "bh": 725726.96,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -11074.589999999967,
+        "bh": 725726.96,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -11074.589999999967,
+        "bh": 725726.96,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -15322.74,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": -26501.98,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 86915.23,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 253421.15,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 0,
+        "net": 0,
+        "bh": 394853.27,
+        "beats": false
+      }
+    ],
+    "paramKey": "sma_period",
+    "variationsHeldPct": 33.3,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 7,
+        "net": -209852.45,
+        "vsBH": -935579.41,
+        "beats": false
+      },
+      {
+        "value": 160,
+        "trades": 3,
+        "net": 713062.44,
+        "vsBH": -12664.52,
+        "beats": false
+      },
+      {
+        "value": 180,
+        "trades": 3,
+        "net": 711897.62,
+        "vsBH": -13829.34,
+        "beats": false
+      },
+      {
+        "value": 220,
+        "trades": 1,
+        "net": 739975.95,
+        "vsBH": 14248.99,
+        "beats": true
+      },
+      {
+        "value": 250,
+        "trades": 1,
+        "net": 737854.74,
+        "vsBH": 12127.78,
+        "beats": true
+      },
+      {
+        "value": 300,
+        "trades": 0,
+        "net": 0,
+        "vsBH": -725726.96,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "2 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_top_vsBH",
+    "symbol": "LITE",
+    "timeframe": "1h",
+    "strategy": "MEAN_REVERSION",
+    "shares": 125,
+    "sourceVsBH": 52273.11,
+    "sourceTrades": 10,
+    "sourceTopTradeShare": 18.0,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 10,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample but fails out-of-sample \u2014 the usual shape of a rule fitted to its own history."
+    ],
+    "fullNet": 63826.86,
+    "fullBh": 11553.75,
+    "fullVsBH": 52273.11,
+    "fullTrades": 10,
+    "fullTopTradeShare": 18.0,
+    "fullSharpe": 6.996570566337418,
+    "devBeatsBH": true,
+    "devTrades": 6,
+    "oosBeatsBH": false,
+    "oosTrades": 3,
+    "oosVsBH": -3785.63,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 52094.36,
+        "bh": 11553.75,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": 29849.36,
+        "bh": 11553.75,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": 12661.239999999998,
+        "bh": 11553.75,
+        "beats": true
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 1,
+        "net": 10318.12,
+        "bh": 19308.12,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": 26576.25,
+        "bh": -10033.12,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": 8529.37,
+        "bh": -15206.86,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": 9044.38,
+        "bh": 9104.37,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 2,
+        "net": 15481.88,
+        "bh": 5965.0,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 16,
+        "net": 75252.63,
+        "vsBH": 63698.88,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": 66730.61,
+        "vsBH": 55176.86,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 11,
+        "net": 73736.87,
+        "vsBH": 62183.12,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 10,
+        "net": 67714.35,
+        "vsBH": 56160.6,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 6,
+        "net": 54105.14,
+        "vsBH": 42551.39,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 6,
+        "net": 55969.38,
+        "vsBH": 44415.63,
+        "beats": true
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "group": "stepC_c_outlier_top_vsBH",
+    "symbol": "ARM",
+    "timeframe": "4h",
+    "strategy": "DONCHIAN_BREAKOUT",
+    "shares": 713,
+    "sourceVsBH": 38840.66,
+    "sourceTrades": 6,
+    "sourceTopTradeShare": 70.0,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 6,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 2,
+      "foldsRun": 5
+    },
+    "why": [
+      "6 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 107466.91,
+    "fullBh": 68626.25,
+    "fullVsBH": 38840.66,
+    "fullTrades": 6,
+    "fullTopTradeShare": 70.0,
+    "fullSharpe": 2.1098670606204095,
+    "devBeatsBH": false,
+    "devTrades": 5,
+    "oosBeatsBH": false,
+    "oosTrades": 1,
+    "oosVsBH": -14088.89,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": 8894.669999999998,
+        "bh": 68626.25,
+        "beats": false
+      },
+      {
+        "removed": 3,
+        "net": -33286.399999999994,
+        "bh": 68626.25,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -33286.399999999994,
+        "bh": 68626.25,
+        "beats": false
+      }
+    ],
+    "foldsWon": 2,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 2,
+        "net": -8645.12,
+        "bh": 11001.59,
+        "beats": false
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 1,
+        "net": 9078.77,
+        "bh": -31424.19,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 2,
+        "net": -14423.99,
+        "bh": -2128.31,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 1,
+        "net": 168824.13,
+        "bh": 206727.21,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": 6894.71,
+        "bh": -104472.32,
+        "beats": true
+      }
+    ],
+    "paramKey": "entry_lookback",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 33,
+        "trades": 10,
+        "net": 54779.76,
+        "vsBH": -13846.49,
+        "beats": false
+      },
+      {
+        "value": 44,
+        "trades": 7,
+        "net": 86508.28,
+        "vsBH": 17882.03,
+        "beats": true
+      },
+      {
+        "value": 50,
+        "trades": 7,
+        "net": 86508.28,
+        "vsBH": 17882.03,
+        "beats": true
+      },
+      {
+        "value": 61,
+        "trades": 6,
+        "net": 107466.91,
+        "vsBH": 38840.66,
+        "beats": true
+      },
+      {
+        "value": 69,
+        "trades": 6,
+        "net": 107466.91,
+        "vsBH": 38840.66,
+        "beats": true
+      },
+      {
+        "value": 82,
+        "trades": 5,
+        "net": 113851.83,
+        "vsBH": 45225.58,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "70% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "6 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_top_vsBH",
+    "symbol": "WDC",
+    "timeframe": "30m",
+    "strategy": "DONCHIAN_BREAKOUT",
+    "shares": 170,
+    "sourceVsBH": 24828.48,
+    "sourceTrades": 5,
+    "sourceTopTradeShare": 57.6,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 5,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "5 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 5455.28,
+    "fullBh": -19373.2,
+    "fullVsBH": 24828.48,
+    "fullTrades": 5,
+    "fullTopTradeShare": 57.6,
+    "fullSharpe": 0.8903641877473141,
+    "devBeatsBH": true,
+    "devTrades": 3,
+    "oosBeatsBH": false,
+    "oosTrades": 1,
+    "oosVsBH": -6936.0,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -2866.2200000000003,
+        "bh": -19373.2,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -8992.16,
+        "bh": -19373.2,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -8992.16,
+        "bh": -19373.2,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": 3926.15,
+        "bh": -10262.9,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 1,
+        "net": 4892.59,
+        "bh": 1057.4,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 1,
+        "net": 13145.26,
+        "bh": -3334.55,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 2,
+        "net": -3934.65,
+        "bh": 7646.6,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -6579.0,
+        "beats": true
+      }
+    ],
+    "paramKey": "entry_lookback",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 33,
+        "trades": 10,
+        "net": -12046.19,
+        "vsBH": 7327.01,
+        "beats": true
+      },
+      {
+        "value": 44,
+        "trades": 7,
+        "net": 4489.7,
+        "vsBH": 23862.9,
+        "beats": true
+      },
+      {
+        "value": 50,
+        "trades": 7,
+        "net": 1251.19,
+        "vsBH": 20624.39,
+        "beats": true
+      },
+      {
+        "value": 61,
+        "trades": 5,
+        "net": 5455.28,
+        "vsBH": 24828.48,
+        "beats": true
+      },
+      {
+        "value": 69,
+        "trades": 3,
+        "net": 4075.72,
+        "vsBH": 23448.92,
+        "beats": true
+      },
+      {
+        "value": 82,
+        "trades": 3,
+        "net": -10564.65,
+        "vsBH": 8808.55,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "58% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "5 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_top_vsBH",
+    "symbol": "SNDK",
+    "timeframe": "30m",
+    "strategy": "EMA_REGIME_LS",
+    "shares": 55,
+    "sourceVsBH": 24305.2,
+    "sourceTrades": 9,
+    "sourceTopTradeShare": 61.3,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": false,
+      "trades": 9,
+      "variationsHeldPct": 50.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 3,
+      "foldsRun": 5
+    },
+    "why": [
+      "9 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": 5374.47,
+    "fullBh": -18930.73,
+    "fullVsBH": 24305.2,
+    "fullTrades": 9,
+    "fullTopTradeShare": 61.3,
+    "fullSharpe": 0.8872452516279282,
+    "devBeatsBH": true,
+    "devTrades": 8,
+    "oosBeatsBH": false,
+    "oosTrades": 1,
+    "oosVsBH": -8402.24,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -5545.78,
+        "bh": -18930.73,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -10940.48,
+        "bh": -18930.73,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -12428.539999999997,
+        "bh": -18930.73,
+        "beats": true
+      }
+    ],
+    "foldsWon": 3,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": -357.79,
+        "bh": -11825.27,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 1,
+        "net": -918.36,
+        "bh": -13932.05,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 1,
+        "net": -1735.52,
+        "bh": 4504.5,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 1,
+        "net": 466.41,
+        "bh": 18258.91,
+        "beats": false
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 1,
+        "net": -304.43,
+        "bh": -11107.53,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 50.0,
+    "variations": [
+      {
+        "value": 60,
+        "trades": 32,
+        "net": -28878.45,
+        "vsBH": -9947.72,
+        "beats": false
+      },
+      {
+        "value": 80,
+        "trades": 15,
+        "net": -7498.59,
+        "vsBH": 11432.14,
+        "beats": true
+      },
+      {
+        "value": 90,
+        "trades": 12,
+        "net": 6015.43,
+        "vsBH": 24946.16,
+        "beats": true
+      },
+      {
+        "value": 110,
+        "trades": 11,
+        "net": -17841.65,
+        "vsBH": 1089.08,
+        "beats": true
+      },
+      {
+        "value": 125,
+        "trades": 11,
+        "net": -33169.31,
+        "vsBH": -14238.58,
+        "beats": false
+      },
+      {
+        "value": 150,
+        "trades": 11,
+        "net": -19575.54,
+        "vsBH": -644.81,
+        "beats": false
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "61% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "9 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_top_vsBH",
+    "symbol": "AMAT",
+    "timeframe": "30m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 162,
+    "sourceVsBH": 21721.78,
+    "sourceTrades": 6,
+    "sourceTopTradeShare": 65.7,
+    "verdict": "FAILED",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 6,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "6 trades is too few to distinguish a rule from a coincidence."
+    ],
+    "fullNet": -6008.57,
+    "fullBh": -27730.35,
+    "fullVsBH": 21721.78,
+    "fullTrades": 6,
+    "fullTopTradeShare": 65.7,
+    "fullSharpe": -0.49034598454117423,
+    "devBeatsBH": true,
+    "devTrades": 4,
+    "oosBeatsBH": true,
+    "oosTrades": 1,
+    "oosVsBH": 11508.48,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -11305.97,
+        "bh": -27730.35,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -14068.07,
+        "bh": -27730.35,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -14068.07,
+        "bh": -27730.35,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": 2318.22,
+        "bh": -8640.27,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 1,
+        "net": -4249.25,
+        "bh": -8190.72,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 5221.26,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 1,
+        "net": 2762.1,
+        "bh": -4315.68,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 1,
+        "net": -1238.9,
+        "bh": -8396.46,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 15,
+        "net": 7285.96,
+        "vsBH": 35016.31,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 11,
+        "net": 8896.23,
+        "vsBH": 36626.58,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 9,
+        "net": 12682.56,
+        "vsBH": 40412.91,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 6,
+        "net": -3090.95,
+        "vsBH": 24639.4,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 6,
+        "net": 5143.1,
+        "vsBH": 32873.45,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 5,
+        "net": 12171.46,
+        "vsBH": 39901.81,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "66% of gross profit came from a single trade. That is one outcome wearing the costume of a system.",
+      "6 trades is too small a sample to separate a rule from a coincidence."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_high_concentration",
+    "symbol": "AMAT",
+    "timeframe": "30m",
+    "strategy": "REGIME_SWITCH_LS",
+    "shares": 162,
+    "sourceVsBH": 6464.21,
+    "sourceTrades": 13,
+    "sourceTopTradeShare": 100.0,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 13,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": -21266.14,
+    "fullBh": -27730.35,
+    "fullVsBH": 6464.21,
+    "fullTrades": 13,
+    "fullTopTradeShare": 100.0,
+    "fullSharpe": -3.5456208652503527,
+    "devBeatsBH": true,
+    "devTrades": 8,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 14920.2,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -22545.94,
+        "bh": -27730.35,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -22545.94,
+        "bh": -27730.35,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -22545.94,
+        "bh": -27730.35,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8640.27,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8190.72,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 5221.26,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -4315.68,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8396.46,
+        "beats": true
+      }
+    ],
+    "paramKey": "mid_period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 14,
+        "net": -22527.31,
+        "vsBH": 5203.04,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 13,
+        "net": -20892.73,
+        "vsBH": 6837.62,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 13,
+        "net": -20943.76,
+        "vsBH": 6786.59,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 12,
+        "net": -18852.76,
+        "vsBH": 8877.59,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 12,
+        "net": -18952.38,
+        "vsBH": 8777.97,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 12,
+        "net": -18915.93,
+        "vsBH": 8814.42,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_high_concentration",
+    "symbol": "ARM",
+    "timeframe": "30m",
+    "strategy": "REGIME_SWITCH_LS",
+    "shares": 302,
+    "sourceVsBH": 8458.26,
+    "sourceTrades": 12,
+    "sourceTopTradeShare": 99.7,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 12,
+      "variationsHeldPct": 100.0,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": -18782.14,
+    "fullBh": -27240.4,
+    "fullVsBH": 8458.26,
+    "fullTrades": 12,
+    "fullTopTradeShare": 99.7,
+    "fullSharpe": -3.2244807370626654,
+    "devBeatsBH": true,
+    "devTrades": 9,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 9802.92,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -23710.77,
+        "bh": -27240.4,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -23725.87,
+        "bh": -27240.4,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -23725.87,
+        "bh": -27240.4,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -15785.54,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -2095.88,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 8658.34,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -14079.24,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -6927.88,
+        "beats": true
+      }
+    ],
+    "paramKey": "mid_period",
+    "variationsHeldPct": 100.0,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 13,
+        "net": -17846.15,
+        "vsBH": 9394.25,
+        "beats": true
+      },
+      {
+        "value": 40,
+        "trades": 12,
+        "net": -20277.04,
+        "vsBH": 6963.36,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 12,
+        "net": -19229.1,
+        "vsBH": 8011.3,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 12,
+        "net": -19295.54,
+        "vsBH": 7944.86,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 12,
+        "net": -19049.41,
+        "vsBH": 8190.99,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 12,
+        "net": -17885.2,
+        "vsBH": 9355.2,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "100% of gross profit came from a single trade. That is one outcome wearing the costume of a system."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_high_concentration",
+    "symbol": "AMAT",
+    "timeframe": "5m",
+    "strategy": "MEAN_REVERSION",
+    "shares": 202,
+    "sourceVsBH": 2723.72,
+    "sourceTrades": 16,
+    "sourceTopTradeShare": 82.3,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 16,
+      "variationsHeldPct": 83.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 5,
+      "foldsRun": 5
+    },
+    "why": [
+      "Beats in-sample, but not by enough on the robustness tests to call it more than fragile."
+    ],
+    "fullNet": -4873.5,
+    "fullBh": -7597.22,
+    "fullVsBH": 2723.72,
+    "fullTrades": 16,
+    "fullTopTradeShare": 82.3,
+    "fullSharpe": -5.893570098939835,
+    "devBeatsBH": true,
+    "devTrades": 12,
+    "oosBeatsBH": true,
+    "oosTrades": 2,
+    "oosVsBH": 1608.93,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -6838.23,
+        "bh": -7597.22,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -7245.73,
+        "bh": -7597.22,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -7261.889999999999,
+        "bh": -7597.22,
+        "beats": true
+      }
+    ],
+    "foldsWon": 5,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 120,
+        "trades": 4,
+        "net": -2081.61,
+        "bh": -2154.33,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 120,
+        "trades": 2,
+        "net": 2325.59,
+        "bh": -2213.41,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 120,
+        "trades": 1,
+        "net": -1079.69,
+        "bh": -1633.17,
+        "beats": true
+      },
+      {
+        "fold": 4,
+        "bars": 120,
+        "trades": 2,
+        "net": -916.06,
+        "bh": -1885.67,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 120,
+        "trades": 1,
+        "net": -2016.71,
+        "bh": -3844.06,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 83.3,
+    "variations": [
+      {
+        "value": 30,
+        "trades": 18,
+        "net": -10666.28,
+        "vsBH": -3069.06,
+        "beats": false
+      },
+      {
+        "value": 40,
+        "trades": 18,
+        "net": -5178.13,
+        "vsBH": 2419.09,
+        "beats": true
+      },
+      {
+        "value": 45,
+        "trades": 17,
+        "net": -3406.23,
+        "vsBH": 4190.99,
+        "beats": true
+      },
+      {
+        "value": 55,
+        "trades": 16,
+        "net": -4351.31,
+        "vsBH": 3245.91,
+        "beats": true
+      },
+      {
+        "value": 62,
+        "trades": 13,
+        "net": -6138.29,
+        "vsBH": 1458.93,
+        "beats": true
+      },
+      {
+        "value": 75,
+        "trades": 12,
+        "net": -4976.0,
+        "vsBH": 2621.22,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "82% of gross profit came from a single trade. That is one outcome wearing the costume of a system."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_high_concentration",
+    "symbol": "AMAT",
+    "timeframe": "30m",
+    "strategy": "TREND_REGIME",
+    "shares": 162,
+    "sourceVsBH": 7093.16,
+    "sourceTrades": 13,
+    "sourceTopTradeShare": 82.0,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 13,
+      "variationsHeldPct": 66.7,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": false,
+      "survivesTop5Removal": false,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "82% of gross profit came from one trade, and the edge disappears without the top 3."
+    ],
+    "fullNet": -20637.19,
+    "fullBh": -27730.35,
+    "fullVsBH": 7093.16,
+    "fullTrades": 13,
+    "fullTopTradeShare": 82.0,
+    "fullSharpe": -2.5605371433035247,
+    "devBeatsBH": true,
+    "devTrades": 10,
+    "oosBeatsBH": true,
+    "oosTrades": 0,
+    "oosVsBH": 14920.2,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -27243.55,
+        "bh": -27730.35,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -28690.21,
+        "bh": -27730.35,
+        "beats": false
+      },
+      {
+        "removed": 5,
+        "net": -28690.21,
+        "bh": -27730.35,
+        "beats": false
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8640.27,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8190.72,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": 5221.26,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -4315.68,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 0,
+        "net": 0,
+        "bh": -8396.46,
+        "beats": true
+      }
+    ],
+    "paramKey": "regime_period",
+    "variationsHeldPct": 66.7,
+    "variations": [
+      {
+        "value": 120,
+        "trades": 17,
+        "net": -26083.63,
+        "vsBH": 1646.72,
+        "beats": true
+      },
+      {
+        "value": 160,
+        "trades": 9,
+        "net": -12209.96,
+        "vsBH": 15520.39,
+        "beats": true
+      },
+      {
+        "value": 180,
+        "trades": 5,
+        "net": -6645.23,
+        "vsBH": 21085.12,
+        "beats": true
+      },
+      {
+        "value": 220,
+        "trades": 19,
+        "net": -41251.71,
+        "vsBH": -13521.36,
+        "beats": false
+      },
+      {
+        "value": 250,
+        "trades": 17,
+        "net": -39898.15,
+        "vsBH": -12167.8,
+        "beats": false
+      },
+      {
+        "value": 300,
+        "trades": 7,
+        "net": -21929.12,
+        "vsBH": 5801.23,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "82% of gross profit came from a single trade. That is one outcome wearing the costume of a system."
+    ]
+  },
+  {
+    "group": "stepC_c_outlier_high_concentration",
+    "symbol": "SMH",
+    "timeframe": "30m",
+    "strategy": "EMA_REGIME_LS",
+    "shares": 163,
+    "sourceVsBH": 8171.48,
+    "sourceTrades": 13,
+    "sourceTopTradeShare": 61.6,
+    "verdict": "FRAGILE",
+    "gates": {
+      "beatsInSample": true,
+      "benchmarkWorthBeating": true,
+      "marginWorthKeeping": true,
+      "marginFloor": 1000.0,
+      "beatsOutOfSample": true,
+      "trades": 13,
+      "variationsHeldPct": 33.3,
+      "survivesTicks": 8.0,
+      "survivesTop3Removal": true,
+      "survivesTop5Removal": true,
+      "foldsWon": 4,
+      "foldsRun": 5
+    },
+    "why": [
+      "Only 33% of parameter variations still beat \u2014 an island, not a plateau."
+    ],
+    "fullNet": -1438.82,
+    "fullBh": -9610.3,
+    "fullVsBH": 8171.48,
+    "fullTrades": 13,
+    "fullTopTradeShare": 61.6,
+    "fullSharpe": -0.025634133291457004,
+    "devBeatsBH": true,
+    "devTrades": 10,
+    "oosBeatsBH": true,
+    "oosTrades": 3,
+    "oosVsBH": 2561.34,
+    "survivesTicks": 8.0,
+    "topRemoval": [
+      {
+        "removed": 1,
+        "net": -6143.0,
+        "bh": -9610.3,
+        "beats": true
+      },
+      {
+        "removed": 3,
+        "net": -8821.41,
+        "bh": -9610.3,
+        "beats": true
+      },
+      {
+        "removed": 5,
+        "net": -9077.32,
+        "bh": -9610.3,
+        "beats": true
+      }
+    ],
+    "foldsWon": 4,
+    "foldsRun": 5,
+    "folds": [
+      {
+        "fold": 1,
+        "bars": 104,
+        "trades": 1,
+        "net": -1379.79,
+        "bh": -3502.06,
+        "beats": true
+      },
+      {
+        "fold": 2,
+        "bars": 104,
+        "trades": 1,
+        "net": -1789.74,
+        "bh": -5331.73,
+        "beats": true
+      },
+      {
+        "fold": 3,
+        "bars": 104,
+        "trades": 1,
+        "net": -1537.09,
+        "bh": 5819.92,
+        "beats": false
+      },
+      {
+        "fold": 4,
+        "bars": 104,
+        "trades": 1,
+        "net": -1520.79,
+        "bh": -3113.3,
+        "beats": true
+      },
+      {
+        "fold": 5,
+        "bars": 104,
+        "trades": 1,
+        "net": -393.52,
+        "bh": -4362.52,
+        "beats": true
+      }
+    ],
+    "paramKey": "period",
+    "variationsHeldPct": 33.3,
+    "variations": [
+      {
+        "value": 60,
+        "trades": 30,
+        "net": -40694.59,
+        "vsBH": -31084.29,
+        "beats": false
+      },
+      {
+        "value": 80,
+        "trades": 23,
+        "net": -17503.1,
+        "vsBH": -7892.8,
+        "beats": false
+      },
+      {
+        "value": 90,
+        "trades": 18,
+        "net": -13074.38,
+        "vsBH": -3464.08,
+        "beats": false
+      },
+      {
+        "value": 110,
+        "trades": 11,
+        "net": -10296.88,
+        "vsBH": -686.58,
+        "beats": false
+      },
+      {
+        "value": 125,
+        "trades": 13,
+        "net": -7961.73,
+        "vsBH": 1648.57,
+        "beats": true
+      },
+      {
+        "value": 150,
+        "trades": 7,
+        "net": -3814.38,
+        "vsBH": 5795.92,
+        "beats": true
+      }
+    ],
+    "warnings": [
+      "Asked for 600 bars, served 520. Yahoo serves 30m bars for a 60-day trailing window only.",
+      "62% of gross profit came from a single trade. That is one outcome wearing the costume of a system."
+    ]
+  }
+]

@@ -1,0 +1,27 @@
+{
+ "15m:1": {
+  "kept": 3,
+  "of": 3,
+  "verdict": "ROBUST"
+ },
+ "1h:10": {
+  "kept": 2,
+  "of": 3,
+  "verdict": "MODERATELY ROBUST"
+ },
+ "1h:5": {
+  "kept": 3,
+  "of": 3,
+  "verdict": "ROBUST"
+ },
+ "15m:10": {
+  "kept": 2,
+  "of": 3,
+  "verdict": "MODERATELY ROBUST"
+ },
+ "15m:7": {
+  "kept": 3,
+  "of": 3,
+  "verdict": "ROBUST"
+ }
+}

@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backtest Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* The terminal's palette, so the lab reads as the same product. */
+:root{
+  --bg:#0b0d14; --panel:#12141f; --raised:#1a1d2b; --hover:#1e2133;
+  --line:#252838; --line-2:#33374a;
+  --ink:#e8eaef; --ink-2:#8d93a8; --ink-3:#5a5f75;
+  --green:#00d26a; --green-bg:rgba(0,210,106,.10);
+  --red:#ff4757;   --red-bg:rgba(255,71,87,.10);
+  --blue:#3b82f6;  --blue-bg:rgba(59,130,246,.10);
+  --amber:#f5a623; --amber-bg:rgba(245,166,35,.10);
+  --purple:#8b5cf6;
+  --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:13px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+a{color:var(--blue)}
+
+/* ---- shell ---- */
+.top{
+  height:48px; display:flex; align-items:center; gap:20px;
+  padding:0 18px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:20;
+}
+.brand{font-weight:600;letter-spacing:-.01em;font-size:14px;white-space:nowrap}
+.brand span{color:var(--ink-3);font-weight:400;margin-left:8px;font-size:12px}
+.tabs{display:flex;gap:2px;margin-left:auto}
+.tab{
+  background:none;border:1px solid transparent;border-radius:6px;
+  padding:6px 14px;color:var(--ink-2);cursor:pointer;font-weight:500;
+}
+.tab:hover{background:var(--hover);color:var(--ink)}
+.tab.on{background:var(--blue-bg);border-color:rgba(59,130,246,.35);color:#8fb8fb}
+.dbdot{
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-3);
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+}
+.dbdot i{width:7px;height:7px;border-radius:50%;background:var(--ink-3);display:block}
+.dbdot.up i{background:var(--green)} .dbdot.down i{background:var(--amber)}
+
+.shell{display:grid;grid-template-columns:288px 1fr;min-height:calc(100vh - 48px)}
+.rail{
+  border-right:1px solid var(--line);background:var(--panel);
+  padding:16px 16px 60px; position:sticky; top:48px;
+  height:calc(100vh - 48px); overflow-y:auto;
+}
+.main{padding:18px 22px 80px;min-width:0}
+
+/* ---- form ---- */
+.grp{margin-bottom:20px}
+.grp>h4{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px;
+}
+.f{margin-bottom:9px}
+.f label{display:block;font-size:11.5px;color:var(--ink-2);margin-bottom:3px}
+.f input,.f select{
+  width:100%;background:var(--bg);border:1px solid var(--line);border-radius:5px;
+  padding:6px 8px;font-family:var(--mono);font-size:12px;
+}
+.f input:focus,.f select:focus{outline:none;border-color:var(--blue)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.checks{display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}
+.checks label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);cursor:pointer}
+.checks input{width:auto;accent-color:var(--blue)}
+.hint{font-size:11px;color:var(--ink-3);margin:4px 0 0;line-height:1.45}
+
+.btn{
+  width:100%;background:var(--blue);border:none;border-radius:6px;color:#fff;
+  padding:9px;font-weight:600;cursor:pointer;
+}
+.btn:hover{background:#4f8ef7} .btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:var(--raised);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--hover)}
+.btn.sm{width:auto;padding:5px 12px;font-size:12px;font-weight:500}
+
+/* ---- panels ---- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:14px}
+.card>h3{margin:0 0 3px;font-size:14px;font-weight:600}
+.card>h3+.sub{margin:0 0 14px;font-size:11.5px;color:var(--ink-3)}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.head h3{margin:0;font-size:14px}
+
+/* ---- stats ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}
+.st{background:var(--panel);padding:12px 14px}
+.st .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.st .v{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:3px}
+.st .n{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.pos{color:var(--green)} .neg{color:var(--red)} .mid{color:var(--amber)}
+
+/* ---- warnings: the guardrails, said out loud ---- */
+.warn{background:var(--amber-bg);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:11px 14px;margin-bottom:14px}
+.warn h5{margin:0 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--amber)}
+.warn ul{margin:0;padding-left:17px} .warn li{margin-bottom:4px;color:#e2cfa8}
+.warn li:last-child{margin-bottom:0}
+
+/* ---- verdict ---- */
+.vb{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;padding:4px 11px;border-radius:5px}
+.v-ROBUST{background:var(--green-bg);color:var(--green);border:1px solid rgba(0,210,106,.35)}
+.v-MODERATE{background:var(--blue-bg);color:#7dabf8;border:1px solid rgba(59,130,246,.35)}
+.v-FRAGILE{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(245,166,35,.35)}
+.v-FAILED{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,71,87,.35)}
+
+/* ---- tables ---- */
+.scroll{overflow-x:auto;margin:0 -2px}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th{
+  text-align:left;font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  padding:0 11px 7px 0;border-bottom:1px solid var(--line-2);white-space:nowrap;
+}
+th.s{cursor:pointer} th.s:hover{color:var(--ink)}
+td{padding:7px 11px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right;padding-right:0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr:hover td{background:var(--raised)}
+tr.click{cursor:pointer}
+/* Numeric cells drop their right padding so the digits align on the column
+   edge; the cell after one therefore has to supply the gap itself. */
+td.num+td:not(.num),th.num+th:not(.num){padding-left:16px}
+
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.05em;padding:2px 6px;border-radius:3px}
+.p-ok{background:var(--green-bg);color:var(--green)}
+.p-no{background:var(--red-bg);color:var(--red)}
+.p-na{background:var(--raised);color:var(--ink-3)}
+
+/* ---- matrix grid ---- */
+.axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.quick{
+  font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--ink-3);text-decoration:none;margin-left:9px;
+}
+.quick:hover{color:var(--blue)}
+.chip{
+  font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:5px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink-2);cursor:pointer;
+}
+.chip.on{background:var(--blue-bg);border-color:rgba(59,130,246,.45);color:#8fb8fb}
+.bar{height:4px;background:var(--raised);border-radius:2px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .15s}
+.grid{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cell{background:var(--panel);padding:8px 9px;min-height:62px;cursor:pointer}
+.cell:hover{background:var(--hover)}
+.cell .c1{font-family:var(--mono);font-size:10px;color:var(--ink-3);display:flex;justify-content:space-between;gap:6px}
+.cell .c2{font-family:var(--mono);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px}
+.cell .c3{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:1px}
+.cell.err{background:var(--red-bg)} .cell.err .c2{font-size:10.5px;font-weight:400;color:var(--red)}
+.cell.empty{background:var(--bg)}
+
+/* ---- chart ---- */
+.chartwrap{position:relative}
+canvas{display:block;width:100%;border-radius:7px;background:var(--bg)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.legend b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+.empty-msg{color:var(--ink-3);font-size:12.5px;padding:22px 0;text-align:center}
+.err-msg{background:var(--red-bg);border:1px solid rgba(255,71,87,.3);color:#f6a8ae;border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12.5px}
+.hidden{display:none!important}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--line-2);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">Backtest Lab <span>research loop, as a tool</span></div>
+  <div class="tabs">
+    <button class="tab on" data-tab="run">Run</button>
+    <button class="tab" data-tab="matrix">Matrix</button>
+    <button class="tab" data-tab="validate">Validate</button>
+    <button class="tab" data-tab="predict">Predict</button>
+    <button class="tab" data-tab="library">Library</button>
+  </div>
+  <div class="dbdot" id="dbdot"><i></i><span>library …</span></div>
+</div>
+
+<div class="shell">
+  <!-- ------------------------------------------------------------------ -->
+  <aside class="rail">
+    <div class="grp">
+      <h4>Instrument</h4>
+      <div class="f"><label>Symbol</label><input id="symbol" value="/NQ"></div>
+      <div class="row2">
+        <div class="f"><label>Timeframe</label><select id="timeframe"></select></div>
+        <div class="f"><label>Bars</label><input id="bars" type="number" value="600" min="30" step="10"></div>
+      </div>
+      <p class="hint" id="ceiling"></p>
+    </div>
+
+    <div class="grp">
+      <h4>Strategy</h4>
+      <div class="f"><select id="strategy"></select></div>
+      <p class="hint" id="stratdesc"></p>
+      <div id="params"></div>
+    </div>
+
+    <div class="grp">
+      <h4>Costs &amp; sizing</h4>
+      <div class="row2">
+        <div class="f"><label>Commission / side</label><input id="commission" type="number" value="2.5" step="0.5"></div>
+        <div class="f"><label>Slippage (ticks)</label><input id="slippage" type="number" value="1" step="0.5"></div>
+      </div>
+      <div class="row2">
+        <div class="f"><label>Capital</label><input id="capital" type="number" value="100000" step="1000"></div>
+        <div class="f"><label>Contracts</label><input id="size" type="number" value="1" step="1"></div>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" id="long" checked> Long</label>
+        <label><input type="checkbox" id="short"> Short</label>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" id="sizeToCapital" checked> Size to capital</label>
+      </div>
+      <p class="hint">On, each run trades about one account's worth: ~800 shares of a
+        $120 stock, still one futures contract because one is already more than the
+        account. Off, it trades exactly the number in Contracts — which on a stock
+        makes the result and its benchmark too small to compare.</p>
+    </div>
+
+    <div class="grp">
+      <h4>Exits <span style="color:var(--ink-3);font-weight:400;text-transform:none;letter-spacing:0"> — blank = off</span></h4>
+      <div class="row2">
+        <div class="f"><label>Stop (ATR)</label><input id="stopAtr" type="number" step="0.5" placeholder="off"></div>
+        <div class="f"><label>Target (ATR)</label><input id="tpAtr" type="number" step="0.5" placeholder="off"></div>
+      </div>
+      <div class="row2">
+        <div class="f">
+          <label>Trailing (ATR)
+            <a href="#" class="quick" id="trailDefault">default</a>
+            <a href="#" class="quick" id="trailOff">off</a>
+          </label>
+          <input id="trailAtr" type="number" step="0.1" placeholder="off">
+        </div>
+        <div class="f"><label>Max bars held</label><input id="maxBars" type="number" step="1" placeholder="off"></div>
+      </div>
+      <p class="hint" id="trailNote"></p>
+    </div>
+
+    <div class="grp">
+      <h4>Bookkeeping</h4>
+      <div class="f"><label>Label (optional)</label><input id="label" placeholder="what this run is asking"></div>
+      <div class="checks"><label><input type="checkbox" id="save" checked> Save to library</label></div>
+    </div>
+
+    <button class="btn" id="go">Run backtest</button>
+    <p class="hint" id="railnote"></p>
+  </aside>
+
+  <!-- ------------------------------------------------------------------ -->
+  <main class="main">
+    <div id="err" class="err-msg hidden"></div>
+
+    <!-- RUN ------------------------------------------------------------ -->
+    <section id="tab-run">
+      <div id="run-empty" class="card"><div class="empty-msg">
+        Set the configuration on the left and run it. The result keeps its trade
+        list, its equity curve and the window it was measured over.
+      </div></div>
+      <div id="run-body" class="hidden">
+        <div id="run-warn"></div>
+        <div class="stats" id="run-stats"></div>
+        <div class="card">
+          <div class="head">
+            <h3>Price, with every entry and exit</h3>
+            <div class="legend">
+              <span><b style="background:var(--green)"></b>buy</span>
+              <span><b style="background:var(--red)"></b>sell / exit</span>
+              <span><b style="background:var(--blue)"></b>equity</span>
+            </div>
+          </div>
+          <div class="chartwrap"><canvas id="chart" height="380"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="head">
+            <h3>Trades</h3>
+            <span class="hint" id="tradecount"></span>
+          </div>
+          <div class="scroll"><table id="trades"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MATRIX --------------------------------------------------------- -->
+    <section id="tab-matrix" class="hidden">
+      <div class="card">
+        <h3>One frozen strategy, across axes</h3>
+        <p class="sub">Only the axes vary, so a difference in the grid is a
+          difference in the axis and not in the setup. Each series is downloaded
+          once and shared by every cell that needs it.</p>
+        <div class="axes">
+          <div>
+            <div class="f"><label>Symbols</label><input id="mxSymbols" value="/NQ, /GC, /CL"></div>
+            <p class="hint">Comma separated. Blank uses the rail's symbol.</p>
+          </div>
+          <div>
+            <label style="display:block;font-size:11.5px;color:var(--ink-2);margin-bottom:5px">
+              Timeframes
+              <a href="#" class="quick" id="tfAll">all</a>
+              <a href="#" class="quick" id="tfIntraday">intraday</a>
+              <a href="#" class="quick" id="tfSwing">swing</a>
+              <a href="#" class="quick" id="tfNone">none</a>
+            </label>
+            <div class="chips" id="mxTfs"></div>
+          </div>
+          <div>
+            <div class="f"><label>Sweep parameter</label><select id="mxKey"></select></div>
+            <div class="f"><label>Values</label><input id="mxValues" placeholder="50, 100, 200"></div>
+          </div>
+          <div>
+            <label style="display:block;font-size:11.5px;color:var(--ink-2);margin-bottom:5px">
+              Strategies
+              <a href="#" class="quick" id="stAll">all</a>
+              <a href="#" class="quick" id="stNone">none</a>
+            </label>
+            <div class="chips" id="mxStrats"></div>
+            <p class="hint">None selected runs the one on the left. Any selected run on
+              their own shipped parameters — the form's parameters belong to one strategy.</p>
+          </div>
+        </div>
+        <div class="head" style="margin:4px 0 0">
+          <span class="hint" id="mxPlan"></span>
+          <span>
+            <button class="btn ghost sm" id="mxStop" disabled>Stop</button>
+            <button class="btn ghost sm" id="mxGo" style="width:auto;margin-left:6px">Run matrix</button>
+            <button class="btn sm" id="mxAll" style="width:auto;margin-left:6px">Every timeframe</button>
+            <button class="btn sm" id="mxEvery" style="width:auto;margin-left:6px">Every strategy</button>
+          </span>
+        </div>
+        <div class="bar"><i id="mxBar"></i></div>
+        <p class="hint" id="mxNote"></p>
+      </div>
+      <div class="card" id="mxCard" style="display:none">
+        <div class="head">
+          <h3>Results</h3>
+          <span>
+            <span class="hint" id="mxCount"></span>
+            <a href="#" class="quick" id="mxWide">more columns</a>
+            <a href="#" class="quick" id="viewTable">table</a>
+            <a href="#" class="quick" id="viewGrid">grid</a>
+            <a href="#" class="quick" id="mxCsv">copy as csv</a>
+          </span>
+        </div>
+        <div class="scroll" id="mxTableWrap"><table id="mxTable"></table></div>
+        <div class="scroll hidden" id="mxGridWrap"><div class="grid" id="mxGrid"></div></div>
+        <p class="hint" id="mxFoot"></p>
+      </div>
+      <div class="card" id="mxSummary" style="display:none">
+        <div class="head">
+          <h3>How often each axis beat</h3>
+          <span class="hint">Share of runs that beat buy &amp; hold at all — not by how
+            much, which is the Beat % column above. Runs that never traded are
+            excluded: sitting out a falling market is not a win.</span>
+        </div>
+        <div id="mxRates"></div>
+      </div>
+    </section>
+
+    <!-- VALIDATE ------------------------------------------------------- -->
+    <section id="tab-validate" class="hidden">
+      <div class="card">
+        <h3>Grade the evidence, not just the metric</h3>
+        <p class="sub">Out-of-sample split, cost ladder, concentration, walk-forward
+          and parameter sensitivity — then the grade those eight gates add up to.
+          Uses the configuration on the left.</p>
+        <div class="head" style="margin:0">
+          <span class="hint" id="vdNote">A full battery is about 20 runs, so it takes a few seconds.</span>
+          <button class="btn sm" id="vdGo" style="width:auto">Validate this configuration</button>
+        </div>
+      </div>
+      <div id="vdBody"></div>
+    </section>
+
+    <!-- PREDICT -------------------------------------------------------- -->
+    <section id="tab-predict" class="hidden">
+      <div class="card">
+        <h3>Where each instrument's best rule currently stands</h3>
+        <p class="sub">For every instrument listed, all fourteen strategies are scored
+          on their own defaults over the same window, and the best one that clears the
+          lab's sanity checks reports the position it is already holding.</p>
+        <div class="warn">
+          <h5>Read this first</h5>
+          <ul>
+            <li><b>This is not a forecast.</b> Nothing here models what price will do.
+              UP means the winning rule is currently long, DOWN means short, FLAT means
+              out of the market — facts about the rule, not claims about the future.</li>
+            <li><b>"Best" means best on the window measured</b>, which is the most
+              overfittable idea in the whole tool. Across 462 runs this session, not one
+              configuration reached ROBUST.</li>
+            <li>A call marked <b>weak</b> is the best available rule when
+              <b>nothing cleared the checks</b> — usually too few trades, or one trade
+              carrying the profit. Treat those as a shortlist to investigate, not as a
+              call. The row says exactly what it fell short on.</li>
+          </ul>
+        </div>
+        <div class="f" style="max-width:640px">
+          <label>Symbols
+            <a href="#" class="quick" id="pdCached">everything backtested</a>
+            <a href="#" class="quick" id="pdListed">everything listed</a>
+            <a href="#" class="quick" id="pdFromMatrix">copy from matrix</a>
+          </label>
+          <input id="pdSymbols" placeholder="blank = every instrument the site lists">
+        </div>
+        <div class="head" style="margin:0">
+          <span class="hint" id="pdPlan"></span>
+          <span>
+            <button class="btn ghost sm" id="pdStop" disabled>Stop</button>
+            <button class="btn sm" id="pdGo" style="width:auto;margin-left:6px">Predict</button>
+          </span>
+        </div>
+        <div class="bar"><i id="pdBar"></i></div>
+        <p class="hint" id="pdNote"></p>
+      </div>
+      <div class="card" id="pdCard" style="display:none">
+        <div class="head"><h3>Stances</h3><span class="hint" id="pdCount"></span></div>
+        <div class="scroll"><table id="pdTable"></table></div>
+      </div>
+    </section>
+
+    <!-- LIBRARY -------------------------------------------------------- -->
+    <section id="tab-library" class="hidden">
+      <div class="card">
+        <div class="head">
+          <h3>Run library</h3>
+          <span>
+            <a class="btn ghost sm" id="libCsv" href="#" style="display:inline-block;text-decoration:none">Export CSV</a>
+            <button class="btn sm" id="libGo" style="width:auto;margin-left:6px">Refresh</button>
+          </span>
+        </div>
+        <div class="axes">
+          <div class="f"><label>Symbol</label><input id="libSymbol" placeholder="any"></div>
+          <div class="f"><label>Timeframe</label><input id="libTf" placeholder="any"></div>
+          <div class="f"><label>Strategy</label><input id="libStrat" placeholder="any"></div>
+          <div class="f"><label>Verdict</label>
+            <select id="libVerdict">
+              <option value="">any</option><option>ROBUST</option><option>MODERATE</option>
+              <option>FRAGILE</option><option>FAILED</option>
+            </select>
+          </div>
+        </div>
+        <div class="checks"><label><input type="checkbox" id="libBeats"> Only runs that beat buy &amp; hold</label></div>
+      </div>
+      <div class="card">
+        <div id="libState" class="hint" style="margin-bottom:10px"></div>
+        <div class="scroll"><table id="libTable"></table></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const api = async (path, opts) => {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || `${r.status} ${r.statusText}`);
+  return body;
+};
+const money = (n) => (n === null || n === undefined) ? "—"
+  : (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString(undefined, {maximumFractionDigits: 0});
+const num = (n, d = 2) => (n === null || n === undefined) ? "—" : Number(n).toFixed(d);
+const pct = (n, d = 1) => (n === null || n === undefined) ? "—" : Number(n).toFixed(d) + "%";
+const sign = (n) => n > 0 ? "pos" : n < 0 ? "neg" : "";
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* By how much the net profit beat buy & hold, as a percentage of buy & hold.
+   Two cases the raw number cannot express honestly, both marked rather than
+   hidden: a benchmark too near zero to divide by, and a negative one — beating
+   a loss by 567% is arithmetic, not an edge. */
+function beatPctCell(r) {
+  if (r.beatPct === null || r.beatPct === undefined) {
+    return `<span class="p-na" title="Buy &amp; hold made too little over this window to express the margin as a ratio.">—</span>`;
+  }
+  const value = `${r.beatPct > 0 ? "+" : ""}${num(r.beatPct, 1)}%`;
+  return r.bh < 0
+    ? `<span class="mid" title="Buy &amp; hold lost money over this window, so this is a margin over a loss, not a return on one.">${value}*</span>`
+    : `<span class="${sign(r.beatPct)}">${value}</span>`;
+}
+
+const S = {cfg: null, run: null, matrix: [], ws: null, sortKey: "created_at",
+           sortDesc: true, mxSort: null, mxDesc: true, mxWide: false, mxCols: null, mxSig: null, predict: [], pdWs: null};
+
+/* ---- boot ----------------------------------------------------------- */
+(async function boot() {
+  try { S.cfg = await api("/api/lab/config"); }
+  catch (e) { return showError("Could not load the lab's configuration: " + e.message); }
+
+  $("timeframe").innerHTML = S.cfg.timeframes.map(t => `<option ${t === "1d" ? "selected" : ""}>${t}</option>`).join("");
+  $("strategy").innerHTML = S.cfg.strategies
+    .map(s => `<option value="${s.name}" ${s.name === "DAILY_SWING_SMA200" ? "selected" : ""}>${esc(s.label)}</option>`).join("");
+  $("mxTfs").innerHTML = S.cfg.timeframes
+    .map(t => `<button class="chip ${t === "1d" ? "on" : ""}" data-tf="${t}">${t}</button>`).join("");
+  $("mxStrats").innerHTML = S.cfg.strategies
+    .map(x => `<button class="chip" data-st="${x.name}" title="${esc(x.label)}">${
+      esc(x.name.toLowerCase().replace(/_/g, " "))}</button>`).join("");
+
+  paintCeiling(); paintStrategy(); paintLibraryState(); paintTrailing(true);
+  // Start on what the backtests already downloaded, so Predict works on the
+  // first click instead of quietly running every listed future.
+  $("pdSymbols").value = (S.cfg.cachedSymbols || []).join(", ");
+  pdPlan();
+  $("railnote").textContent = `Costs are charged per contract per side. Matrix is capped at ${S.cfg.maxCells} runs.`;
+  planMatrix();
+})();
+
+function showError(msg) {
+  $("err").textContent = msg;
+  $("err").classList.remove("hidden");
+}
+function clearError() { $("err").classList.add("hidden"); }
+
+function paintCeiling() {
+  const tf = $("timeframe").value;
+  $("ceiling").textContent = (S.cfg.ceilings || {})[tf] || "";
+}
+
+/* The trailing stop applies to every strategy — it is an exit the engine
+   enforces, not something a rule has to implement — so the default comes from
+   the instrument and timeframe rather than from the strategy. */
+function trailingDefault(symbol, tf) {
+  const table = (S.cfg.trailingDefaults || {}).effective || {};
+  const root = String(symbol || "").toUpperCase().replace(/^\//, "")
+    .replace(/[0-9=FX.\-].*$/, "");
+  const forRoot = table[root];
+  return forRoot && tf in forRoot ? forRoot[tf] : undefined;
+}
+
+function paintTrailing(applyDefault) {
+  const symbol = $("symbol").value.trim().toUpperCase(), tf = $("timeframe").value;
+  const d = trailingDefault(symbol, tf);
+  const meta = S.cfg.trailingDefaults || {};
+  if (applyDefault) $("trailAtr").value = (d === null || d === undefined) ? "" : d;
+
+  if (d === undefined) {
+    $("trailNote").textContent =
+      `No measured default for ${symbol} on ${tf} — a trail from an instrument it `
+      + `was never swept on is worse than none. Set one by hand if you want it.`;
+  } else if (d === null) {
+    $("trailNote").textContent =
+      `Measured default for ${symbol} ${tf} is no trailing stop: nothing survived `
+      + `realistic costs at this bar size.`;
+  } else {
+    $("trailNote").textContent =
+      `Measured default ${d}x ATR for ${symbol} ${tf} (swept ${meta.measured}, `
+      + `scored on return / drawdown, checked on both halves and at 1–8 ticks).`;
+  }
+}
+function paintLibraryState() {
+  const lib = S.cfg.library || {};
+  const dot = $("dbdot");
+  dot.className = "dbdot " + (lib.available ? "up" : "down");
+  dot.querySelector("span").textContent = lib.available
+    ? "library on" : (lib.configured ? "library unreachable" : "library off");
+  dot.title = lib.available
+    ? `Runs are saved to the ${lib.schema} schema.`
+    : `Runs are not being saved (${lib.error}). Backtests still run and still render — set LAB_DATABASE_URL to turn the library on.`;
+}
+
+/* Strategy parameters are built from the registry, so a new strategy needs no
+   edit here. */
+function currentStrategy() {
+  return S.cfg.strategies.find(s => s.name === $("strategy").value);
+}
+function paintStrategy() {
+  const s = currentStrategy();
+  $("stratdesc").textContent = s ? s.description : "";
+  $("params").innerHTML = !s ? "" : s.parameters.map(p => {
+    const v = p.value !== undefined ? p.value : p.default;
+    if (p.type === "bool") {
+      return `<div class="checks" style="margin:6px 0"><label>
+        <input type="checkbox" data-p="${p.key}" ${v ? "checked" : ""}> ${esc(p.label)}</label></div>`;
+    }
+    const step = p.type === "int" ? "1" : "any";
+    return `<div class="f"><label>${esc(p.label)}</label>
+      <input data-p="${p.key}" data-t="${p.type}" type="number" step="${step}" value="${v}"></div>`;
+  }).join("");
+
+  const numeric = !s ? [] : s.parameters.filter(p => p.type === "int" || p.type === "float");
+  $("mxKey").innerHTML = `<option value="">— none, vary nothing —</option>` +
+    numeric.map(p => `<option value="${p.key}">${esc(p.label)}</option>`).join("");
+}
+
+function readParams() {
+  const out = {};
+  $("params").querySelectorAll("[data-p]").forEach(el => {
+    if (el.type === "checkbox") out[el.dataset.p] = el.checked;
+    else if (el.value !== "") out[el.dataset.p] = el.dataset.t === "int"
+      ? parseInt(el.value, 10) : parseFloat(el.value);
+  });
+  return out;
+}
+const opt = (id) => $(id).value === "" ? null : parseFloat($(id).value);
+
+function body(extra) {
+  return Object.assign({
+    symbol: $("symbol").value.trim().toUpperCase(),
+    timeframe: $("timeframe").value,
+    strategy: $("strategy").value,
+    strategyParameters: readParams(),
+    bars: parseInt($("bars").value, 10) || null,
+    commission: parseFloat($("commission").value) || 0,
+    slippageTicks: parseFloat($("slippage").value) || 0,
+    initialCapital: parseFloat($("capital").value) || 100000,
+    positionSize: parseFloat($("size").value) || 1,
+    allowLong: $("long").checked,
+    allowShort: $("short").checked,
+    sizeToCapital: $("sizeToCapital").checked,
+    stopLossAtr: opt("stopAtr"), takeProfitAtr: opt("tpAtr"),
+    trailingStopAtr: opt("trailAtr"),
+    maxBarsInTrade: $("maxBars").value === "" ? null : parseInt($("maxBars").value, 10),
+    label: $("label").value.trim(),
+    save: $("save").checked,
+  }, extra || {});
+}
+const post = (path, extra) => api(path, {
+  method: "POST", headers: {"Content-Type": "application/json"},
+  body: JSON.stringify(body(extra)),
+});
+
+/* ---- tabs ----------------------------------------------------------- */
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x === t));
+  ["run", "matrix", "validate", "predict", "library"].forEach(n =>
+    $("tab-" + n).classList.toggle("hidden", n !== t.dataset.tab));
+  if (t.dataset.tab === "library") loadLibrary();
+  if (t.dataset.tab === "run" && S.run) drawChart(S.run);
+});
+$("timeframe").onchange = () => { paintCeiling(); paintTrailing(true); planMatrix(); };
+$("symbol").onchange = () => paintTrailing(true);
+$("trailDefault").onclick = (e) => { e.preventDefault(); paintTrailing(true); };
+$("trailOff").onclick = (e) => {
+  e.preventDefault();
+  $("trailAtr").value = "";
+  paintTrailing(false);
+};
+$("strategy").onchange = paintStrategy;
+["mxSymbols", "mxValues", "mxKey", "bars"].forEach(id => $(id).oninput = planMatrix);
+$("mxTfs").onclick = (e) => {
+  const c = e.target.closest(".chip");
+  if (c) { c.classList.toggle("on"); planMatrix(); }
+};
+
+/* Selecting eleven chips by hand is the kind of setup the tool exists to
+   remove, so the common groupings are one click each. */
+const INTRADAY = ["5m", "15m", "30m", "1h", "2h", "4h"];
+const SWING = ["6h", "8h", "12h", "1d", "1w"];
+function selectTfs(keep) {
+  $("mxTfs").querySelectorAll(".chip").forEach(c =>
+    c.classList.toggle("on", keep.includes(c.dataset.tf)));
+  planMatrix();
+}
+$("tfAll").onclick = (e) => { e.preventDefault(); selectTfs(S.cfg.timeframes); };
+$("tfIntraday").onclick = (e) => { e.preventDefault(); selectTfs(INTRADAY); };
+$("tfSwing").onclick = (e) => { e.preventDefault(); selectTfs(SWING); };
+$("tfNone").onclick = (e) => { e.preventDefault(); selectTfs([]); };
+
+function selectStrats(keep) {
+  $("mxStrats").querySelectorAll(".chip").forEach(c =>
+    c.classList.toggle("on", keep.includes(c.dataset.st)));
+  planMatrix();
+}
+$("mxStrats").onclick = (e) => {
+  const c = e.target.closest(".chip");
+  if (c) { c.classList.toggle("on"); planMatrix(); }
+};
+$("stAll").onclick = (e) => {
+  e.preventDefault(); selectStrats(S.cfg.strategies.map(x => x.name));
+};
+$("stNone").onclick = (e) => { e.preventDefault(); selectStrats([]); };
+
+/* ---- run ------------------------------------------------------------ */
+$("go").onclick = async () => {
+  clearError();
+  const btn = $("go");
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Running…';
+  try {
+    S.run = await post("/api/lab/run");
+    paintRun(S.run);
+  } catch (e) { showError(e.message); }
+  finally { btn.disabled = false; btn.textContent = "Run backtest"; }
+};
+
+function statCard(k, v, note, cls) {
+  return `<div class="st"><div class="k">${k}</div>
+    <div class="v ${cls || ""}">${v}</div><div class="n">${note || ""}</div></div>`;
+}
+
+function paintRun(r) {
+  $("run-empty").classList.add("hidden");
+  $("run-body").classList.remove("hidden");
+
+  $("run-warn").innerHTML = !(r.warnings || []).length ? "" :
+    `<div class="warn"><h5>Read this before the numbers</h5><ul>${
+      r.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>`;
+
+  $("run-stats").innerHTML = [
+    statCard("Net P&amp;L", money(r.net), pct(r.returnPct) + " on capital", sign(r.net)),
+    statCard("vs Buy &amp; hold", money(r.vsBH),
+             `${r.beatPct === null || r.beatPct === undefined ? "benchmark too small for a ratio"
+               : (r.beatPct > 0 ? "+" : "") + num(r.beatPct, 1) + "% on B&amp;H"} · B&amp;H ${money(r.bh)}`,
+             sign(r.vsBH)),
+    statCard("Trades", r.trades, pct(r.winRate) + " won"),
+    statCard("Profit factor", num(r.pf), "gross won / gross lost"),
+    statCard("Max drawdown", pct(r.maxDDPct), "B&amp;H " + pct(r.bhDDPct), "neg"),
+    statCard("Sharpe", num(r.sharpe), "annualised"),
+    statCard("Top-trade share", pct(r.topTradeShare),
+             "of gross profit", r.topTradeShare >= 50 ? "mid" : ""),
+    statCard("Window", r.bars + " bars", r.usableBars + " usable after warm-up"),
+    statCard("Time in market", pct(r.timeInMarket), "of the window"),
+  ].join("");
+
+  const t = r.trades_list || [];
+  $("tradecount").textContent = `${t.length} trades · exits are the engine's, not a summary`;
+  $("trades").innerHTML = `<thead><tr>
+      <th>#</th><th>Dir</th><th>Entry</th><th class="num">Price</th>
+      <th>Exit</th><th class="num">Price</th><th>Reason</th>
+      <th class="num">Bars</th><th class="num">Gross</th><th class="num">Net</th>
+    </tr></thead><tbody>${t.map((x, i) => `<tr>
+      <td class="num">${i + 1}</td>
+      <td><span class="pill ${x.direction === "LONG" ? "p-ok" : "p-no"}">${x.direction}</span></td>
+      <td class="num">${esc((x.entryTime || "").slice(0, 16).replace("T", " "))}</td>
+      <td class="num">${num(x.entryPrice)}</td>
+      <td class="num">${esc((x.exitTime || "").slice(0, 16).replace("T", " "))}</td>
+      <td class="num">${num(x.exitPrice)}</td>
+      <td>${esc(x.exitReason)}</td>
+      <td class="num">${x.barsHeld}</td>
+      <td class="num">${money(x.grossPnl)}</td>
+      <td class="num ${sign(x.netPnl)}">${money(x.netPnl)}</td>
+    </tr>`).join("")}</tbody>`;
+
+  drawChart(r);
+}
+
+/* Candles, entry and exit markers, and the equity curve underneath. Drawn on a
+   canvas rather than pulled from a chart library, because the page has to be
+   self-contained. */
+function drawChart(r) {
+  const cv = $("chart");
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth, H = 380;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const g = cv.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, W, H);
+
+  const c = r.candles || [];
+  if (!c.length) return;
+  const padL = 8, padR = 62, priceH = 268, eqTop = priceH + 26, eqH = H - eqTop - 6;
+  const plotW = W - padL - padR;
+
+  let lo = Infinity, hi = -Infinity;
+  for (const k of c) { if (k[3] < lo) lo = k[3]; if (k[2] > hi) hi = k[2]; }
+  const span = (hi - lo) || 1;
+  const x = (i) => padL + (i + 0.5) / c.length * plotW;
+  const y = (p) => 12 + (hi - p) / span * (priceH - 24);
+
+  // price grid
+  g.strokeStyle = "#252838"; g.fillStyle = "#5a5f75";
+  g.font = "10px 'JetBrains Mono', monospace"; g.textAlign = "left";
+  for (let i = 0; i <= 4; i++) {
+    const p = hi - span * i / 4, yy = Math.round(y(p)) + 0.5;
+    g.beginPath(); g.moveTo(padL, yy); g.lineTo(W - padR, yy); g.stroke();
+    g.fillText(p.toLocaleString(undefined, {maximumFractionDigits: 2}), W - padR + 6, yy + 3);
+  }
+
+  // candles — a hairline when there are more bars than pixels
+  const bw = Math.max(1, Math.min(9, plotW / c.length * 0.68));
+  for (let i = 0; i < c.length; i++) {
+    const [, o, h, l, cl] = c[i];
+    const up = cl >= o;
+    g.strokeStyle = g.fillStyle = up ? "#00d26a" : "#ff4757";
+    g.globalAlpha = 0.75;
+    g.beginPath(); g.moveTo(x(i), y(h)); g.lineTo(x(i), y(l)); g.stroke();
+    if (bw > 1.6) {
+      const top = y(Math.max(o, cl)), bot = y(Math.min(o, cl));
+      g.fillRect(x(i) - bw / 2, top, bw, Math.max(1, bot - top));
+    }
+    g.globalAlpha = 1;
+  }
+
+  // markers, placed on the bar whose timestamp the fill carries
+  const at = new Map(c.map((k, i) => [k[0], i]));
+  const idx = (iso) => {
+    const t = Math.floor(new Date(iso).getTime() / 1000);
+    if (at.has(t)) return at.get(t);
+    let best = -1, gap = Infinity;
+    for (let i = 0; i < c.length; i++) {
+      const d = Math.abs(c[i][0] - t);
+      if (d < gap) { gap = d; best = i; }
+    }
+    return best;
+  };
+  const tri = (px, py, up, colour) => {
+    g.fillStyle = colour;
+    g.beginPath();
+    if (up) { g.moveTo(px, py - 7); g.lineTo(px - 5, py + 2); g.lineTo(px + 5, py + 2); }
+    else { g.moveTo(px, py + 7); g.lineTo(px - 5, py - 2); g.lineTo(px + 5, py - 2); }
+    g.closePath(); g.fill();
+  };
+  for (const t of (r.trades_list || [])) {
+    const a = idx(t.entryTime), b = idx(t.exitTime);
+    const longEntry = t.direction === "LONG";
+    if (a >= 0) tri(x(a), y(t.entryPrice) + (longEntry ? 12 : -12), longEntry, longEntry ? "#00d26a" : "#ff4757");
+    if (b >= 0) tri(x(b), y(t.exitPrice) + (longEntry ? -12 : 12), !longEntry, longEntry ? "#ff4757" : "#00d26a");
+  }
+
+  // equity, on its own scale beneath the price
+  const eq = r.equity || [];
+  if (eq.length > 1) {
+    let elo = Infinity, ehi = -Infinity;
+    for (const [, v] of eq) { if (v < elo) elo = v; if (v > ehi) ehi = v; }
+    const espan = (ehi - elo) || 1;
+    g.strokeStyle = "#252838";
+    g.beginPath(); g.moveTo(padL, eqTop - 9); g.lineTo(W - padR, eqTop - 9); g.stroke();
+    g.strokeStyle = "#3b82f6"; g.lineWidth = 1.5; g.beginPath();
+    eq.forEach(([, v], i) => {
+      const px = padL + i / (eq.length - 1) * plotW;
+      const py = eqTop + (ehi - v) / espan * eqH;
+      i ? g.lineTo(px, py) : g.moveTo(px, py);
+    });
+    g.stroke(); g.lineWidth = 1;
+    g.fillStyle = "#5a5f75"; g.textAlign = "left";
+    g.fillText("equity  " + money(elo) + " – " + money(ehi), padL, eqTop - 14);
+  }
+
+  g.fillStyle = "#5a5f75"; g.textAlign = "left";
+  const first = new Date(c[0][0] * 1000).toISOString().slice(0, 10);
+  const last = new Date(c[c.length - 1][0] * 1000).toISOString().slice(0, 10);
+  g.fillText(first, padL, H - 2);
+  g.textAlign = "right"; g.fillText(last, W - padR, H - 2);
+}
+window.addEventListener("resize", () => { if (S.run) drawChart(S.run); });
+
+/* ---- matrix --------------------------------------------------------- */
+const mxSymbols = () => $("mxSymbols").value.split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
+const mxTfs = () => [...$("mxTfs").querySelectorAll(".chip.on")].map(c => c.dataset.tf);
+const mxValues = () => $("mxValues").value.split(",").map(s => s.trim()).filter(Boolean)
+  .map(v => Number(v)).filter(v => !Number.isNaN(v));
+const mxStrats = () => [...$("mxStrats").querySelectorAll(".chip.on")].map(c => c.dataset.st);
+
+function matrixJob() {
+  const key = $("mxKey").value || null;
+  return body({
+    symbols: mxSymbols().length ? mxSymbols() : [$("symbol").value.trim().toUpperCase()],
+    timeframes: mxTfs().length ? mxTfs() : [$("timeframe").value],
+    sweepKey: key, sweepValues: key ? mxValues() : [],
+    strategies: mxStrats(),
+  });
+}
+async function planMatrix() {
+  if (!S.cfg) return;
+  try {
+    const p = await api("/api/lab/plan", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(matrixJob()),
+    });
+    $("mxPlan").textContent = `${p.cells} runs · ${p.strategies} ${
+      p.strategies === 1 ? "strategy" : "strategies"} · ${p.series} series downloaded · cap ${p.cap}`;
+    $("mxNote").textContent = "";
+    $("mxGo").disabled = false;
+  } catch (e) {
+    $("mxPlan").textContent = "";
+    $("mxNote").textContent = e.message;
+    $("mxGo").disabled = true;
+  }
+}
+
+/* One strategy, every timeframe, one click. Nothing else varies — no sweep, and
+   whatever symbols are in the box — so a difference in the grid is a difference
+   in the timeframe and nothing else. */
+$("mxAll").onclick = () => {
+  selectTfs(S.cfg.timeframes);
+  $("mxKey").value = "";
+  $("mxValues").value = "";
+  // planMatrix is also the guard: it disables the run when the submission is
+  // over the cap, and the note says which dimension to cut.
+  planMatrix().then(() => { if (!$("mxGo").disabled) runMatrix(); });
+};
+
+/* Every strategy the site offers, on its own defaults, across whatever
+   timeframes are selected. Deliberately not "and every timeframe too" — that is
+   462 runs on three symbols and the cap would refuse it; the point of the two
+   buttons is to pick which axis is being opened up. */
+$("mxEvery").onclick = () => {
+  selectStrats(S.cfg.strategies.map(x => x.name));
+  $("mxKey").value = "";
+  $("mxValues").value = "";
+  planMatrix().then(() => { if (!$("mxGo").disabled) runMatrix(); });
+};
+
+$("mxGo").onclick = () => runMatrix();
+
+function runMatrix() {
+  clearError();
+  const job = matrixJob();
+  S.matrix = [];
+  $("mxCard").style.display = "";
+  // With more than one symbol the timeframes have to stay in columns, or a row
+  // stops meaning "this symbol". With one symbol there are no rows to preserve,
+  // so the cells wrap and eleven timeframes are readable without scrolling.
+  $("mxGrid").style.gridTemplateColumns = job.symbols.length > 1
+    ? `repeat(${job.timeframes.length}, minmax(122px, 1fr))`
+    : "repeat(auto-fill, minmax(136px, 1fr))";
+  $("mxGrid").innerHTML = "";
+  $("mxBar").style.width = "0%";
+
+  const proto = location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${proto}://${location.host}/ws/lab`);
+  S.ws = ws;
+  $("mxGo").disabled = true; $("mxAll").disabled = true; $("mxStop").disabled = false;
+
+  ws.onopen = () => ws.send(JSON.stringify(job));
+  ws.onmessage = (ev) => {
+    const m = JSON.parse(ev.data);
+    if (m.type === "refused" || m.type === "error") { showError(m.detail); ws.close(); return; }
+    if (m.type === "start") {
+      $("mxNote").textContent = `Running ${m.cells} cells over ${m.series} downloaded series…`;
+      $("mxGrid").innerHTML = Array.from({length: m.cells}, () => `<div class="cell empty"></div>`).join("");
+      S.mxSort = null;
+      S.mxSig = null;
+      $("mxSummary").style.display = "none";
+      mxHeader();
+      $("mxCount").textContent = "";
+      $("mxFoot").textContent = "";
+      return;
+    }
+    if (m.type === "cell") {
+      S.matrix[m.cell.index] = m.cell;
+      paintCell(m.cell);
+      mxAppend(m.cell);
+      $("mxCount").textContent = `${S.matrix.filter(Boolean).length} of ${m.cell.total} · `;
+      $("mxBar").style.width = ((m.cell.index + 1) / m.cell.total * 100) + "%";
+      return;
+    }
+    if (m.type === "done") {
+      const done = S.matrix.filter(Boolean).filter(c => !c.error);
+      const beat = done.filter(c => c.beatsBH && c.trades > 0);
+      $("mxNote").textContent = m.error
+        ? "Stopped: " + m.error
+        : `Done. ${beat.length} of ${done.length} beat buy & hold` +
+          (m.saved ? ` · ${m.saved} saved to the library` : " · not saved (library off)");
+      $("mxCount").textContent = `${done.length} runs · `;
+      paintRates();
+      $("mxFoot").textContent = beat.length
+        ? "Beat buy & hold: " + beat.map(c => `${c.symbol} ${c.timeframe}` +
+            (c.paramValue == null ? "" : ` (${c.paramValue})`)).join(", ") + "."
+        : "Nothing here beat buy & hold over its own window.";
+      ws.close();
+    }
+  };
+  ws.onclose = () => {
+    $("mxGo").disabled = false; $("mxAll").disabled = false;
+    $("mxStop").disabled = true; S.ws = null;
+  };
+  ws.onerror = () => showError("The matrix stream dropped.");
+}
+$("mxStop").onclick = () => { if (S.ws) S.ws.close(); $("mxNote").textContent = "Stopped."; };
+
+/* The table is the primary view: one row per run, every metric, sortable, and
+   the same order the runs came back in until a header is clicked. The grid is
+   kept for the shape of a two-axis matrix, where colour reads faster than
+   numbers. */
+/* Six columns answer the question the run was asking. The rest are real and
+   sometimes decisive, so they are one click away rather than deleted — but a
+   table nobody can read at a glance is not a table. */
+const CORE = [
+  ["timeframe", "TF", false, r => esc(r.timeframe)],
+  ["trades", "Trades", true, r => r.trades],
+  ["net", "Net", true, r => `<span class="${sign(r.net)}">${money(r.net)}</span>`],
+  ["bh", "Buy &amp; hold", true, r => money(r.bh)],
+  ["vsBH", "vs B&amp;H", true, r => `<span class="${sign(r.vsBH)}">${money(r.vsBH)}</span>`],
+  ["beatPct", "Beat %", true, beatPctCell],
+  // A run that never traded cannot beat anything. Marking it YES because the
+  // benchmark happened to lose money reads as a result, and it is the absence
+  // of one.
+  ["beatsBH", "Beat", false, r => !r.trades
+    ? `<span class="pill p-na" title="No trades — nothing to compare.">—</span>`
+    : `<span class="pill ${r.beatsBH ? "p-ok" : "p-no"}">${r.beatsBH ? "YES" : "NO"}</span>`],
+];
+const EXTRA = [
+  ["vsBHPct", "vs B&amp;H (pts)", true,
+   r => `<span class="${sign(r.vsBHPct)}">${r.vsBHPct > 0 ? "+" : ""}${num(r.vsBHPct, 1)}</span>`],
+  ["winRate", "Win %", true, r => pct(r.winRate)],
+  ["pf", "PF", true, r => num(r.pf)],
+  ["maxDDPct", "Max DD", true, r => pct(r.maxDDPct)],
+  ["sharpe", "Sharpe", true, r => num(r.sharpe)],
+  ["topTradeShare", "Top trade", true, r => pct(r.topTradeShare)],
+  ["usableBars", "Usable bars", true, r => r.usableBars],
+];
+const SYMBOL_COL = ["symbol", "Symbol", false, r => esc(r.symbol)];
+const STRATEGY_COL = ["strategy", "Strategy", false,
+                      r => esc(String(r.strategy || "").toLowerCase().replace(/_/g, " "))];
+const PARAM_COL = ["paramValue", "Param", false,
+                   r => r.paramValue == null ? "—" : esc(r.paramValue)];
+
+/* Symbol and parameter columns only appear when they actually vary — a column
+   of eleven identical values is noise pretending to be information. */
+function mxColumns() {
+  const rows = S.matrix.filter(Boolean);
+  const many = (key) => new Set(rows.map(r => r[key])).size > 1;
+  const cols = [CORE[0]];
+  if (many("strategy")) cols.push(STRATEGY_COL);
+  if (many("symbol")) cols.push(SYMBOL_COL);
+  if (rows.some(r => r.paramValue != null)) cols.push(PARAM_COL);
+  cols.push(...CORE.slice(1, -1));
+  if (S.mxWide) cols.push(...EXTRA);
+  cols.push(CORE[CORE.length - 1]);
+  return cols;
+}
+
+function mxHeader() {
+  S.mxCols = mxColumns();
+  $("mxTable").innerHTML = `<thead><tr>${S.mxCols.map(([key, label, isNum]) =>
+    `<th class="${isNum ? "num " : ""}s" data-sort="${key}">${label}${
+      key === S.mxSort ? (S.mxDesc ? " ↓" : " ↑") : ""}</th>`).join("")}</tr></thead><tbody></tbody>`;
+  $("mxTable").querySelectorAll("th[data-sort]").forEach(th => th.onclick = () => {
+    const k = th.dataset.sort;
+    if (k === S.mxSort) S.mxDesc = !S.mxDesc; else { S.mxSort = k; S.mxDesc = true; }
+    mxRepaint();
+  });
+}
+
+function mxRow(r) {
+  const cols = S.mxCols || CORE;
+  if (r.error) {
+    return `<tr><td>${esc(r.timeframe)}</td>
+      <td colspan="${cols.length - 1}" class="neg">${esc(r.error)}</td></tr>`;
+  }
+  return `<tr class="click" data-i="${r.index}">${cols.map(([, , isNum, f]) =>
+    `<td class="${isNum ? "num" : ""}">${f(r)}</td>`).join("")}</tr>`;
+}
+
+function mxAppend(r) {
+  // Which columns are needed only becomes knowable as rows arrive: a strategy
+  // column is pointless until a second strategy shows up. So the column set is
+  // recomputed on every row and the whole table redrawn when it changes —
+  // which happens a handful of times per run, not once per row.
+  const sig = mxColumns().map(c => c[0]).join(",");
+  if (sig !== S.mxSig) {
+    S.mxSig = sig;
+    mxRepaint();
+    return;
+  }
+  const body = $("mxTable").querySelector("tbody");
+  if (!body) return;
+  body.insertAdjacentHTML("beforeend", mxRow(r));
+  const tr = body.lastElementChild;
+  if (tr.dataset.i !== undefined) tr.onclick = () => openCell(S.matrix[tr.dataset.i]);
+}
+
+function mxRepaint() {
+  mxHeader();
+  S.mxSig = S.mxCols.map(c => c[0]).join(",");
+  const rows = S.matrix.filter(Boolean).slice();
+  if (S.mxSort) {
+    rows.sort((a, b) => {
+      const x = a[S.mxSort], y = b[S.mxSort];
+      if (x === y) return 0;
+      if (x === null || x === undefined) return 1;
+      if (y === null || y === undefined) return -1;
+      const c = typeof x === "string" ? x.localeCompare(y) : (x < y ? -1 : 1);
+      return S.mxDesc ? -c : c;
+    });
+  }
+  const body = $("mxTable").querySelector("tbody");
+  body.innerHTML = rows.map(mxRow).join("");
+  body.querySelectorAll("tr.click").forEach(tr =>
+    tr.onclick = () => openCell(S.matrix[tr.dataset.i]));
+}
+
+$("mxWide").onclick = (e) => {
+  e.preventDefault();
+  S.mxWide = !S.mxWide;
+  $("mxWide").textContent = S.mxWide ? "fewer columns" : "more columns";
+  mxRepaint();
+};
+
+/* Beat rate, grouped by each axis that actually varied. A rate over one group
+   of one is not a rate, so single-value axes are left out.
+
+   Runs that never traded are excluded from both halves of the fraction. The
+   engine will happily mark a rule that sat out a falling market as beating buy
+   & hold, and counting those inflates every rate in the table. */
+const RATE_AXES = [["strategy", "Strategy"], ["symbol", "Symbol"],
+                   ["timeframe", "Timeframe"], ["paramValue", "Parameter"]];
+
+function median(values) {
+  const v = values.slice().sort((a, b) => a - b);
+  if (!v.length) return null;
+  const m = Math.floor(v.length / 2);
+  return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+}
+
+function paintRates() {
+  const all = S.matrix.filter(Boolean).filter(r => !r.error);
+  const traded = all.filter(r => r.trades > 0);
+  if (!traded.length) { $("mxSummary").style.display = "none"; return; }
+  $("mxSummary").style.display = "";
+
+  const overall = traded.filter(r => r.beatsBH).length;
+  const blocks = [`<p class="hint" style="margin:0 0 14px">
+      ${overall} of ${traded.length} runs that traded beat buy &amp; hold
+      (${(overall / traded.length * 100).toFixed(0)}%).
+      ${all.length - traded.length} of ${all.length} never traded.</p>`];
+
+  for (const [key, label] of RATE_AXES) {
+    const groups = new Map();
+    for (const r of traded) {
+      const k = r[key];
+      if (k === null || k === undefined) continue;
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(r);
+    }
+    if (groups.size < 2) continue;
+
+    const rows = [...groups.entries()]
+      .map(([k, v]) => ({
+        key: k, runs: v.length,
+        beat: v.filter(r => r.beatsBH).length,
+        rate: v.filter(r => r.beatsBH).length / v.length * 100,
+        med: median(v.map(r => r.beatPct).filter(x => x !== null && x !== undefined)),
+      }))
+      .sort((a, b) => b.rate - a.rate || b.beat - a.beat);
+
+    blocks.push(`<h3 style="margin:18px 0 8px">${label}</h3>
+      <div class="scroll"><table><thead><tr>
+        <th>${label}</th><th class="num">Traded</th><th class="num">Beat</th>
+        <th class="num">Share</th><th class="num">Median beat %</th>
+      </tr></thead><tbody>${rows.map(r => `<tr>
+        <td>${esc(key === "strategy"
+              ? String(r.key).toLowerCase().replace(/_/g, " ") : r.key)}</td>
+        <td class="num">${r.runs}</td><td class="num">${r.beat}</td>
+        <td class="num"><b class="${r.rate >= 50 ? "pos" : r.rate === 0 ? "neg" : ""}">${
+          r.rate.toFixed(0)}%</b></td>
+        <td class="num ${sign(r.med)}">${r.med === null ? "—"
+          : (r.med > 0 ? "+" : "") + num(r.med, 1)}</td>
+      </tr>`).join("")}</tbody></table></div>`);
+  }
+  $("mxRates").innerHTML = blocks.join("");
+}
+
+$("viewTable").onclick = (e) => {
+  e.preventDefault();
+  $("mxTableWrap").classList.remove("hidden");
+  $("mxGridWrap").classList.add("hidden");
+};
+$("viewGrid").onclick = (e) => {
+  e.preventDefault();
+  $("mxGridWrap").classList.remove("hidden");
+  $("mxTableWrap").classList.add("hidden");
+};
+
+/* Copying beats a download here: the rows are usually pasted straight into the
+   sheet the rest of the team already keeps. */
+$("mxCsv").onclick = async (e) => {
+  e.preventDefault();
+  const strip = (h) => h.replace(/&amp;/g, "&");
+  const rows = S.matrix.filter(Boolean).filter(r => !r.error);
+  const all = [CORE[0], SYMBOL_COL, PARAM_COL, ...CORE.slice(1), ...EXTRA];
+  const csv = [all.map(c => strip(c[1])).join(",")]
+    .concat(rows.map(r => all.map(([key]) => {
+      const v = r[key];
+      return typeof v === "string" ? `"${v}"` : (v === null || v === undefined ? "" : v);
+    }).join(","))).join("\n");
+  try {
+    await navigator.clipboard.writeText(csv);
+    $("mxFoot").textContent = `${rows.length} rows copied to the clipboard.`;
+  } catch (err) {
+    $("mxFoot").textContent = "Could not reach the clipboard: " + err.message;
+  }
+};
+
+function paintCell(c) {
+  const node = $("mxGrid").children[c.index];
+  if (!node) return;
+  if (c.error) {
+    node.className = "cell err";
+    node.innerHTML = `<div class="c1"><span>${esc(c.symbol)}</span><span>${esc(c.timeframe)}</span></div>
+      <div class="c2">${esc(c.error.slice(0, 70))}</div>`;
+    return;
+  }
+  // Colour is outperformance, scaled against the strongest cell so far, so the
+  // grid stays readable whatever the instrument's units are.
+  const best = Math.max(1, ...S.matrix.filter(Boolean).map(x => Math.abs(x.vsBH || 0)));
+  const a = Math.min(0.55, Math.abs(c.vsBH) / best * 0.55);
+  node.className = "cell";
+  node.style.background = c.vsBH > 0 ? `rgba(0,210,106,${a})` : `rgba(255,71,87,${a})`;
+  node.title = `${c.symbol} ${c.timeframe}${c.paramValue != null ? ` · ${c.paramKey}=${c.paramValue}` : ""}
+net ${money(c.net)} · B&H ${money(c.bh)} · ${c.trades} trades · PF ${num(c.pf)}
+${c.usableBars} usable bars of ${c.bars}`;
+  node.innerHTML = `<div class="c1"><span>${esc(c.strategy && S.matrix.filter(Boolean)
+      .some(x => x.strategy !== c.strategy)
+      ? c.strategy.toLowerCase().replace(/_/g, " ").slice(0, 14)
+      : `${c.symbol} ${c.timeframe}`)}</span>
+      ${c.paramValue != null ? `<span>${esc(c.paramValue)}</span>` : ""}</div>
+    <div class="c2 ${sign(c.vsBH)}">${money(c.vsBH)}</div>
+    <div class="c3">${c.trades} tr · PF ${num(c.pf)}</div>`;
+  node.onclick = () => openCell(c);
+}
+
+function openCell(c) {
+  $("symbol").value = c.symbol;
+  $("timeframe").value = c.timeframe;
+  if (c.strategy && c.strategy !== $("strategy").value) {
+    $("strategy").value = c.strategy;
+    paintStrategy();          // rebuilds the parameter fields for that strategy
+  }
+  paintCeiling();
+  // The cell was run with the matrix's trailing stop, so the note is refreshed
+  // but the value is left alone — otherwise the reopened run would not be the
+  // run whose numbers were just clicked on.
+  paintTrailing(false);
+  if (c.paramKey && c.paramValue != null) {
+    const el = $("params").querySelector(`[data-p="${c.paramKey}"]`);
+    if (el) el.value = c.paramValue;
+  }
+  document.querySelector('.tab[data-tab="run"]').click();
+  $("go").click();
+}
+
+/* ---- validate ------------------------------------------------------- */
+$("vdGo").onclick = async () => {
+  clearError();
+  const btn = $("vdGo");
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Testing…';
+  try { paintValidation(await post("/api/lab/validate")); }
+  catch (e) { showError(e.message); }
+  finally { btn.disabled = false; btn.textContent = "Validate this configuration"; }
+};
+
+const yesNo = (ok) => `<span class="pill ${ok ? "p-ok" : "p-no"}">${ok ? "PASS" : "FAIL"}</span>`;
+const beatPill = (r) => !r.trades
+  ? `<span class="pill p-na" title="No trades — nothing to compare.">—</span>`
+  : `<span class="pill ${r.beatsBH ? "p-ok" : "p-no"}">${r.beatsBH ? "YES" : "NO"}</span>`;
+
+function paintValidation(v) {
+  const g = v.gates, f = v.full;
+  const gates = [
+    ["Beats buy &amp; hold in-sample", g.beatsInSample, money(f.vsBH)],
+    ["Benchmark worth beating", g.benchmarkWorthBeating, "B&amp;H " + money(f.bh)],
+    ["Margin worth keeping", g.marginWorthKeeping !== false,
+      money(f.vsBH) + " · needs " + money(g.marginFloor)],
+    ["Beats out-of-sample", g.beatsOutOfSample, "last 30%: " + money(v.oos.vsBH)],
+    ["Enough trades", g.trades >= 30, g.trades + " trades"],
+    ["Parameter plateau", g.variationsHeldPct !== null && g.variationsHeldPct >= 50,
+      g.variationsHeldPct === null ? "no numeric parameter" : pct(g.variationsHeldPct) + " of variations still beat"],
+    ["Survives costs", g.survivesTicks >= 2, g.survivesTicks ? g.survivesTicks + " ticks of slippage" : "fails at 1 tick"],
+    ["Not one lucky trade", g.survivesTop3Removal,
+      "top-3 removed" + (g.survivesTop5Removal ? ", top-5 too" : ", top-5 fails")],
+    ["Works in more than one era", g.foldsWon >= 3, `${g.foldsWon} of ${g.foldsRun} walk-forward folds`],
+  ];
+
+  $("vdBody").innerHTML = `
+    <div class="card">
+      <div class="head">
+        <h3>${esc(f.symbol)} · ${esc(f.timeframe)} · ${esc(f.strategy)}</h3>
+        <span class="vb v-${v.verdict}">${v.verdict}</span>
+      </div>
+      <ul style="margin:0 0 4px;padding-left:17px;color:var(--ink-2)">
+        ${v.why.map(w => `<li>${w}</li>`).join("")}</ul>
+    </div>
+
+    ${(v.warnings || []).length ? `<div class="warn"><h5>Guardrails</h5><ul>${
+      v.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>` : ""}
+
+    <div class="card"><h3>The gates</h3><p class="sub">Robust needs all of them. Moderate needs the first three plus the looser thresholds.</p>
+      <div class="scroll"><table><thead><tr><th>Gate</th><th>Result</th><th class="num">Evidence</th></tr></thead>
+      <tbody>${gates.map(([k, ok, note]) =>
+        `<tr><td>${k}</td><td>${yesNo(ok)}</td><td class="num">${note}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+
+    <div class="card"><h3>Development vs out-of-sample</h3>
+      <p class="sub">Cut once at 70%, in time order, never shuffled. Buy &amp; hold is recomputed inside
+        each half, so the comparison never spans two windows.</p>
+      <div class="scroll"><table><thead><tr>
+        <th>Window</th><th class="num">Bars</th><th class="num">Trades</th><th class="num">Net</th>
+        <th class="num">B&amp;H</th><th class="num">vs B&amp;H</th><th class="num">Beat %</th>
+        <th class="num">PF</th><th>Beat</th>
+      </tr></thead><tbody>${[["Development (first 70%)", v.dev], ["Out-of-sample (last 30%)", v.oos], ["Full window", v.full]]
+        .map(([name, r]) => `<tr><td>${name}</td><td class="num">${r.bars}</td>
+          <td class="num">${r.trades}</td><td class="num ${sign(r.net)}">${money(r.net)}</td>
+          <td class="num">${money(r.bh)}</td><td class="num ${sign(r.vsBH)}">${money(r.vsBH)}</td>
+          <td class="num">${beatPctCell(r)}</td>
+          <td class="num">${num(r.pf)}</td><td>${yesNo(r.beatsBH)}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+
+    <div class="card"><h3>Cost ladder</h3>
+      <p class="sub">The same rule at rising slippage. An edge that only exists at one tick is a spread, not an edge.</p>
+      <div class="scroll"><table><thead><tr><th class="num">Ticks</th><th class="num">Net</th>
+        <th class="num">vs B&amp;H</th><th>Beat</th></tr></thead>
+      <tbody>${v.costLadder.map(c => `<tr><td class="num">${c.ticks}</td>
+        <td class="num ${sign(c.net)}">${money(c.net)}</td>
+        <td class="num ${sign(c.vsBH)}">${money(c.vsBH)}</td><td>${yesNo(c.beats)}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+
+    <div class="card"><h3>Concentration</h3>
+      <p class="sub">${pct(f.topTradeShare)} of gross profit came from the single best trade.
+        Delete the biggest winners and see whether anything is left.</p>
+      <div class="scroll"><table><thead><tr><th>Removed</th><th class="num">Net left</th>
+        <th class="num">B&amp;H</th><th>Still beats</th></tr></thead>
+      <tbody>${v.topRemoval.map(r => `<tr><td>top ${r.removed} winner${r.removed > 1 ? "s" : ""}</td>
+        <td class="num ${sign(r.net)}">${money(r.net)}</td><td class="num">${money(r.bh)}</td>
+        <td>${yesNo(r.beats)}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+
+    <div class="card"><h3>Walk-forward</h3>
+      <p class="sub">Five contiguous folds, each judged against its own buy &amp; hold.
+        A rule that only worked in one era shows up here and nowhere else.</p>
+      <div class="scroll"><table><thead><tr><th class="num">Fold</th><th class="num">Bars</th>
+        <th class="num">Trades</th><th class="num">Net</th><th class="num">B&amp;H</th><th>Beat</th></tr></thead>
+      <tbody>${v.folds.map(x => `<tr><td class="num">${x.fold}</td><td class="num">${x.bars}</td>
+        <td class="num">${x.trades}</td><td class="num ${sign(x.net)}">${money(x.net)}</td>
+        <td class="num">${money(x.bh)}</td><td>${yesNo(x.beats)}</td></tr>`).join("")}</tbody></table></div>
+    </div>
+
+    ${!v.variations.length ? "" : `<div class="card"><h3>Parameter sensitivity — ${esc(v.paramKey)}</h3>
+      <p class="sub">Neighbouring values of the same parameter. A plateau is evidence;
+        an island, where only the tested value works, is the shape overfitting makes.</p>
+      <div class="scroll"><table><thead><tr><th class="num">Value</th><th class="num">Trades</th>
+        <th class="num">Net vs B&amp;H</th><th>Beat</th></tr></thead>
+      <tbody>${v.variations.map(x => `<tr><td class="num">${x.value}</td><td class="num">${x.trades}</td>
+        <td class="num ${sign(x.vsBH)}">${money(x.vsBH)}</td><td>${yesNo(x.beats)}</td></tr>`).join("")}</tbody></table></div>
+    </div>`}`;
+}
+
+/* ---- predict -------------------------------------------------------- */
+const STANCE = {UP: "p-ok", DOWN: "p-no", FLAT: "p-na"};
+
+const PD_COLS = [
+  ["symbol", "Symbol", false, r => esc(r.symbol)],
+  // The grade travels with the call. A weak stance is still shown — a blank row
+  // was honest and useless — but it never looks like a qualified one.
+  ["stance", "Next bar", false, r => {
+    if (!r.stance) return `<span class="pill p-na">NO DATA</span>`;
+    if (r.confidence === "weak") {
+      return `<span class="pill p-na" title="No rule cleared the checks; this is the best available one.">${
+        r.stance} <span style="opacity:.75">weak</span></span>`;
+    }
+    return `<span class="pill ${STANCE[r.stance]}">${r.stance}</span>`;
+  }],
+  ["strategy", "Best strategy", false,
+   r => r.strategy ? esc(r.strategy.toLowerCase().replace(/_/g, " ")) : "—"],
+  ["timeframe", "TF", false, r => r.timeframe ? esc(r.timeframe) : "—"],
+  ["qualified", "Qualified", true, r => `${r.qualified ?? 0} / ${r.tested ?? 0}`],
+  ["trades", "Trades", true, r => r.trades ?? "—"],
+  ["beatPct", "Beat %", true, r => r.strategy ? beatPctCell(r) : "—"],
+  ["pf", "PF", true, r => r.pf === undefined ? "—" : num(r.pf)],
+  // The call is about the next bar of the winning timeframe, so the row names
+  // that bar rather than leaving "next" to mean whatever the reader assumes.
+  ["nextBarStart", "Call is for", false, r => {
+    if (!r.nextBarStart) return "—";
+    const iso = (t) => new Date(t * 1000).toISOString().replace("T", " ").slice(0, 16);
+    return r.barSeconds >= 86400
+      ? `the ${esc(r.timeframe)} bar from ${iso(r.nextBarStart).slice(0, 10)}`
+      : `${iso(r.nextBarStart)}–${iso(r.nextBarEnd).slice(11)} UTC`;
+  }],
+  ["lastBar", "Last closed bar", false, r => r.lastBar
+    ? new Date(r.lastBar * 1000).toISOString().replace("T", " ").slice(0, 16) : "—"],
+  // The signal carries epoch seconds, not an ISO string like a trade does.
+  ["since", "Held since", false, r => r.since
+    ? new Date(r.since * 1000).toISOString().slice(0, 10) : "—"],
+];
+
+function pdRow(r) {
+  if (r.error) {
+    return `<tr><td>${esc(r.symbol)}</td>
+      <td colspan="${PD_COLS.length - 1}" class="neg">${esc(r.error)}</td></tr>`;
+  }
+  const why = r.why || (r.reasons || []).join(" · ");
+  return `<tr title="${esc(why)}">${PD_COLS.map(([, , isNum, f]) =>
+    `<td class="${isNum ? "num" : ""}">${f(r)}</td>`).join("")}</tr>`
+    + (why ? `<tr><td colspan="${PD_COLS.length}" style="border-bottom:1px solid var(--line);
+        padding-top:0;color:var(--ink-3);font-size:11.5px">${esc(why)}</td></tr>` : "");
+}
+
+$("pdGo").onclick = () => {
+  clearError();
+  S.predict = [];
+  $("pdCard").style.display = "";
+  $("pdBar").style.width = "0%";
+  $("pdTable").innerHTML = `<thead><tr>${PD_COLS.map(([, label, isNum]) =>
+    `<th class="${isNum ? "num" : ""}">${label}</th>`).join("")}</tr></thead><tbody></tbody>`;
+
+  const proto = location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${proto}://${location.host}/ws/lab/predict`);
+  S.pdWs = ws;
+  $("pdGo").disabled = true; $("pdStop").disabled = false;
+
+  // Whatever is typed, or every instrument the site lists when that is blank.
+  ws.onopen = () => ws.send(JSON.stringify(body({symbols: pdSymbols(), timeframes: []})));
+  ws.onmessage = (ev) => {
+    const m = JSON.parse(ev.data);
+    if (m.type === "error") { showError(m.detail); ws.close(); return; }
+    if (m.type === "start") {
+      $("pdNote").textContent =
+        `Scoring 14 strategies across ${m.timeframes} timeframes on each of `
+        + `${m.symbols} instruments, ${m.bars || "all"} bars`
+        + (m.cachedOnly ? " — reading only what the backtests already downloaded." : ".");
+      return;
+    }
+    if (m.type === "row") {
+      S.predict.push(m.row);
+      // Qualified calls first, so the strong ones are not buried among weak ones.
+      const rank = (r) => r.confidence === "qualified" ? 0 : r.stance ? 1 : 2;
+      S.predict.sort((a, b) => rank(a) - rank(b) || (b.trades || 0) - (a.trades || 0));
+      $("pdTable").querySelector("tbody").innerHTML = S.predict.map(pdRow).join("");
+      $("pdBar").style.width = ((m.row.index + 1) / m.row.total * 100) + "%";
+      const picked = S.predict.filter(r => r.confidence === "qualified");
+      $("pdCount").textContent = `${S.predict.length} of ${m.row.total} · `
+        + `${picked.length} cleared the checks`;
+      return;
+    }
+    if (m.type === "done") {
+      const good = S.predict.filter(r => r.confidence === "qualified");
+      const weak = S.predict.filter(r => r.confidence === "weak");
+      const tally = (rows) => ["UP", "DOWN", "FLAT"]
+        .map(k => `${rows.filter(r => r.stance === k).length} ${k.toLowerCase()}`)
+        .join(", ");
+      $("pdNote").textContent = m.error ? "Stopped: " + m.error
+        : `Done. ${good.length} cleared the checks (${tally(good)}). `
+          + `${weak.length} are best-available only (${tally(weak)}) — read those as `
+          + `a shortlist, not a call.`;
+      ws.close();
+    }
+  };
+  ws.onclose = () => { $("pdGo").disabled = false; $("pdStop").disabled = true; S.pdWs = null; };
+  ws.onerror = () => showError("The predict stream dropped.");
+};
+const pdSymbols = () => $("pdSymbols").value.split(",")
+  .map(x => x.trim().toUpperCase()).filter(Boolean);
+$("pdCached").onclick = (e) => {
+  e.preventDefault();
+  $("pdSymbols").value = (S.cfg.cachedSymbols || []).join(", ");
+  pdPlan();
+};
+$("pdListed").onclick = (e) => { e.preventDefault(); $("pdSymbols").value = ""; pdPlan(); };
+$("pdFromMatrix").onclick = (e) => {
+  e.preventDefault();
+  $("pdSymbols").value = $("mxSymbols").value;
+  pdPlan();
+};
+function pdPlan() {
+  const n = pdSymbols().length || (S.cfg.instruments || []).length;
+  const tfs = (S.cfg.timeframes || []).length;
+  $("pdPlan").textContent = `${n} instruments x 14 strategies x ${tfs} timeframes `
+    + `= ${n * 14 * tfs} runs, ${$("bars").value || "all"} bars each`;
+}
+$("pdSymbols").oninput = pdPlan;
+
+$("pdStop").onclick = () => { if (S.pdWs) S.pdWs.close(); $("pdNote").textContent = "Stopped."; };
+
+/* ---- library -------------------------------------------------------- */
+function libQuery() {
+  const p = new URLSearchParams();
+  if ($("libSymbol").value.trim()) p.set("symbol", $("libSymbol").value.trim().toUpperCase());
+  if ($("libTf").value.trim()) p.set("timeframe", $("libTf").value.trim());
+  if ($("libStrat").value.trim()) p.set("strategy", $("libStrat").value.trim().toUpperCase());
+  if ($("libVerdict").value) p.set("verdict", $("libVerdict").value);
+  if ($("libBeats").checked) p.set("beats", "true");
+  p.set("sort", S.sortKey); p.set("desc", S.sortDesc);
+  return p.toString();
+}
+$("libGo").onclick = loadLibrary;
+["libSymbol", "libTf", "libStrat"].forEach(id => $(id).onchange = loadLibrary);
+$("libVerdict").onchange = loadLibrary;
+$("libBeats").onchange = loadLibrary;
+
+async function loadLibrary() {
+  const q = libQuery();
+  $("libCsv").href = "/api/lab/runs.csv?" + q;
+  let data;
+  try { data = await api("/api/lab/runs?" + q); }
+  catch (e) { return showError(e.message); }
+
+  S.cfg.library = data.library;
+  paintLibraryState();
+
+  if (!data.library.available) {
+    $("libState").innerHTML = data.library.configured
+      ? `The library is unreachable — <code>${esc(data.library.error)}</code>. Backtests still run and still render; only the saved history is unavailable.`
+      : `The library is off. Set <code>LAB_DATABASE_URL</code> to a Postgres connection string and restart the hub to keep runs. Backtests work without it.`;
+    $("libTable").innerHTML = "";
+    return;
+  }
+  $("libState").textContent = `${data.count} runs.`;
+
+  const cols = [
+    ["created_at", "When", r => (r.createdAt || "").slice(0, 16).replace("T", " ")],
+    [null, "Label", r => esc(r.label || "")],
+    [null, "Symbol", r => esc(r.symbol)],
+    [null, "TF", r => esc(r.timeframe)],
+    [null, "Strategy", r => esc(r.strategy)],
+    ["bars", "Bars", r => r.bars],
+    ["trades", "Trades", r => r.trades],
+    ["win_rate", "Win%", r => pct(r.winRate)],
+    ["net", "Net", r => `<span class="${sign(r.net)}">${money(r.net)}</span>`],
+    ["vs_bh", "vs B&H", r => `<span class="${sign(r.vsBH)}">${money(r.vsBH)}</span>`],
+    ["pf", "PF", r => num(r.pf)],
+    ["max_dd_pct", "Max DD", r => pct(r.maxDDPct)],
+    ["top_trade_share", "Top trade", r => pct(r.topTradeShare)],
+    [null, "Verdict", r => r.verdict ? `<span class="vb v-${r.verdict}">${r.verdict}</span>` : ""],
+  ];
+  $("libTable").innerHTML = `<thead><tr>${cols.map(([key, label], i) =>
+      `<th class="${i > 4 ? "num " : ""}${key ? "s" : ""}" ${key ? `data-sort="${key}"` : ""}>${label}${
+        key === S.sortKey ? (S.sortDesc ? " ↓" : " ↑") : ""}</th>`).join("")}</tr></thead>
+    <tbody>${data.runs.map(r => `<tr>${cols.map(([, , f], i) =>
+      `<td class="${i > 4 ? "num" : ""}">${f(r)}</td>`).join("")}</tr>`).join("")}</tbody>`;
+
+  $("libTable").querySelectorAll("th[data-sort]").forEach(th => th.onclick = () => {
+    const k = th.dataset.sort;
+    if (k === S.sortKey) S.sortDesc = !S.sortDesc; else { S.sortKey = k; S.sortDesc = true; }
+    loadLibrary();
+  });
+}
+</script>
+</body>
+</html>

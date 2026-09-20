@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0b0d14; --panel:#12141f; --raised:#1a1d2b; --hover:#1e2133;
+  --line:#252838; --line-2:#33374a;
+  --ink:#e8eaef; --ink-2:#8d93a8; --ink-3:#5a5f75;
+  --green:#00d26a; --green-bg:rgba(0,210,106,.10);
+  --red:#ff4757;   --red-bg:rgba(255,71,87,.10);
+  --blue:#3b82f6;  --blue-bg:rgba(59,130,246,.10);
+  --amber:#f5a623; --amber-bg:rgba(245,166,35,.10);
+  --purple:#8b5cf6; --purple-bg:rgba(139,92,246,.10);
+  --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:13px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+a{color:var(--blue)}
+
+.top{
+  height:48px; display:flex; align-items:center; gap:20px;
+  padding:0 18px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:20;
+}
+.brand{font-weight:600;letter-spacing:-.01em;font-size:14px;white-space:nowrap}
+.brand span{color:var(--ink-3);font-weight:400;margin-left:8px;font-size:12px}
+.navs{display:flex;gap:2px;margin-left:auto}
+.navs a{
+  text-decoration:none;background:none;border:1px solid transparent;border-radius:6px;
+  padding:6px 14px;color:var(--ink-2);font-weight:500;
+}
+.navs a:hover{background:var(--hover);color:var(--ink)}
+.navs a.on{background:var(--blue-bg);border-color:rgba(59,130,246,.35);color:#8fb8fb}
+.dot{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+.dot i{width:7px;height:7px;border-radius:50%;background:var(--ink-3);display:block}
+.dot.up i{background:var(--green)} .dot.down i{background:var(--red)}
+
+.shell{display:grid;grid-template-columns:288px 1fr;min-height:calc(100vh - 48px)}
+.rail{
+  border-right:1px solid var(--line);background:var(--panel);
+  padding:16px 16px 60px;position:sticky;top:48px;
+  height:calc(100vh - 48px);overflow-y:auto;
+}
+.main{padding:18px 22px 80px;min-width:0;display:flex;flex-direction:column}
+
+.grp{margin-bottom:20px}
+.grp>h4{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px;
+}
+.f{margin-bottom:9px}
+.f label{display:block;font-size:11.5px;color:var(--ink-2);margin-bottom:3px}
+.f input,.f select,.f textarea{
+  width:100%;background:var(--raised);border:1px solid var(--line-2);
+  border-radius:6px;padding:7px 9px;outline:none;
+}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--blue)}
+.f .hint{font-size:10.5px;color:var(--ink-3);margin-top:3px}
+.chk{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.chk input{width:auto}
+.chk label{font-size:12px;color:var(--ink-2);margin:0}
+
+.btn{
+  width:100%;background:var(--blue);border:none;border-radius:6px;
+  padding:10px 14px;font-weight:600;cursor:pointer;color:#fff;
+}
+.btn:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.btn.stop{background:var(--red-bg);border:1px solid rgba(255,71,87,.4);color:#ff8b95}
+
+.warn{
+  background:var(--amber-bg);border:1px solid rgba(245,166,35,.35);
+  border-radius:6px;padding:9px 11px;font-size:11.5px;color:#f0c076;margin-bottom:16px;
+}
+.warn b{color:var(--amber);font-weight:600}
+
+.taskbar{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.taskbar textarea{
+  flex:1;background:var(--panel);border:1px solid var(--line-2);border-radius:8px;
+  padding:11px 13px;outline:none;resize:vertical;min-height:74px;line-height:1.55;
+}
+.taskbar textarea:focus{border-color:var(--blue)}
+.taskbar .side{display:flex;flex-direction:column;gap:8px;width:150px}
+
+.meta{
+  display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;
+  color:var(--ink-3);padding:9px 12px;background:var(--panel);
+  border:1px solid var(--line);border-radius:8px;margin-bottom:12px;
+}
+.meta b{color:var(--ink-2);font-weight:500}
+.meta .v{color:var(--ink)}
+
+.stream{
+  flex:1;background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:14px 16px;overflow-y:auto;min-height:340px;
+}
+.ev{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.ev:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ev .tag{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-right:8px;
+}
+.ev.text .tag{background:var(--blue-bg);color:#8fb8fb}
+.ev.tool .tag{background:var(--purple-bg);color:#b9a2f7}
+.ev.think .tag{background:var(--raised);color:var(--ink-3)}
+.ev.done .tag{background:var(--green-bg);color:#5fe0a0}
+.ev.err  .tag{background:var(--red-bg);color:#ff8b95}
+.ev .body{margin-top:6px;white-space:pre-wrap;word-break:break-word}
+.ev.tool .body,.ev.think .body{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+.ev.err .body{color:#ff8b95}
+.ev.done .body{color:var(--ink-2);font-family:var(--mono);font-size:11.5px}
+.empty{color:var(--ink-3);text-align:center;padding:60px 20px}
+.spin{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--blue);
+  margin-right:7px;animation:p 1.1s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">Broker Hub <span>Claude Agent</span></div>
+  <div class="navs">
+    <a href="/">Terminal</a>
+    <a href="/lab">Lab</a>
+    <a href="/game">Beat the Hold</a>
+    <a href="/agents" class="on">Agent</a>
+  </div>
+  <div class="dot" id="conn" style="margin-left:14px"><i></i><span>checking…</span></div>
+</div>
+
+<div class="shell">
+  <div class="rail">
+    <div class="warn">
+      <b>Full tool access.</b> Tasks run with real file and shell tools as your
+      user, in the directory below. Localhost only — keep it that way.
+    </div>
+
+    <div class="grp">
+      <h4>Session</h4>
+      <div class="f">
+        <label>Working directory</label>
+        <input id="cwd" spellcheck="false">
+        <div class="hint">CLAUDE.md, project settings and the ftmo-lab MCP server load from here.</div>
+      </div>
+      <div class="f">
+        <label>Model</label>
+        <select id="model">
+          <option value="">Default</option>
+          <option value="opus">Opus</option>
+          <option value="sonnet">Sonnet</option>
+          <option value="haiku">Haiku</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>Permissions</h4>
+      <div class="f">
+        <label>Permission mode</label>
+        <select id="permissionMode">
+          <option value="acceptEdits">acceptEdits — writes, no prompts</option>
+          <option value="auto">auto — classifier reviews</option>
+          <option value="plan">plan — read only</option>
+          <option value="dontAsk">dontAsk — deny anything unlisted</option>
+          <option value="bypassPermissions">bypassPermissions — everything</option>
+        </select>
+        <div class="hint">Nobody can answer a prompt here, so anything that would ask is denied.</div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>Limits</h4>
+      <div class="f">
+        <label>Budget cap (USD)</label>
+        <input id="maxBudgetUsd" type="number" min="0.1" step="0.5" value="2">
+        <div class="hint">Hard stop. A free-form prompt is where a loop gets expensive.</div>
+      </div>
+      <div class="f">
+        <label>Max turns (blank = unlimited)</label>
+        <input id="maxTurns" type="number" min="1" step="1" placeholder="">
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>Browser</h4>
+      <div class="chk">
+        <input type="checkbox" id="chrome">
+        <label for="chrome">Enable Claude in Chrome</label>
+      </div>
+      <div class="hint" id="chromeNote" style="font-size:10.5px;color:var(--ink-3)"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="taskbar">
+      <textarea id="prompt" spellcheck="false"
+        placeholder="Describe the task.&#10;&#10;e.g. Run lab_run_batch on /NQ across 1h, 4h and 1d with DAILY_SWING_SMA200 and report which beat buy and hold.&#10;e.g. (with Chrome on) Open tradethepool.com and list the account sizes and profit splits."></textarea>
+      <div class="side">
+        <button class="btn" id="run">Run task</button>
+        <button class="btn stop" id="stop" style="display:none">Stop</button>
+      </div>
+    </div>
+
+    <div class="meta" id="meta" style="display:none">
+      <span><b>mode</b> <span class="v" id="mMode">—</span></span>
+      <span><b>turns</b> <span class="v" id="mTurns">—</span></span>
+      <span><b>cost</b> <span class="v" id="mCost">—</span></span>
+      <span><b>time</b> <span class="v" id="mTime">—</span></span>
+      <span><b>session</b> <span class="v" id="mSession">—</span></span>
+    </div>
+
+    <div class="stream" id="stream">
+      <div class="empty" id="empty">No task run yet.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const stream = $('stream'), empty = $('empty');
+let ws = null, running = false;
+
+function setConn(state, text){
+  const el = $('conn');
+  el.className = 'dot ' + state;
+  el.querySelector('span').textContent = text;
+}
+
+function clearStream(){
+  stream.innerHTML = '';
+}
+
+function add(kind, tag, body){
+  if (empty.parentNode) empty.remove();
+  const div = document.createElement('div');
+  div.className = 'ev ' + kind;
+  const head = document.createElement('div');
+  const span = document.createElement('span');
+  span.className = 'tag';
+  span.textContent = tag;
+  head.appendChild(span);
+  div.appendChild(head);
+  if (body){
+    const b = document.createElement('div');
+    b.className = 'body';
+    b.textContent = body;
+    div.appendChild(b);
+  }
+  stream.appendChild(div);
+  stream.scrollTop = stream.scrollHeight;
+  return div;
+}
+
+function setRunning(on){
+  running = on;
+  $('run').disabled = on;
+  $('stop').style.display = on ? 'block' : 'none';
+  $('run').textContent = on ? 'Running…' : 'Run task';
+}
+
+function connect(){
+  ws = new WebSocket(`ws://${location.host}/ws/agent`);
+  ws.onopen = () => setConn('up', 'connected');
+  ws.onclose = () => { setConn('down', 'disconnected'); setRunning(false); };
+  ws.onerror = () => setConn('down', 'socket error');
+  ws.onmessage = e => handle(JSON.parse(e.data));
+}
+
+function handle(m){
+  if (m.type === 'start'){
+    add('think', 'start', `cwd ${m.cwd}${m.chrome ? '  ·  chrome on' : ''}  ·  ${m.permissionMode}  ·  cap $${m.budgetUsd}`);
+    $('meta').style.display = 'flex';
+    $('mMode').textContent = m.chrome ? 'chrome' : 'standard';
+    ['mTurns','mCost','mTime','mSession'].forEach(k => $(k).textContent = '—');
+  }
+  else if (m.type === 'text')     add('text', 'claude', m.text);
+  else if (m.type === 'thinking') add('think', 'thinking', m.text);
+  else if (m.type === 'tool')     add('tool', m.name, m.input);
+  else if (m.type === 'done'){
+    add(m.isError ? 'err' : 'done', m.isError ? 'failed' : 'done', m.result || m.stopReason || '');
+    $('mTurns').textContent = m.turns ?? '—';
+    $('mCost').textContent = m.costUsd != null ? '$' + m.costUsd.toFixed(4) : '—';
+    $('mTime').textContent = m.durationMs != null ? (m.durationMs/1000).toFixed(1) + 's' : '—';
+    $('mSession').textContent = m.session ? m.session.slice(0, 12) + '…' : '—';
+    setRunning(false);
+  }
+  else if (m.type === 'cancelled'){ add('err', 'cancelled', 'Stopped.'); setRunning(false); }
+  else if (m.type === 'error'){    add('err', 'error', m.detail);        setRunning(false); }
+}
+
+$('run').onclick = () => {
+  const prompt = $('prompt').value.trim();
+  if (!prompt){ add('err', 'error', 'Enter a task first.'); return; }
+  if (!ws || ws.readyState !== WebSocket.OPEN){ add('err', 'error', 'Not connected.'); return; }
+  clearStream();
+  setRunning(true);
+  const turns = parseInt($('maxTurns').value, 10);
+  ws.send(JSON.stringify({
+    prompt,
+    cwd: $('cwd').value.trim(),
+    model: $('model').value || null,
+    permissionMode: $('permissionMode').value,
+    chrome: $('chrome').checked,
+    maxTurns: Number.isFinite(turns) ? turns : null,
+    maxBudgetUsd: parseFloat($('maxBudgetUsd').value) || 2.0,
+  }));
+};
+
+$('stop').onclick = () => {
+  if (ws && ws.readyState === WebSocket.OPEN && running) ws.send(JSON.stringify({cancel: true}));
+};
+
+$('prompt').addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && !running) $('run').click();
+});
+
+fetch('/api/agent/status').then(r => r.json()).then(s => {
+  $('cwd').value = s.defaultCwd || '';
+  $('chromeNote').textContent = s.chromeNote || '';
+  if (!s.ready){
+    const why = !s.sdkInstalled ? s.sdkError : 'Claude Code CLI not found on PATH.';
+    add('err', 'setup', why);
+    $('run').disabled = true;
+  }
+  connect();
+}).catch(() => { add('err', 'error', 'Could not reach the hub.'); });
+</script>
+</body>
+</html>

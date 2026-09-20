@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ftmo-lab": {
+      "command": "/Users/yashnihalani/Downloads/FTMO_MT5/venv/bin/python3",
+      "args": ["/Users/yashnihalani/Downloads/FTMO_MT5/mcp_server/server.py"],
+      "env": {
+        "PYTHONPATH": "/Users/yashnihalani/Downloads/FTMO_MT5"
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+ "5m": {
+  "bars": 11754,
+  "bh": -11595.0,
+  "bhdd": 61.38,
+  "bestLabel": "regime SMA150 band 2.0%",
+  "bestNet": 28075.0,
+  "bestVsBH": 39670.0,
+  "bestDD": 18.96,
+  "bestTrades": 1,
+  "devLabel": "regime SMA150 band 2.0%",
+  "devVsBH": 39670.0,
+  "oosVsBH": 1820.0,
+  "oosNet": 0
+ },
+ "15m": {
+  "bars": 3937,
+  "bh": -11595.0,
+  "bhdd": 61.38,
+  "bestLabel": "regime SMA100 band 2.0%",
+  "bestNet": 26555.0,
+  "bestVsBH": 38150.0,
+  "bestDD": 19.11,
+  "bestTrades": 1,
+  "devLabel": "regime SMA100 band 2.0%",
+  "devVsBH": 38150.0,
+  "oosVsBH": 1710.0,
+  "oosNet": 0
+ },
+ "30m": {
+  "bars": 1961,
+  "bh": -290.0,
+  "bhdd": 55.71,
+  "bestLabel": "Donchian 20/10 long",
+  "bestNet": 27535.0,
+  "bestVsBH": 27825.0,
+  "bestDD": 15.27,
+  "bestTrades": 25,
+  "devLabel": "Donchian 20/10 long",
+  "devVsBH": 27370.0,
+  "oosVsBH": 2445.0,
+  "oosNet": -1295.0
+ }
+}
