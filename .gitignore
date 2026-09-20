@@ -29,5 +29,8 @@ data/events/
 .replay_cache/
 study/lab/cache/
 
+# --- Editor backups (removed in history; don't let them come back) ---
+*.bak
+
 # --- OS ----------------------------------------------------------------
 .DS_Store
