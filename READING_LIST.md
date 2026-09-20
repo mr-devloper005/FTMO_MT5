@@ -1,16 +1,59 @@
-# Reading List — books and research papers
+# Reading and viewing list
 
 Compiled 2026-09-21 from the prior session that produced the FTMO work plan.
 Citations below were checked against primary sources on 2026-09-21; see
 **Verification** at the end for exactly what was and wasn't re-fetched.
 
-## On the films
+## Film
 
-**No films were ever mentioned.** Neither this session nor the prior one
-recommended a single movie or documentary. The earlier list had two parts —
-*Books* and *Research papers* — and nothing else. If your manager is expecting
-a film list, it needs to come from them, because there is nothing here to
-recover. Ask which conversation they had in mind.
+**Memento** (2000, dir. Christopher Nolan) — 1 h 53 m.
+Free with ads on Tubi, Pluto TV, Plex and The Roku Channel; also streaming on
+Netflix, Hulu and Peacock.
+
+Not present in any session transcript — supplied directly by the manager who
+assigned it. Recorded here so the origin is not lost again.
+
+### Why it sits next to this codebase
+
+Leonard Shelby cannot form new memories. Everything that survives for him is
+external: Polaroids with notes on the back, facts tattooed on his body. That is
+an append-only event store with a replay mechanism, carried around by a man who
+has no other state.
+
+The film runs its colour sequence backwards. You watch a replay, in reverse,
+of an event log — which is the same exercise as
+`scripts/replay_events.py --from-timestamp`.
+
+But the reason it is the *right* assignment is the ending, so watch for this
+rather than reading about it. Leonard's system does not fail because he loses
+his memory. It fails because **he can write to his own log.** He deliberately
+records something false, knowing his future self will read it as fact and act
+on it. Every mechanism he built works exactly as designed. What breaks is the
+integrity of the record.
+
+That is `CLAUDE.md` constraint #8 — *"Event sourcing is immutable — EventStore
+append-only, never edit/delete events"* — argued for 113 minutes. The film
+draws a line a design doc tends to blur: **durability and integrity are
+different properties.** A log you can durably persist and also quietly rewrite
+is a diary, not an audit trail. Your constraint forbids the rewrite, and
+Memento is what the forbidden case looks like from the inside.
+
+There is a second reading, closer to what you have been building this month.
+An agent between sessions is Leonard. The context ends, and the only thing that
+survives is what was written down — `CLAUDE.md`, the memory directory, the
+event log. This session was exactly that: your memory directory was empty, and
+everything about your plan had to be reconstructed from transcripts on disk.
+
+And the failure mode showed up for real. Searching for film titles, I found
+twenty — every one of them planted in the transcript by my own earlier search
+command, then read back as though someone had recommended them. A record
+contaminated by its own reader, mistaken for evidence. That is the Polaroid
+Leonard wrote for himself, and it took deliberately checking *who wrote each
+line* to catch it.
+
+Watch it after Tier 1. The López de Prado chapters are about not fooling
+yourself with data; Memento is about not fooling yourself with records. They
+are the same discipline pointed at different artifacts.
 
 ---
 
@@ -86,9 +129,10 @@ running code you own except ADWIN.
 
 ## Realistic scope
 
-18 items: 2 books, 16 papers. Read properly — understood, not skimmed — this is
-**roughly 50–60 hours**, and the DeepSeek book is a third of it. At an hour a
-night that is two months.
+19 items: 2 books, 16 papers, 1 film. Read properly — understood, not skimmed —
+this is **roughly 50–60 hours**, and the DeepSeek book is a third of it. At an
+hour a night that is two months. The film is two hours and is the one item you
+can finish tonight.
 
 Tier 1 alone is about **10 hours** and covers everything connected to code you
 have actually written. That is the defensible subset if you need to report
