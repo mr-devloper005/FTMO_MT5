@@ -679,7 +679,30 @@ def main() -> None:
 
     Called by the ftmo-mt5 console script defined in pyproject.toml.
     Runs the async event loop using asyncio.run().
+
+    Arguments are parsed before anything starts so that an unrecognised flag
+    exits with usage instead of silently launching the live trading loop.
     """
+    import argparse
+
+    from ftmo_mt5 import __version__
+
+    parser = argparse.ArgumentParser(
+        prog="ftmo-mt5",
+        description=(
+            "FTMO MT5 multi-agent trading system. "
+            "Invoked with no arguments it starts the trading loop and connects "
+            "to the configured broker. Configuration is read from the "
+            "FTMO_CONFIG_PATH environment variable."
+        ),
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"ftmo-mt5 {__version__}",
+    )
+    parser.parse_args()
+
     try:
         asyncio.run(run())
     except KeyboardInterrupt:

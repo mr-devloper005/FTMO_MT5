@@ -31,6 +31,7 @@ dependencies = [
     "opentelemetry-api",
     "opentelemetry-sdk",
     "opentelemetry-exporter-otlp-proto-grpc",
+    "opentelemetry-exporter-prometheus",
     "prometheus-client",
     "numpy",
     "scipy",
@@ -38,6 +39,7 @@ dependencies = [
     "scikit-learn",
     "pyyaml",
     "aiohttp",
+    "python-dotenv",
 ]
 
 [project.optional-dependencies]
@@ -62,7 +64,12 @@ agent = [
 ]
 
 [project.scripts]
-ftmo-mt5 = "nehanth.main:main"
+ftmo-mt5 = "ftmo_mt5.main:main"
+
+[tool.setuptools.packages.find]
+# Flat layout with several top-level dirs (study/, config/, logs/, mcp_server/).
+# Only ftmo_mt5 is the installable package; the rest are scripts and data.
+include = ["ftmo_mt5*"]
 
 [tool.ruff]
 line-length = 120
@@ -75,7 +82,7 @@ ignore = ["ANN101", "ANN102", "ANN401"]
 "tests/**" = ["ANN001", "ANN002", "ANN201", "S101"]
 
 [tool.ruff.isort]
-known-first-party = ["nehanth"]
+known-first-party = ["ftmo_mt5"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"
@@ -90,7 +97,7 @@ markers = [
 asyncio_mode = "auto"
 
 [tool.coverage.run]
-source = ["nehanth"]
+source = ["ftmo_mt5"]
 omit = [
     "*/tests/*",
     "*/__init__.py",

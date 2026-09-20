@@ -41,8 +41,11 @@ except ImportError:
 
 
 # Module-level tracer and meter instances
-_tracer: Optional[trace.Tracer] = None
-_meter: Optional[metrics.Meter] = None
+# Quoted so these resolve lazily: when OTel is missing, `trace`/`metrics`
+# are None and eager evaluation of `trace.Tracer` would raise AttributeError,
+# defeating the ImportError fallback above.
+_tracer: Optional["trace.Tracer"] = None
+_meter: Optional["metrics.Meter"] = None
 
 
 def setup_telemetry(
