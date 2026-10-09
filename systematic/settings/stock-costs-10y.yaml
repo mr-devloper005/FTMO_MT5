@@ -1,0 +1,24 @@
+# Realistic US stock costs + a 10-year window (2500 daily bars).
+# Rationale: MODERATE needs >=30 trades. Daily mean reversion fires ~16 times
+# in 600 bars, so the grade was window-limited, not quality-limited.
+#
+# The Lab's default cost model ($2.50 commission per unit per side) is
+# calibrated per futures/forex CONTRACT. Applied per SHARE it charges ~$1,095
+# on a 219-share round trip, which swamped 70% of gross profit in the first
+# real-data paper replay. Retail US equity commission is ~$0 (or $0.005/share
+# at IBKR pro); slippage of 1 tick on a liquid name is realistic.
+#
+# research and the paper broker always use the same values (config.Settings),
+# so a grade earned here is a grade under the costs the paper account pays.
+
+timeframes: ["1d"]
+bars: 2500
+allow_short: true
+candidates_per_symbol: 3
+min_grade: MODERATE
+max_positions: 5
+max_entry_age_bars: 1
+max_gross_exposure: 1.0
+
+commission_per_unit: 0.005   # per share per side (IBKR pro tier)
+slippage_ticks: 1.0

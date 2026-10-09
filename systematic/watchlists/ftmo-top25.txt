@@ -1,0 +1,36 @@
+# FTMO US equity CFD — top 25 for systematic trading
+# Built 2026-09-30. Ranked, not hand-picked. Method:
+#   universe  = the 46 US-session equity CFDs FTMO actually lists (ftmo.com/en/symbols)
+#   measured  = Yahoo daily bars, identical window 2025-09-29 -> 2026-09-29 (252 sessions)
+#   score     = 0.40 liquidity + 0.32 volatility-fit + 0.20 gap-safety + 0.08 sizing
+# Sector/market-cap verified via Financial Modeling Prep company profiles, 2026-09-30.
+# See the chat transcript for the full table and the exclusion reasons.
+#
+# NOTE: FTMO US shares trade 16:35-23:00 GMT+3 (09:35-16:00 ET) only. Overnight gaps
+# cannot be traded out of and land straight on the 5% daily loss limit.
+
+AAPL   # 1  most liquid + calmest of the mega-caps
+NVDA   # 2  $25B/day, the deepest book on the list
+TSLA   # 3  high ATR with mega-cap liquidity
+MSFT   # 4
+AMZN   # 5
+META   # 6  widest daily range of the mega-caps
+GOOG   # 7
+AVGO   # 8
+PLTR   # 9  highest annualised vol that still passes gap safety
+JPM    # 10
+NFLX   # 11
+CSCO   # 12
+BAC    # 13
+XOM    # 14
+JNJ    # 15
+MCD    # 16
+WMT    # 17
+BA     # 18
+GE     # 19
+CVX    # 20
+DIS    # 21
+T      # 22
+RTX    # 23
+IBM    # 24
+AMD    # 25 highest gap risk of the 25 — size it smaller

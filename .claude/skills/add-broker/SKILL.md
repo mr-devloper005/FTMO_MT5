@@ -23,7 +23,7 @@ Three gateways already follow this pattern: `remote_gateway.py` (MT5), `tastytra
 - **Read-only first.** Ship the gateway with `order_send` and `close_position` raising `NotImplementedError`. Enable them only after the user confirms the sandbox works and any IP whitelisting is done.
 - `autoconnect` defaults to `"0"`.
 - **Never** read, print, or write credential values. The user pastes them into `.env`.
-- **Never** place a test order yourself. The user does that by hand in the sandbox.
+- **Paper trades are permitted** — but only after proving the account is simulated. The broker must self-report demo/sandbox in `/api/brokers`, and `.env` must confirm it (`TT_SANDBOX=1`, `MT5_SERVER=FTMO-Demo`, sandbox endpoint). If you cannot prove it, do not send an order. Never place an order against an account whose mode you haven't checked this session.
 - Prices and quantities are `Decimal`; convert to float only at the JSON boundary (`_num` in `broker_hub.py`).
 - `health_check` must never raise.
 - `mcp_server/` must never import the new gateway. The Lab MCP server imports only `ftmo_mt5.lab` and `ftmo_mt5.signals` — keep it that way.

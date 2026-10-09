@@ -62,6 +62,20 @@ ml = [
 agent = [
     "claude-agent-sdk",
 ]
+# research_agent/: the Claude Agent SDK process, the Excel report and the Google Sheet sync.
+research = [
+    "claude-agent-sdk",
+    "openpyxl>=3.1",
+    "gspread>=6",
+]
+# rag/: company-knowledge RAG POC (SEC filings -> local embeddings -> PostgreSQL + pgvector). Research only.
+rag = [
+    "claude-agent-sdk",
+    "fastembed>=0.4",
+    "psycopg[binary]>=3.1",
+    "beautifulsoup4",
+    "lxml",
+]
 
 [project.scripts]
 ftmo-mt5 = "ftmo_mt5.main:main"

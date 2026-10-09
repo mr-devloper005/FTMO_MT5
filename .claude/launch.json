@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "systematic-ui",
+      "runtimeExecutable": "venv/bin/python3",
+      "runtimeArgs": ["-m", "systematic", "ui", "--port", "8601"],
+      "port": 8601,
+      "env": { "PYTHONPATH": "." }
+    }
+  ]
+}

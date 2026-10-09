@@ -7,6 +7,25 @@ marked `UNKNOWN` rather than guessed.
 
 ---
 
+## UPDATE 2026-09-26 — read this before the sections below
+
+The body of this document describes the repo as of **2026-09-03**. These things changed after it was written. `CLAUDE.md` is now the maintained summary; prefer it where the two disagree.
+
+**Trading mode: PAPER ONLY.** Every configured broker is simulated — MT5 on `FTMO-Demo`, tastytrade on `TT_SANDBOX=1` (account `6AC40091`, gateway self-reports "(sandbox)"), Webull on the sandbox endpoint. No live-money account is configured. Paper trades are permitted to validate the system; the mode must be re-verified from `/api/brokers` before any order.
+
+**Added since Sep 3:**
+- `mcp_server/` — MCP server with 5 tools (`lab_list_strategies`, `lab_lookup`, `lab_run_backtest`, `lab_run_matrix`, `lab_validate_strategy`) and 3 resources (`lab://reference`, `lab://metrics`, `lab://timeframes`), plus a SQLite results index holding ~3,500 prior runs. Wired via `.mcp.json`.
+- `ftmo_mt5/signals/hold_strategies.py` — `HOLD_UNTIL_BROKEN`, `BUY_AND_HOLD_BASELINE`. Catalog is now **16** strategies, not 14.
+- `ftmo_mt5/lab/metrics.py` — new metrics: `bhPeakReturnPct`, `bhGiveBackPct`, `bhCagrPct`, `cagrPct`, `peakEquityPct`, `vsBHPeakPct`, `windowYears`.
+- `.claude/skills/` — 6 project skills.
+- Test count is now **165**.
+
+**Research result (unchanged in direction, now much better evidenced):** ~3,500 indexed runs, **0 ROBUST, 0 MODERATE**. Buy & hold beat every strategy tested at every timeframe of 2h or longer. A `HOLD_UNTIL_BROKEN` exit rule and ATR trailing stops from 2× to 20× were tested and all failed; widening the stop improved results only by converging toward doing nothing.
+
+**End-to-end paper trade attempted 2026-09-26** via tastytrade sandbox: connection, auth, account read and positions read all succeeded; the order reached the broker and was rejected with `tif_no_after_hours_opening_market_orders` because US markets were closed (Saturday). Fill → position → close remains **unvalidated**. The hub sends market orders only, so it cannot place anything outside market hours.
+
+---
+
 ## 1. Project Overview
 
 FTMO_MT5 is an algorithmic trading system built to trade FTMO prop-firm

@@ -1,0 +1,50 @@
+# Diversified probe list — NOT the team's list.
+# Purpose: the sample watchlist was 10 mega-cap trend winners, where buy & hold
+# is very hard to beat. This list deliberately spans regimes (range-bound
+# defensives, bonds, commodities, beaten-down cyclicals, sector ETFs) to test
+# whether "all FAILED" is a property of the pipeline or of that sample.
+
+# range-bound defensives
+KO
+PEP
+PG
+CL
+KMB
+GIS
+VZ
+T
+JNJ
+PFE
+BMY
+CVS
+
+# utilities / REITs / bonds / commodities
+XLU
+SO
+DUK
+O
+TLT
+IEF
+GLD
+SLV
+
+# beaten-down or choppy cyclicals
+INTC
+NKE
+SBUX
+DIS
+PYPL
+TGT
+F
+BA
+MRNA
+
+# sector / broad ETFs
+XLP
+XLV
+XLE
+XLF
+XBI
+IWM
+EEM
+EFA

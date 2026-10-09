@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0b0d14; --panel:#12141f; --raised:#1a1d2b; --hover:#1e2133;
+  --line:#252838; --line-2:#33374a;
+  --ink:#e8eaef; --ink-2:#8d93a8; --ink-3:#5a5f75;
+  --green:#00d26a; --green-bg:rgba(0,210,106,.12);
+  --red:#ff4757;   --red-bg:rgba(255,71,87,.12);
+  --blue:#3b82f6;  --blue-bg:rgba(59,130,246,.12);
+  --amber:#f5a623; --amber-bg:rgba(245,166,35,.14);
+  --purple:#8b5cf6; --purple-bg:rgba(139,92,246,.13);
+  --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+  --shadow:0 1px 0 rgba(255,255,255,.02), 0 8px 24px rgba(0,0,0,.25);
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f9; --panel:#ffffff; --raised:#f0f2f6; --hover:#e9ecf2;
+  --line:#e2e5ec; --line-2:#cfd4de;
+  --ink:#151823; --ink-2:#565d73; --ink-3:#8a90a3;
+  --green:#0a9f55; --green-bg:rgba(10,159,85,.10);
+  --red:#d6334a;   --red-bg:rgba(214,51,74,.09);
+  --blue:#2563eb;  --blue-bg:rgba(37,99,235,.09);
+  --amber:#b7791f; --amber-bg:rgba(245,166,35,.16);
+  --purple:#7c3aed; --purple-bg:rgba(124,58,237,.09);
+  --shadow:0 1px 2px rgba(16,24,40,.06), 0 6px 18px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+a{color:var(--blue)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* top bar — same as the hub's other pages */
+.top{height:48px;display:flex;align-items:center;gap:20px;padding:0 18px;border-bottom:1px solid var(--line);
+  background:var(--panel);position:sticky;top:0;z-index:30}
+.brand{font-weight:600;letter-spacing:-.01em;font-size:14px;white-space:nowrap}
+.brand span{color:var(--ink-3);font-weight:400;margin-left:8px;font-size:12px}
+.navs{display:flex;gap:2px;margin-left:auto}
+.navs a{text-decoration:none;border:1px solid transparent;border-radius:6px;padding:6px 14px;color:var(--ink-2);font-weight:500}
+.navs a:hover{background:var(--hover);color:var(--ink)}
+.navs a.on{background:var(--blue-bg);border-color:rgba(59,130,246,.35);color:var(--blue)}
+.icon-btn{background:none;border:1px solid var(--line-2);border-radius:6px;padding:5px 9px;cursor:pointer;color:var(--ink-2)}
+.icon-btn:hover{background:var(--hover);color:var(--ink)}
+
+.wrap{max-width:1440px;margin:0 auto;padding:22px 24px 80px}
+.head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.head h1{margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700}
+.head .sub{color:var(--ink-2);margin-top:3px}
+.head .sub b{color:var(--ink);font-weight:600}
+.actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:7px;padding:8px 13px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--panel);color:var(--ink);text-decoration:none}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn svg{width:15px;height:15px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
+.step{padding:16px 18px 15px;position:relative;border-right:1px solid var(--line)}
+.step:last-child{border-right:none}
+.step:not(:last-child)::after{content:"";position:absolute;right:-7px;top:50%;width:12px;height:12px;background:var(--panel);
+  border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:2}
+.step .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.step .v{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:2px;font-variant-numeric:tabular-nums}
+.step .d{color:var(--ink-2);font-size:12px}
+.vbar{display:flex;height:8px;border-radius:5px;overflow:hidden;background:var(--raised);margin:8px 0 6px}
+.vbar i{display:block;height:100%}
+.vleg{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+.vleg b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+
+/* finding */
+.finding{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
+  border-left:3px solid var(--amber);border-radius:10px;padding:13px 16px;margin-bottom:18px;box-shadow:var(--shadow)}
+.finding .t{font-weight:600}
+.finding .s{color:var(--ink-2);margin-top:2px}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tab{background:none;border:none;border-bottom:2px solid transparent;padding:9px 14px;cursor:pointer;color:var(--ink-2);
+  font-weight:600;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--ink);border-bottom-color:var(--blue)}
+.tab .c{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:6px;font-weight:500}
+.view{display:none}.view.on{display:block}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.toolbar input,.toolbar select{background:var(--panel);border:1px solid var(--line-2);border-radius:7px;padding:7px 10px;outline:none}
+.toolbar input{min-width:220px}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--blue)}
+.chips{display:flex;gap:4px}
+.chip{border:1px solid var(--line-2);background:var(--panel);border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink-2);font-weight:500}
+.chip.on{background:var(--blue-bg);border-color:rgba(59,130,246,.4);color:var(--blue)}
+.toolbar .meta{margin-left:auto;color:var(--ink-3);font-size:12px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{position:sticky;top:0;background:var(--raised);text-align:left;font-size:11px;font-weight:600;color:var(--ink-2);
+  padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--ink)}
+th.r,td.r{text-align:right}
+th .ar{color:var(--blue);margin-left:3px}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--hover)}
+tr.click{cursor:pointer}
+td .co{display:block;color:var(--ink-3);font-size:11.5px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td .pm{display:block;color:var(--ink-3);font-family:var(--mono);font-size:10.5px;margin-top:1px;max-width:250px;white-space:normal;overflow-wrap:anywhere}
+td.strat{max-width:270px;overflow-wrap:anywhere}
+td.reason{color:var(--ink-2);min-width:260px;max-width:460px}
+.sym{font-weight:700;letter-spacing:.01em}
+.pos{color:var(--green)} .neg{color:var(--red)} .mut{color:var(--ink-3)}
+.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.p-rec{background:var(--green-bg);color:var(--green)}
+.p-watch{background:var(--amber-bg);color:var(--amber)}
+.p-rej{background:var(--red-bg);color:var(--red)}
+.p-pass{background:var(--green-bg);color:var(--green)}
+.p-fail{background:var(--red-bg);color:var(--red)}
+.g{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;border-radius:5px;padding:1px 7px;white-space:nowrap}
+.g-ROBUST{background:var(--green-bg);color:var(--green)}
+.g-MODERATE{background:var(--blue-bg);color:var(--blue)}
+.g-FRAGILE{background:var(--amber-bg);color:var(--amber)}
+.g-FAILED{background:var(--red-bg);color:var(--red)}
+.g-NA{background:var(--raised);color:var(--ink-3)}
+.src{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px}
+.src-ai{background:var(--purple-bg);color:var(--purple)}
+.src-team{background:var(--blue-bg);color:var(--blue)}
+.src-builtin{background:var(--raised);color:var(--ink-3)}
+.outbar{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.outbar .b{width:64px;height:6px;background:var(--raised);border-radius:3px;position:relative;overflow:hidden}
+.outbar .b i{position:absolute;top:0;bottom:0}
+.score{display:flex;align-items:center;gap:7px;justify-content:flex-end}
+.score .b{width:46px;height:5px;background:var(--raised);border-radius:3px;overflow:hidden}
+.score .b i{display:block;height:100%;background:var(--blue)}
+.trend-up{color:var(--green)} .trend-down{color:var(--red)}
+.pager{display:flex;gap:6px;align-items:center;justify-content:flex-end;padding:10px 12px;border-top:1px solid var(--line);color:var(--ink-2)}
+.empty{padding:40px;text-align:center;color:var(--ink-3)}
+
+/* runs & settings */
+.grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.box h3{margin:0 0 10px;font-size:13px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px}
+.kv div:nth-child(odd){color:var(--ink-2)}
+.gl{display:grid;grid-template-columns:130px 1fr;gap:8px 14px}
+.gl b{font-weight:600}
+.gl span{color:var(--ink-2)}
+.run{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.run:last-child{border-bottom:none}
+.run .id{font-family:var(--mono);font-size:11.5px}
+.run .x{color:var(--ink-3);font-size:12px}
+
+/* sheets drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100%;background:var(--panel);border-left:1px solid var(--line);
+  z-index:41;transform:translateX(100%);transition:transform .2s ease;display:flex;flex-direction:column}
+.drawer.open{transform:none}.scrim.open{display:block}
+.drawer header{display:flex;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer header h3{margin:0;font-size:15px}
+.drawer header button{margin-left:auto}
+.drawer .body{padding:16px 18px;overflow-y:auto}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.check .ic{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;margin-top:1px}
+.ok{background:var(--green-bg);color:var(--green)} .no{background:var(--red-bg);color:var(--red)}
+.check .t{font-weight:600}.check .s{color:var(--ink-2);font-size:12px;word-break:break-all}
+.field{margin:12px 0}
+.field label{display:block;font-size:12px;color:var(--ink-2);margin-bottom:4px}
+.field input{width:100%;background:var(--raised);border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;outline:none}
+.note{background:var(--raised);border-radius:8px;padding:10px 12px;color:var(--ink-2);font-size:12px;margin-top:12px}
+.note ol{margin:6px 0 0;padding-left:18px}
+.msg{margin-top:12px;font-size:12.5px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;
+  border-radius:8px;font-weight:600;display:none;z-index:60}
+
+
+/* timeframes */
+.tfstrip{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:-4px 0 16px}
+.tfc{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;cursor:pointer;text-align:left;
+  box-shadow:var(--shadow);color:var(--ink)}
+.tfc:hover{border-color:var(--line-2);background:var(--hover)}
+.tfc .t{font-family:var(--mono);font-weight:700;font-size:14px}
+.tfc .l{color:var(--ink-3);font-size:10.5px}
+.tfc .n{font-size:11.5px;color:var(--ink-2);margin-top:3px;font-variant-numeric:tabular-nums}
+.tfc .n b{color:var(--green)}
+.tfhead{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}
+.tfhead .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.tfhead .m{color:var(--ink-3);font-size:12px}
+.tf{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 7px;
+  background:var(--purple-bg);color:var(--purple);white-space:nowrap}
+@media (max-width:1000px){.tfstrip{grid-template-columns:repeat(5,1fr)}}
+@media (max-width:640px){.tfstrip{grid-template-columns:repeat(2,1fr)}}
+
+
+/* quality x tested edge */
+.qintro{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--ink-2);font-size:12.5px;margin-bottom:12px}
+.qintro b{color:var(--ink)}
+.qgrid{display:grid;grid-template-columns:150px 1fr 1fr;gap:8px;margin-bottom:16px}
+.qaxis{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:6px}
+.qcell{border-radius:12px;padding:12px 14px;min-height:118px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow)}
+.qcell h5{margin:0;font-size:13.5px}
+.qcell p{margin:3px 0 10px;color:var(--ink-2);font-size:12px}
+.qcell.best{border-color:rgba(0,210,106,.5);background:var(--green-bg)}
+.qcell.hold{border-color:rgba(59,130,246,.45);background:var(--blue-bg)}
+.qcell.risk{border-color:rgba(245,166,35,.5);background:var(--amber-bg)}
+.qcell.skip{border-color:rgba(255,71,87,.4);background:var(--red-bg)}
+.qchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);background:var(--panel);border-radius:999px;
+  padding:3px 10px;margin:0 6px 6px 0;font-weight:700;cursor:pointer;font-size:12px}
+.qchip span{font-family:var(--mono);font-weight:500;color:var(--ink-2)}
+.qnot{grid-column:2 / 4;border:1px dashed var(--line-2);border-radius:12px;padding:10px 14px;color:var(--ink-2);font-size:12.5px}
+.p-hold{background:var(--blue-bg);color:var(--blue)} .p-none{background:var(--raised);color:var(--ink-2)}
+.qbar{display:flex;align-items:center;gap:8px}
+.qbar .b{width:70px;height:6px;background:var(--raised);border-radius:3px;overflow:hidden}
+.qbar .b i{display:block;height:100%}
+.lens{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.lens b{color:var(--ink)}
+.qdetail td{background:var(--raised)}
+.qd{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 2px}
+.qd .c{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.qd .c h6{margin:0 0 6px;font-size:12.5px;display:flex;justify-content:space-between}
+.qd ul{margin:0;padding-left:16px;color:var(--ink-2);font-size:12px}
+.qd li{margin-bottom:3px}
+.qkeys{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:12px;color:var(--ink-2)}
+.qkeys b{color:var(--ink);font-variant-numeric:tabular-nums}
+.qnote{margin-top:8px;font-size:11.5px;color:var(--ink-3)}
+@media (max-width:1000px){.qgrid{grid-template-columns:90px 1fr 1fr}.qd{grid-template-columns:1fr}}
+
+/* agent control center */
+.cc{display:grid;grid-template-columns:1.45fr 1fr;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+.cc-main{padding:16px 18px;border-right:1px solid var(--line);min-width:0}
+.cc-side{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.cc-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cc-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.state{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.state i{width:10px;height:10px;border-radius:50%;background:var(--ink-3)}
+.state.running i{background:var(--blue);box-shadow:0 0 0 0 rgba(59,130,246,.6);animation:pulse 1.6s infinite}
+.state.scheduled i{background:var(--green)}
+.state.paused i{background:var(--amber)}
+.state.offline i,.state.error i,.state.stopping i{background:var(--red)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(59,130,246,.55)}70%{box-shadow:0 0 0 9px rgba(59,130,246,0)}100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}}
+.cc-line{color:var(--ink-2);margin-top:4px;min-height:20px}
+.cc-line b{color:var(--ink);font-weight:600}
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stp{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--raised);font-size:12px;color:var(--ink-3)}
+.stp .n{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em}
+.stp.done{color:var(--ink-2);border-color:rgba(0,210,106,.35)} .stp.done .n{color:var(--green)}
+.stp.on{color:var(--ink);border-color:rgba(59,130,246,.55);background:var(--blue-bg)} .stp.on .n{color:var(--blue)}
+.prog{height:6px;background:var(--raised);border-radius:4px;overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .6s ease}
+.cc-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn.go{background:var(--green);border-color:var(--green);color:#04150c}
+.btn.warn{color:var(--amber);border-color:rgba(245,166,35,.45)}
+.btn.danger{color:var(--red);border-color:rgba(255,71,87,.45)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:12.5px}
+.facts div:nth-child(odd){color:var(--ink-3)}
+.banner{border-radius:8px;padding:9px 12px;font-size:12.5px;margin-top:12px;display:none}
+.banner.err{background:var(--red-bg);color:var(--red);display:block}
+.banner.info{background:var(--amber-bg);color:var(--amber);display:block}
+/* activity */
+.act-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+.feed{max-height:560px;overflow-y:auto}
+.ev{display:grid;grid-template-columns:62px 22px 1fr;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:12.5px}
+.ev:last-child{border-bottom:none}
+.ev .tm{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.ev .ic{text-align:center}
+.ev .msg{color:var(--ink-2);overflow-wrap:anywhere}
+.ev.agent .msg{color:var(--ink);white-space:pre-wrap}
+.ev.run .msg,.ev.command .msg{color:var(--ink);font-weight:600}
+.ev.budget .msg,.ev.lifecycle .msg{color:var(--amber)}
+.ev .st{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-right:6px}
+.runs-t td{font-size:12px;padding:8px 10px}
+.out-completed{color:var(--green)} .out-failed,.out-interrupted{color:var(--red)} .out-cancelled{color:var(--amber)} .out-running{color:var(--blue)}
+/* strategies */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.scard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px;box-shadow:var(--shadow)}
+.scard h4{margin:0;font-size:13px;overflow-wrap:anywhere}
+.scard .d{color:var(--ink-2);font-size:12px;margin-top:5px}
+.scard .why{color:var(--ink-2);font-size:12px;margin-top:7px;border-left:2px solid var(--purple);padding-left:8px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.scard .why.open{-webkit-line-clamp:unset}
+.scard .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:9px;font-size:12px;color:var(--ink-3)}
+.scard .row b{color:var(--ink);font-variant-numeric:tabular-nums}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field select,.field textarea{width:100%;background:var(--raised);border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;outline:none}
+.field .hint{font-size:11px;color:var(--ink-3);margin-top:3px}
+.presets{display:flex;gap:4px;margin-top:5px}
+@media (max-width:1000px){.cc{grid-template-columns:1fr}.cc-main{border-right:none;border-bottom:1px solid var(--line)}.act-grid{grid-template-columns:1fr}.stepper{grid-template-columns:1fr 1fr}}
+
+@media (max-width:1000px){
+  .pipe{grid-template-columns:1fr 1fr}
+  .step{border-bottom:1px solid var(--line)} .step::after{display:none}
+  .grid2{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:16px 16px 60px} .brand span{display:none} .top{gap:10px;padding:0 12px}
+  .navs{overflow-x:auto;min-width:0;flex:1;scrollbar-width:none} .navs a{padding:6px 8px;white-space:nowrap}
+  .icon-btn{flex:none}
+  .pipe{grid-template-columns:1fr} .toolbar input{min-width:0;flex:1}
+}
+@media print{
+  .top,.actions,.toolbar,.tabs,.pager{display:none!important}
+  .view{display:block!important;page-break-before:always}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">AI Research <span>NASDAQ screen → strategies → backtest vs Buy &amp; Hold</span></div>
+  <div class="navs">
+    <a href="/">Terminal</a>
+    <a href="/lab">Lab</a>
+    <a href="/game">Beat the Hold</a>
+    <a href="/agents">Agent</a>
+    <a href="/research" class="on">Research</a>
+  </div>
+  <button class="icon-btn" id="theme" title="Light / dark">◐</button>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>Research results</h1>
+      <div class="sub" id="sub">Loading…</div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="refresh" title="Reload from the research database">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
+      <a class="btn" href="/api/research/export.xlsx">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Excel</a>
+      <button class="btn primary" id="sheetBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/></svg>Google Sheet</button>
+    </div>
+  </div>
+
+  <section class="cc" id="cc">
+    <div class="cc-main">
+      <div class="cc-title">AI research agent · control center</div>
+      <div class="cc-top" style="margin-top:6px">
+        <span class="state" id="ccState"><i></i><span>Loading…</span></span>
+      </div>
+      <div class="cc-line" id="ccLine"></div>
+      <div class="stepper" id="ccSteps"></div>
+      <div class="prog"><i id="ccProg" style="width:0"></i></div>
+      <div class="banner" id="ccBanner"></div>
+    </div>
+    <div class="cc-side">
+      <div class="cc-btns">
+        <button class="btn go" id="bStart">▶ Start 24/7</button>
+        <button class="btn warn" id="bPause">❚❚ Pause</button>
+        <button class="btn danger" id="bStop">■ Stop</button>
+        <button class="btn" id="bNow">⚡ Run now</button>
+        <button class="btn" id="bSet" title="Agent settings">⚙ Settings</button>
+      </div>
+      <div class="facts" id="ccFacts"></div>
+    </div>
+  </section>
+
+  <div class="pipe" id="pipe"></div>
+  <div class="tfhead"><span class="k">Timeframes tested · every strategy on every stock</span><span class="m" id="tfMeta"></span></div>
+  <div class="tfstrip" id="tfstrip"></div>
+  <div class="finding" id="finding" style="display:none"></div>
+
+  <div class="tabs">
+    <button class="tab on" data-v="act">Live activity<span class="c" id="c-act"></span></button>
+    <button class="tab" data-v="lb">Leaderboard<span class="c" id="c-lb"></span></button>
+    <button class="tab" data-v="qual">Quality × Edge<span class="c" id="c-qual"></span></button>
+    <button class="tab" data-v="strat">Strategies<span class="c" id="c-strat"></span></button>
+    <button class="tab" data-v="tests">Strategy tests<span class="c" id="c-tests"></span></button>
+    <button class="tab" data-v="tfs">Timeframes<span class="c" id="c-tfs"></span></button>
+    <button class="tab" data-v="screen">Screening<span class="c" id="c-screen"></span></button>
+    <button class="tab" data-v="about">Runs &amp; how to read</button>
+  </div>
+
+  <section class="view on" id="v-act">
+    <div class="act-grid">
+      <div>
+        <div class="toolbar"><div class="chips" id="aChips"></div><span class="meta" id="aMeta"></span></div>
+        <div class="card"><div class="feed" id="feed"></div></div>
+      </div>
+      <div>
+        <div class="toolbar"><b style="font-size:13px">Run history</b><span class="meta">every run is stored</span></div>
+        <div class="card"><div class="tw"><table class="runs-t" id="runsT"></table></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-qual">
+    <div class="qintro" id="qIntro"></div>
+    <div class="qgrid" id="qGrid"></div>
+    <div class="card"><div class="tw"><table id="qT"></table></div></div>
+  </section>
+
+  <section class="view" id="v-strat">
+    <div class="toolbar">
+      <div class="chips" id="stChips"></div>
+      <input id="stQ" placeholder="Search strategy, idea or rationale">
+      <span class="meta">AI strategies are JSON rules checked against a fixed contract — never code</span>
+    </div>
+    <div class="sgrid" id="sgrid"></div>
+  </section>
+
+  <section class="view" id="v-lb">
+    <div class="toolbar">
+      <div class="chips" id="lbChips"></div>
+      <input id="lbQ" placeholder="Search stock, company or strategy">
+      <span class="meta">Best strategy × timeframe per stock · click a row to see every strategy and timeframe tested on it</span>
+    </div>
+    <div class="card"><div class="tw"><table id="lbT"></table></div></div>
+  </section>
+
+  <section class="view" id="v-tests">
+    <div class="toolbar">
+      <select id="tSym"><option value="">All stocks</option></select>
+      <select id="tTf"><option value="">All timeframes</option></select>
+      <div class="chips" id="tChips"></div>
+      <input id="tQ" placeholder="Search strategy or parameter">
+      <span class="meta" id="tMeta"></span>
+    </div>
+    <div class="card"><div class="tw"><table id="tT"></table></div></div>
+  </section>
+
+  <section class="view" id="v-tfs">
+    <div class="toolbar"><span class="meta" style="margin-left:0" id="tfNote"></span></div>
+    <div class="card"><div class="tw"><table id="tfT"></table></div></div>
+  </section>
+
+  <section class="view" id="v-screen">
+    <div class="toolbar">
+      <div class="chips" id="sChips"></div>
+      <input id="sQ" placeholder="Search symbol, company or reason">
+      <span class="meta" id="sMeta"></span>
+    </div>
+    <div class="card"><div class="tw"><table id="sT"></table></div><div class="pager" id="sPager"></div></div>
+  </section>
+
+  <section class="view" id="v-about">
+    <div class="grid2">
+      <div class="box"><h3>How to read this</h3><div class="gl" id="gloss"></div></div>
+      <div>
+        <div class="box" style="margin-bottom:16px"><h3>Settings behind these numbers</h3><div class="kv" id="sett"></div></div>
+        <div class="box"><h3>Recent runs</h3><div id="runs"></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Google Sheet">
+  <header><h3>Google Sheet</h3><button class="icon-btn" id="dClose">✕</button></header>
+  <div class="body">
+    <div style="color:var(--ink-2)">The sheet gets the same four tabs as this page — Summary, Leaderboard, Strategy Tests, Screening — rebuilt from the research database on every sync.</div>
+    <div id="checks" style="margin-top:12px"></div>
+    <div class="field"><label for="sheetIn">Google Sheet URL</label>
+      <input id="sheetIn" placeholder="https://docs.google.com/spreadsheets/d/…"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="saveSheet">Save URL</button>
+      <button class="btn primary" id="syncBtn">Sync now</button>
+      <a class="btn" id="openSheet" target="_blank" rel="noopener" style="display:none">Open sheet ↗</a>
+    </div>
+    <div class="msg" id="sheetMsg"></div>
+    <div class="note"><b>One-time setup</b>
+      <ol>
+        <li>In Google Cloud, enable the Sheets API, create a <b>service account</b> and download its JSON key.</li>
+        <li>Save the key at the path shown above (it stays on this machine; never commit it).</li>
+        <li>Create a Google Sheet, <b>Share</b> it with the service account's email as <b>Editor</b>, and paste its URL here.</li>
+      </ol>
+    </div>
+  </div>
+</aside>
+<aside class="drawer" id="setDrawer" aria-label="Agent settings">
+  <header><h3>Agent settings</h3><button class="icon-btn" id="sClose">✕</button></header>
+  <div class="body">
+    <div style="color:var(--ink-2)">Applies from the next run. The workflow itself never changes: screen → strategies → backtest vs Buy &amp; Hold → leaderboard.</div>
+    <div class="field"><label for="fInt">Scan interval (minutes)</label><input id="fInt" type="number" min="30" max="10080">
+      <div class="presets" id="intPresets"></div><div class="hint">Time between scheduled runs, 30 min – 7 days. Market data updates once a day after the US close.</div></div>
+    <div class="field-row">
+      <div class="field"><label for="fShort">Shortlist size</label><input id="fShort" type="number" min="3" max="30"><div class="hint">stocks backtested per run (3–30)</div></div>
+      <div class="field"><label for="fNew">Max new strategies</label><input id="fNew" type="number" min="0" max="8"><div class="hint">AI proposals per run (0–8)</div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="fBud">Budget per run ($)</label><input id="fBud" type="number" step="0.5" min="0.5" max="25"><div class="hint">hard cap, enforced by the SDK</div></div>
+      <div class="field"><label for="fDay">Daily budget ($)</label><input id="fDay" type="number" step="1" min="1" max="200"><div class="hint">no new run past this</div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="fModel">Model</label><select id="fModel"><option value="sonnet">Sonnet (recommended)</option><option value="opus">Opus</option><option value="haiku">Haiku</option><option value="fable">Fable</option></select></div>
+      <div class="field"><label for="fTurns">Max turns</label><input id="fTurns" type="number" min="10" max="150"></div>
+    </div>
+    <div class="field"><label for="fFocus">Research focus (optional)</label><textarea id="fFocus" rows="3" maxlength="500" placeholder="e.g. Focus on mean-reversion ideas for stocks in a downtrend"></textarea></div>
+    <div style="display:flex;gap:8px"><button class="btn primary" id="sSave">Save settings</button></div>
+    <div class="msg" id="sMsg"></div>
+    <div class="note"><b>Safety</b> — the agent can only use 13 research tools (screen, strategies, backtests, results, reports). It has no broker, order, shell or file access, and runs in its own process without any broker credentials.</div>
+  </div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nf = new Intl.NumberFormat("en-US");
+const pct = (v, d=1) => v == null ? '<span class="mut">—</span>' : `<span class="num ${v>0?'pos':v<0?'neg':''}">${v>0?'+':''}${nf.format(+v.toFixed(d))}%</span>`;
+const pts = v => v == null ? '<span class="mut">—</span>' : `<span class="num ${v>0?'pos':v<0?'neg':''}">${v>0?'+':''}${nf.format(+v.toFixed(1))}</span>`;
+const plain = (v, d=1) => v == null ? '<span class="mut">—</span>' : `<span class="num">${nf.format(+(+v).toFixed(d))}</span>`;
+const VCLS = {Recommended:"p-rec", Watch:"p-watch", Rejected:"p-rej"};
+const verdict = v => `<span class="pill ${VCLS[v]||''}">${esc(v)}</span>`;
+function grade(r){
+  const m = /^(\w+)(?: \((\d+)\/100\))?/.exec(r||"");
+  if (!m || r === "Not tested") return '<span class="g g-NA">Not tested</span>';
+  return `<span class="g g-${m[1]}">${m[1]}</span>${m[2]?` <span class="num mut" style="font-size:11px">${m[2]}/100</span>`:''}`;
+}
+const src = s => `<span class="src src-${esc(s||'builtin')}">${s==='ai'?'AI':esc(s||'builtin')}</span>`;
+function outbar(v, max){
+  if (v == null) return '<span class="mut">—</span>';
+  const w = Math.min(50, Math.sqrt(Math.abs(v) / (max||1)) * 50);       // sqrt: one huge loss must not flatten every lead
+  const style = v >= 0 ? `left:50%;width:${w}%;background:var(--green)` : `right:50%;width:${w}%;background:var(--red)`;
+  return `<span class="outbar">${pts(v)}<span class="b"><i style="${style}"></i></span></span>`;
+}
+function toast(t){ const el=$("#toast"); el.textContent=t; el.style.display="block"; clearTimeout(el._t); el._t=setTimeout(()=>el.style.display="none",2600); }
+async function get(u){ const r = await fetch(u, {cache:"no-store"}); if(!r.ok) throw new Error((await r.json().catch(()=>({}))).detail || r.statusText); return r.json(); }
+async function post(u, body){ const r = await fetch(u, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body||{})});
+  const j = await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.detail || r.statusText); return j; }
+
+/* theme (per-viewer convenience only) */
+function setTheme(t){ document.documentElement.dataset.theme = t; try{ localStorage.setItem("research-theme", t); }catch(e){} }
+try{ const t = localStorage.getItem("research-theme"); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+$("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(b => b.onclick = () => showTab(b.dataset.v));
+function showTab(v){
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.dataset.v === v));
+  document.querySelectorAll(".view").forEach(x => x.classList.toggle("on", x.id === "v-" + v));
+}
+
+/* generic sortable table */
+function table(el, cols, rows, opts={}){
+  const st = el._sort || (el._sort = {key: null, dir: 1});
+  let data = rows.slice();
+  if (st.key){
+    const c = cols.find(c => c.k === st.key);
+    const val = r => c.sort ? c.sort(r) : r[c.k];
+    data.sort((a,b) => { const x=val(a), y=val(b);
+      if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1;
+      return (typeof x === "number" ? x - y : String(x).localeCompare(String(y))) * st.dir; });
+  }
+  if (opts.page){ const {n, size} = opts.page; data = data.slice(n*size, (n+1)*size); }
+  const head = "<thead><tr>" + cols.map(c => `<th class="${c.r?'r':''}" data-k="${c.k}">${esc(c.h)}${st.key===c.k?`<span class="ar">${st.dir>0?'▲':'▼'}</span>`:''}</th>`).join("") + "</tr></thead>";
+  const body = data.length ? data.map((r,i) => `<tr class="${opts.click?'click':''}" data-i="${i}">` + cols.map(c => `<td class="${c.r?'r ':''}${c.cls||''}">${c.f ? c.f(r) : esc(r[c.k])}</td>`).join("") + "</tr>").join("")
+                           : `<tr><td colspan="${cols.length}" class="empty">${esc(opts.empty || "Nothing to show yet.")}</td></tr>`;
+  el.innerHTML = head + "<tbody>" + body + "</tbody>";
+  el.querySelectorAll("th").forEach(th => th.onclick = () => {
+    st.dir = st.key === th.dataset.k ? -st.dir : (cols.find(c=>c.k===th.dataset.k).r ? -1 : 1); st.key = th.dataset.k; opts.redraw && opts.redraw(); });
+  if (opts.click) el.querySelectorAll("tbody tr[data-i]").forEach(tr => tr.onclick = () => opts.click(data[+tr.dataset.i]));
+}
+function chips(el, items, cur, on){
+  el.innerHTML = items.map(([k, label]) => `<button class="chip ${k===cur?'on':''}" data-k="${k}">${esc(label)}</button>`).join("");
+  el.querySelectorAll(".chip").forEach(b => b.onclick = () => on(b.dataset.k));
+}
+const match = (r, q, keys) => !q || keys.some(k => String(r[k] ?? "").toLowerCase().includes(q));
+
+/* timeframes — always from the API (config.TIMEFRAMES), never written into this page */
+const tfOrder = tf => { const i = (S.sum && S.sum.timeframe_list || []).indexOf(tf); return i < 0 ? 99 : i; };
+const tfPill = tf => tf ? `<span class="tf">${esc(tf)}</span>` : '<span class="mut">—</span>';
+function renderTimeframes(){
+  const s = S.sum, tfs = s.timeframes;
+  $("#tfMeta").textContent = `${tfs.length} timeframes from config · screening uses ${s.screen_timeframe} bars`;
+  $("#tfstrip").innerHTML = tfs.map(x => `<button class="tfc" data-tf="${esc(x.Timeframe)}" title="${esc(x.Label)} · ${esc(x.History)}">
+      <div class="t">${esc(x.Timeframe)}</div><div class="l">${esc(x.Label)}</div>
+      <div class="n">${nf.format(x.Tests)} tests · <b>${nf.format(x["Beat Buy & Hold"])}</b> beat B&amp;H</div></button>`).join("");
+  $("#tfstrip").querySelectorAll(".tfc").forEach(b => b.onclick = () => { $("#tTf").value = b.dataset.tf; $("#tSym").value = ""; S.tV = "all"; renderTests(); showTab("tests"); });
+  const cur = $("#tTf").value;
+  $("#tTf").innerHTML = '<option value="">All timeframes</option>' + tfs.map(x => `<option value="${esc(x.Timeframe)}" ${x.Timeframe===cur?'selected':''}>${esc(x.Timeframe)} · ${esc(x.Label)}</option>`).join("");
+  $("#tfNote").textContent = "Every strategy is backtested on every shortlisted stock on each of these timeframes, against Buy & Hold on the same bars. Daily uses the last " + nf.format(s.settings.bars) + " bars (~" + s.settings.years + " years); every other timeframe uses all the history available, so windows differ — compare a row with its own Buy & Hold.";
+  table($("#tfT"), [
+    {h:"Timeframe", k:"Timeframe", f:x => tfPill(x.Timeframe), sort:x => tfOrder(x.Timeframe)},
+    {h:"Bar size", k:"Label"},
+    {h:"History used", k:"History"},
+    {h:"Typical window (yrs)", k:"Typical window (years)", r:1, f:x => plain(x["Typical window (years)"], 2)},
+    {h:"Tests", k:"Tests", r:1, f:x => plain(x.Tests, 0)},
+    {h:"Beat B&H", k:"Beat Buy & Hold", r:1, f:x => `<span class="num pos">${nf.format(x["Beat Buy & Hold"])}</span>`},
+    {h:"Recommended", k:"Recommended", r:1, f:x => plain(x.Recommended, 0)},
+    {h:"Watch", k:"Watch", r:1, f:x => plain(x.Watch, 0)},
+    {h:"Rejected", k:"Rejected", r:1, f:x => plain(x.Rejected, 0)},
+    {h:"Best result", k:"Best result", f:x => esc(x["Best result"] || "—")},
+  ], tfs, {redraw: renderTimeframes, click: x => { $("#tTf").value = x.Timeframe; $("#tSym").value = ""; renderTests(); showTab("tests"); }});
+  $("#c-tfs").textContent = tfs.length;
+}
+
+/* state */
+const S = {sum:null, lb:[], tests:[], screen:[], lbV:"all", tV:"all", sV:"all", sPage:0};
+
+function renderSummary(){
+  const s = S.sum, v = s.verdicts, tot = (v.Recommended||0)+(v.Watch||0)+(v.Rejected||0) || 1;
+  $("#sub").innerHTML = `Data as of <b>${esc(s.data_as_of || "—")}</b> · ${esc(s.settings.years)}-year backtests · costs ${esc(s.settings.costs)} · Recommended needs <b>+${esc(s.settings.target_pts)} pts</b> vs Buy &amp; Hold and grade <b>${esc(s.settings.promote_grade)}</b>`;
+  const bySrc = Object.entries(s.strategies_by_source).map(([k,n]) => `${n} ${k==='ai'?'AI':k}`).join(" · ");
+  $("#pipe").innerHTML = `
+    <div class="step"><div class="k">1 · NASDAQ universe</div><div class="v">${nf.format(s.universe)}</div><div class="d">common stocks listed today</div></div>
+    <div class="step"><div class="k">2 · Screened</div><div class="v">${nf.format(s.passed)}<span style="font-size:15px;color:var(--ink-3);font-weight:500"> / ${nf.format(s.scanned)}</span></div><div class="d">passed liquidity, price, volatility &amp; history</div></div>
+    <div class="step"><div class="k">3 · Shortlisted</div><div class="v">${nf.format(s.shortlisted)}</div><div class="d">top scores, sent to backtesting</div></div>
+    <div class="step"><div class="k">4 · Backtested</div><div class="v">${nf.format(s.backtests)}</div><div class="d">${nf.format(s.strategies_tested)} strategies (${esc(bySrc)}) × ${s.timeframe_list.length} timeframes · ${nf.format(s.validations)} stress-tested</div></div>
+    <div class="step"><div class="k">5 · Verdicts <span style="text-transform:none;letter-spacing:0">(all pairs)</span></div>
+      <div class="vbar"><i style="width:${(v.Recommended||0)/tot*100}%;background:var(--green)"></i><i style="width:${(v.Watch||0)/tot*100}%;background:var(--amber)"></i><i style="width:${(v.Rejected||0)/tot*100}%;background:var(--red);opacity:.7"></i></div>
+      <div class="vleg"><span><i class="sw" style="background:var(--green)"></i>Recommended <b>${v.Recommended||0}</b></span><span><i class="sw" style="background:var(--amber)"></i>Watch <b>${v.Watch||0}</b></span><span><i class="sw" style="background:var(--red)"></i>Rejected <b>${v.Rejected||0}</b></span></div>
+      <div class="d" style="margin-top:4px">${nf.format(s.beat_buy_and_hold)} of ${nf.format(s.pairs)} stock × strategy pairs beat Buy &amp; Hold</div></div>`;
+  $("#gloss").innerHTML = s.glossary.map(g => `<b>${esc(g.term)}</b><span>${esc(g.meaning)}</span>`).join("");
+  const st = s.settings;
+  $("#sett").innerHTML = [
+    ["Outperformance target", `+${st.target_pts} pts vs Buy & Hold`], ["Robustness for Recommended", st.promote_grade],
+    ["Timeframes tested", s.timeframe_list.join(" · ")],
+    ["Backtest window", `daily: last ${st.bars} bars (~${st.years} years); other timeframes: all available history`],
+    ["Trading costs", st.costs],
+    ["Screen: liquidity", `≥ $${st.min_dollar_volume_m}M traded per day`], ["Screen: price", `≥ $${st.min_price}`],
+    ["Screen: daily range (ATR)", `${st.atr_band[0]}–${st.atr_band[1]}%`], ["Screen: history", `≥ ${st.min_history_bars} daily bars`],
+    ["Last screened (UTC)", s.last_screened_at || "—"],
+  ].map(([k,v]) => `<div>${esc(k)}</div><div>${esc(v)}</div>`).join("");
+  $("#runs").innerHTML = s.runs.length ? s.runs.map(r => {
+    const x = r.summary || {}, bits = [];
+    if (x.error) bits.push(`<span class="neg">${esc(x.error.slice(0,90))}</span>`);
+    if (x.turns != null) bits.push(`${x.turns} turns`);
+    if (x.tool_calls != null) bits.push(`${x.tool_calls} tool calls`);
+    if (x.strategies_proposed) bits.push(`${x.strategies_proposed} new strategies`);
+    if (x.cost_usd != null) bits.push(`$${(+x.cost_usd).toFixed(2)}`);
+    if (x.seconds != null) bits.push(`${x.seconds}s`);
+    if (!r.finished_at) bits.push('<span style="color:var(--amber)">running or interrupted</span>');
+    return `<div class="run"><span class="pill ${r.kind==='agent'?'p-watch':'p-pass'}" style="height:fit-content">${r.kind==='agent'?'AI agent':'Pipeline'}</span>
+      <div><div class="id">${esc(r.run_id)}</div><div class="x">${esc((r.started_at||"").replace("T"," ").slice(0,16))} UTC · ${bits.join(" · ")}</div></div></div>`;
+  }).join("") : '<div class="mut">No runs recorded yet.</div>';
+}
+
+function renderFinding(){
+  const best = S.lb[0], el = $("#finding");
+  if (!best){ el.style.display = "none"; return; }
+  const v = S.sum.verdicts;
+  const head = v.Recommended ? `${v.Recommended} stock–strategy pair${v.Recommended>1?'s':''} cleared every test.`
+             : "No strategy has cleared every test yet — Buy & Hold remains hard to beat once robustness is checked.";
+  el.style.borderLeftColor = v.Recommended ? "var(--green)" : "var(--amber)";
+  el.innerHTML = `<div><div class="t">${esc(head)}</div><div class="s">Top of the board: <b>${esc(best.Stock)}</b> with <b>${esc(best["Best Strategy"])}</b> on ${tfPill(best.Timeframe)} returned
+    ${pct(best["Return %"])} vs Buy &amp; Hold ${pct(best["Buy & Hold %"])} (${pts(best["Outperformance (pts)"])} pts) — robustness ${grade(best.Robustness)} → ${verdict(best.Verdict)}.</div></div>`;
+  el.style.display = "flex";
+}
+
+function verdictChips(el, rows, cur, set){
+  const n = k => rows.filter(r => r.Verdict === k).length;
+  chips(el, [["all", `All ${rows.length}`], ["Recommended", `Recommended ${n("Recommended")}`], ["Watch", `Watch ${n("Watch")}`], ["Rejected", `Rejected ${n("Rejected")}`]], cur, set);
+}
+
+function renderLB(){
+  verdictChips($("#lbChips"), S.lb, S.lbV, k => { S.lbV = k; renderLB(); });
+  const q = $("#lbQ").value.trim().toLowerCase();
+  const rows = S.lb.filter(r => (S.lbV === "all" || r.Verdict === S.lbV) && match(r, q, ["Stock","Company","Best Strategy"]));
+  const max = Math.max(1, ...S.lb.map(r => Math.abs(r["Outperformance (pts)"] || 0)));
+  table($("#lbT"), [
+    {h:"Rank", k:"Rank", r:1, f:r => `<span class="num mut">${r.Rank}</span>`},
+    {h:"Stock", k:"Stock", f:r => `<span class="sym">${esc(r.Stock)}</span><span class="co">${esc(r.Company)}</span>`},
+    {h:"Best strategy", k:"Best Strategy", cls:"strat", f:r => `${esc(r["Best Strategy"])}${src(r.Source)}<span class="pm">${esc(r.Parameters)}</span>`},
+    {h:"Timeframe", k:"Timeframe", f:r => tfPill(r.Timeframe), sort:r => tfOrder(r.Timeframe)},
+    {h:"Return", k:"Return %", r:1, f:r => pct(r["Return %"])},
+    {h:"Buy & Hold", k:"Buy & Hold %", r:1, f:r => pct(r["Buy & Hold %"])},
+    {h:"vs B&H (pts)", k:"Outperformance (pts)", r:1, f:r => outbar(r["Outperformance (pts)"], max)},
+    {h:"Robustness", k:"Robustness", f:r => grade(r.Robustness)},
+    {h:"Verdict", k:"Verdict", f:r => verdict(r.Verdict), sort:r => ({Recommended:0,Watch:1,Rejected:2})[r.Verdict]},
+    {h:"Reason", k:"Reason", cls:"reason"},
+    {h:"Tried", k:"Combinations tried", r:1, f:r => plain(r["Combinations tried"],0)},
+  ], rows, {redraw: renderLB, empty: "No backtests yet — run `python -m research_agent research` or the AI agent.",
+            click: r => { $("#tSym").value = r.Stock; S.tV = "all"; renderTests(); showTab("tests"); }});
+  $("#c-lb").textContent = S.lb.length;
+}
+
+function renderTests(){
+  const sym = $("#tSym").value, tf = $("#tTf").value, q = $("#tQ").value.trim().toLowerCase();
+  const base = S.tests.filter(r => (!sym || r.Symbol === sym) && (!tf || r.Timeframe === tf));
+  verdictChips($("#tChips"), base, S.tV, k => { S.tV = k; renderTests(); });
+  const rows = base.filter(r => (S.tV === "all" || r.Verdict === S.tV) && match(r, q, ["Strategy","Parameters","Symbol","Source"]));
+  $("#tMeta").textContent = `${rows.length} of ${S.tests.length} tests · validated result shown when a stress test ran`;
+  table($("#tT"), [
+    {h:"Symbol", k:"Symbol", f:r => `<span class="sym">${esc(r.Symbol)}</span>`},
+    {h:"Strategy", k:"Strategy", f:r => `${esc(r.Strategy)}${src(r.Source)}`},
+    {h:"Timeframe", k:"Timeframe", f:r => tfPill(r.Timeframe), sort:r => tfOrder(r.Timeframe)},
+    {h:"Parameters", k:"Parameters", f:r => `<span class="pm" style="margin:0">${esc(r.Parameters)}</span>`},
+    {h:"Return", k:"Return %", r:1, f:r => pct(r["Return %"])},
+    {h:"Buy & Hold", k:"Buy & Hold %", r:1, f:r => pct(r["Buy & Hold %"])},
+    {h:"vs B&H (pts)", k:"Outperformance (pts)", r:1, f:r => pts(r["Outperformance (pts)"])},
+    {h:"Trades", k:"Trades", r:1, f:r => plain(r.Trades,0)},
+    {h:"Max drawdown", k:"Max DD %", r:1, f:r => r["Max DD %"]==null?'<span class="mut">—</span>':`<span class="num neg">−${(+r["Max DD %"]).toFixed(1)}%</span>`},
+    {h:"Sharpe", k:"Sharpe", r:1, f:r => plain(r.Sharpe,2)},
+    {h:"Robustness", k:"Robustness", f:r => grade(r.Robustness)},
+    {h:"Verdict", k:"Verdict", f:r => verdict(r.Verdict), sort:r => ({Recommended:0,Watch:1,Rejected:2})[r.Verdict]},
+  ], rows, {redraw: renderTests, empty: "No strategy tests match."});
+  $("#c-tests").textContent = S.tests.length;
+}
+
+function renderScreen(){
+  const pass = S.screen.filter(r => r.Result === "PASS").length;
+  chips($("#sChips"), [["all", `All ${S.screen.length}`], ["PASS", `Pass ${pass}`], ["FAIL", `Fail ${S.screen.length - pass}`]], S.sV,
+        k => { S.sV = k; S.sPage = 0; renderScreen(); });
+  const q = $("#sQ").value.trim().toLowerCase();
+  const rows = S.screen.filter(r => (S.sV === "all" || r.Result === S.sV) && match(r, q, ["Symbol","Company","Reason"]));
+  const size = 100, pages = Math.max(1, Math.ceil(rows.length / size));
+  S.sPage = Math.min(S.sPage, pages - 1);
+  table($("#sT"), [
+    {h:"Symbol", k:"Symbol", f:r => `<span class="sym">${esc(r.Symbol)}</span><span class="co">${esc(r.Company)}</span>`},
+    {h:"Result", k:"Result", f:r => `<span class="pill ${r.Result==='PASS'?'p-pass':'p-fail'}">${r.Result}</span>`},
+    {h:"Score", k:"Score", r:1, f:r => r.Score==null?'<span class="mut">—</span>':`<span class="score"><span class="num">${r.Score.toFixed(1)}</span><span class="b"><i style="width:${r.Score}%"></i></span></span>`},
+    {h:"Price", k:"Price", r:1, f:r => r.Price==null?'<span class="mut">—</span>':`<span class="num">$${nf.format(+r.Price.toFixed(2))}</span>`},
+    {h:"Liquidity ($M/day)", k:"Liquidity ($M/day)", r:1, f:r => plain(r["Liquidity ($M/day)"],1)},
+    {h:"ATR % (volatility)", k:"ATR %", r:1, f:r => plain(r["ATR %"],2)},
+    {h:"Trend", k:"Trend", f:r => r.Trend==null?'<span class="mut">—</span>':`<span class="${r.Trend==='Uptrend'?'trend-up':'trend-down'}">${r.Trend==='Uptrend'?'▲':'▼'} ${r.Trend}</span>`},
+    {h:"1Y return", k:"1Y Return %", r:1, f:r => pct(r["1Y Return %"])},
+    {h:"Reason", k:"Reason", cls:"reason"},
+  ], rows, {redraw: renderScreen, page: {n: S.sPage, size}, empty: "No screening results yet — run `python -m research_agent screen`."});
+  $("#sMeta").textContent = `${nf.format(rows.length)} stocks`;
+  $("#sPager").innerHTML = pages > 1 ? `<button class="btn" id="pPrev" ${S.sPage?'':'disabled'}>‹ Prev</button><span class="num">${S.sPage+1} / ${pages}</span><button class="btn" id="pNext" ${S.sPage<pages-1?'':'disabled'}>Next ›</button>` : "";
+  if (pages > 1){ $("#pPrev").onclick = () => { S.sPage--; renderScreen(); }; $("#pNext").onclick = () => { S.sPage++; renderScreen(); }; }
+  $("#c-screen").textContent = nf.format(S.screen.length);
+}
+
+async function load(){
+  $("#refresh").disabled = true;
+  try{
+    const [sum, lb, tests, scr] = await Promise.all([get("/api/research/summary"), get("/api/research/leaderboard"),
+                                                     get("/api/research/tests"), get("/api/research/screening")]);
+    S.sum = sum; S.lb = lb.rows; S.tests = tests.rows; S.screen = scr.rows;
+    const syms = [...new Set(S.tests.map(r => r.Symbol))].sort(), cur = $("#tSym").value;
+    $("#tSym").innerHTML = '<option value="">All stocks</option>' + syms.map(s => `<option ${s===cur?'selected':''}>${esc(s)}</option>`).join("");
+    renderSummary(); renderTimeframes(); renderFinding(); renderLB(); renderTests(); renderScreen();
+  }catch(e){ $("#sub").innerHTML = `<span class="neg">Could not load research data: ${esc(e.message)}</span>`; }
+  $("#refresh").disabled = false;
+}
+$("#refresh").onclick = () => { loadQuality(); load().then(() => toast("Reloaded from the research database")); };
+$("#lbQ").oninput = renderLB; $("#tQ").oninput = renderTests; $("#tSym").onchange = renderTests; $("#tTf").onchange = renderTests;
+$("#sQ").oninput = () => { S.sPage = 0; renderScreen(); };
+
+/* Google Sheet drawer */
+function drawer(open){ $("#drawer").classList.toggle("open", open); $("#scrim").classList.toggle("open", open); if (open) loadSheet(); }
+$("#sheetBtn").onclick = () => drawer(true); $("#dClose").onclick = () => drawer(false); $("#scrim").addEventListener("click", () => drawer(false));
+function check(ok, t, s){ return `<div class="check"><span class="ic ${ok?'ok':'no'}">${ok?'✓':'!'}</span><div><div class="t">${esc(t)}</div>${s?`<div class="s">${s}</div>`:''}</div></div>`; }
+async function loadSheet(){
+  try{
+    const st = await get("/api/research/sheets");
+    $("#checks").innerHTML =
+      check(st.library, "Google Sheets library", st.library ? "installed" : "run: venv/bin/python3 -m pip install gspread") +
+      check(st.credentials_file_present, "Service-account key", `${esc(st.credentials_file)}${st.service_account_email ? `<br>Share the sheet with <b>${esc(st.service_account_email)}</b>` : ""}`) +
+      check(!!st.sheet_id, "Sheet selected", st.sheet_url ? `<a href="${esc(st.sheet_url)}" target="_blank" rel="noopener">${esc(st.sheet_url)}</a>` : "paste the sheet URL below") +
+      (st.last_sync ? check(!st.last_error, `Last sync ${st.last_sync.replace("T"," ").slice(0,16)} UTC`, st.last_error ? `<span class="neg">${esc(st.last_error)}</span>` : "") :
+       st.last_error ? check(false, "Last sync failed", `<span class="neg">${esc(st.last_error)}</span>`) : "");
+    if (st.sheet_url){ $("#openSheet").href = st.sheet_url; $("#openSheet").style.display = ""; }
+    $("#syncBtn").disabled = !st.configured;
+  }catch(e){ $("#checks").innerHTML = `<div class="neg">${esc(e.message)}</div>`; }
+}
+$("#saveSheet").onclick = async () => {
+  try{ await post("/api/research/sheets/config", {sheet: $("#sheetIn").value}); $("#sheetMsg").innerHTML = '<span class="pos">Saved.</span>'; loadSheet(); }
+  catch(e){ $("#sheetMsg").innerHTML = `<span class="neg">${esc(e.message)}</span>`; }
+};
+$("#syncBtn").onclick = async () => {
+  $("#syncBtn").disabled = true; $("#sheetMsg").textContent = "Syncing…";
+  try{
+    const r = await post("/api/research/sheets/sync");
+    $("#sheetMsg").innerHTML = `<span class="pos">Synced: ${Object.entries(r.rows).map(([k,n]) => `${esc(k)} ${nf.format(n)}`).join(" · ")}</span>`;
+  }catch(e){ $("#sheetMsg").innerHTML = `<span class="neg">${esc(e.message)}</span>`; }
+  loadSheet();
+};
+
+/* ===================== Agent Control Center ===================== */
+const A = {lastEv: 0, events: [], status: null, lastRunSeen: undefined, filt: "all", strategies: [], stV: "all"};
+const ICON = {tool:"↗", tool_result:"✓", agent:"💬", progress:"⋯", run:"◆", command:"⌘", lifecycle:"●", budget:"$", settings:"⚙"};
+const T = ts => ts ? new Date(ts) : null;
+function rel(ts){ const d = T(ts); if (!d) return "—"; let s = Math.round((Date.now() - d) / 1000), fut = s < 0; s = Math.abs(s);
+  const txt = s < 60 ? `${s}s` : s < 3600 ? `${Math.round(s/60)}m` : s < 86400 ? `${Math.floor(s/3600)}h ${Math.round(s%3600/60)}m` : `${Math.floor(s/86400)}d ${Math.floor(s%86400/3600)}h`;
+  return fut ? `in ${txt}` : `${txt} ago`; }
+const clock = ts => { const d = T(ts); return d ? d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) : "—"; };
+const stamp = ts => { const d = T(ts); return d ? d.toLocaleString([], {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"}) : "—"; };
+const every = m => m % 1440 === 0 ? `${m/1440} day${m>1440?'s':''}` : m % 60 === 0 ? `${m/60} h` : `${m} min`;
+const money = v => v == null ? "—" : `$${(+v).toFixed(2)}`;
+
+function renderStatus(st){
+  const prev = A.status; A.status = st;
+  const LABEL = {running:"Running", scheduled:"Scheduled · 24/7 on", paused:"Paused", stopped:"Stopped",
+                 offline:"Worker offline — restarting", starting:"Starting worker…", stopping:"Stopping…"};
+  const el = $("#ccState"); el.className = "state " + st.state; el.querySelector("span").textContent = LABEL[st.state] || st.state;
+  const s = st.settings;
+  let line = "";
+  if (st.state === "running") line = `<b>${esc(st.task || "Working")}</b> · started ${esc(rel(st.run_started_at))} · ${st.trigger === "manual" ? "manual run" : "scheduled run"}`;
+  else if (st.state === "scheduled") line = `Next run <b>${esc(rel(st.next_run_at))}</b> (${esc(clock(st.next_run_at))}) · repeats every <b>${esc(every(s.interval_minutes))}</b>`;
+  else if (st.state === "paused") line = st.run_now_pending ? "Run requested — starting shortly"
+      : `${esc(st.pause_reason || "Paused.")} Press <b>Start 24/7</b> to resume the schedule.`;
+  else if (st.state === "stopped") line = `Press <b>Start 24/7</b> to research every ${esc(every(s.interval_minutes))}, or <b>Run now</b> for a single cycle.`;
+  else if (st.state === "stopping") line = "Cancelling the run in progress and shutting the worker down…";
+  else line = "Waiting for the worker process…";
+  $("#ccLine").innerHTML = line;
+  const keys = st.stages.map(x => x.key), cur = st.state === "running" ? keys.indexOf(st.stage) : -1;
+  $("#ccSteps").innerHTML = st.stages.map((x, i) =>
+    `<div class="stp ${cur > i ? 'done' : cur === i ? 'on' : ''}"><div class="n">${cur > i ? '✓' : i + 1} · STEP</div>${esc(x.label)}</div>`).join("");
+  $("#ccProg").style.width = (st.state === "running" ? Math.max(2, st.progress) : 0) + "%";
+  const b = $("#ccBanner");
+  if (st.last_error) { b.className = "banner err"; b.textContent = `Last run failed: ${st.last_error}${st.last_result && st.last_result.fix ? " — " + st.last_result.fix : ""}`; }
+  else if (st.desired === "paused" && st.pause_reason && st.pause_reason.startsWith("auto")) { b.className = "banner info"; b.textContent = st.pause_reason; }
+  else b.className = "banner";
+  $("#bStart").disabled = st.desired === "running";
+  $("#bPause").disabled = st.desired !== "running";
+  $("#bStop").disabled = st.desired === "stopped" && st.state !== "running";
+  $("#bNow").disabled = st.state === "running" || st.run_now_pending;
+  const lr = st.last_result || {};
+  $("#ccFacts").innerHTML = [
+    ["Last run", st.last_run_at ? `${rel(st.last_run_at)} · <span class="out-${esc(lr.outcome)}">${esc(lr.outcome || "")}</span>${lr.cost_usd != null ? " · " + money(lr.cost_usd) : ""}` : "never"],
+    ["Schedule", st.desired === "running" ? `every ${esc(every(s.interval_minutes))}` : "off"],
+    ["Per run", `${s.shortlist_size} stocks × every strategy × ${S.sum ? S.sum.timeframe_list.length : "all"} timeframes · ≤${s.max_new_strategies} new strategies · ${esc(s.model)}`],
+    ["Budget", `${money(s.budget_usd)} per run · today ${money(st.spent_today_usd)} of ${money(s.daily_budget_usd)}`],
+    ["Worker", st.worker_alive ? `online · pid ${st.pid} · heartbeat ${esc(rel(st.heartbeat_at))}` : "not running"],
+  ].map(([k, v]) => `<div>${esc(k)}</div><div>${v}</div>`).join("");
+  // a run finished since we last looked -> refresh every results view from the database
+  if (A.lastRunSeen !== undefined && st.last_run_id && st.last_run_id !== A.lastRunSeen) {
+    load(); loadRuns(); loadStrategies(); loadQuality(); toast("Run finished — results refreshed");
+  }
+  A.lastRunSeen = st.last_run_id;
+}
+
+function renderFeed(){
+  const curRun = A.status && (A.status.current_run_id || A.status.last_run_id);
+  chips($("#aChips"), [["all","All"], ["run","Current / last run"], ["agent","Agent messages"], ["tools","Tool calls"]], A.filt,
+        k => { A.filt = k; renderFeed(); });
+  const keep = e => A.filt === "all" || (A.filt === "run" && e.run_id === curRun) || (A.filt === "agent" && e.kind === "agent")
+                    || (A.filt === "tools" && (e.kind === "tool" || e.kind === "tool_result"));
+  const rows = A.events.filter(keep).slice(-300).reverse();
+  $("#feed").innerHTML = rows.length ? rows.map(e => `<div class="ev ${esc(e.kind)}"><span class="tm" title="${esc(e.at)}">${esc(clock(e.at))}</span>
+      <span class="ic">${ICON[e.kind] || "·"}</span><span class="msg">${e.stage && e.stage !== "done" ? `<span class="st">${esc(e.stage)}</span>` : ""}${esc(e.message)}</span></div>`).join("")
+    : '<div class="empty">No activity yet. Press Start or Run now.</div>';
+  $("#aMeta").textContent = `${A.events.length} events`;
+  $("#c-act").textContent = A.status && A.status.state === "running" ? "● live" : "";
+}
+
+async function pollEvents(){
+  try {
+    const r = await get(`/api/research/agent/events?after=${A.lastEv}&limit=500`);
+    if (r.events.length){ A.events.push(...r.events); A.lastEv = r.events[r.events.length - 1].id; if (A.events.length > 1500) A.events = A.events.slice(-1000); renderFeed(); }
+  } catch (e) {}
+}
+async function pollStatus(){ try { renderStatus(await get("/api/research/agent/status")); renderFeed(); } catch (e) {} }
+
+async function loadRuns(){
+  try {
+    const r = await get("/api/research/agent/runs?limit=25");
+    table($("#runsT"), [
+      {h:"Started", k:"started_at", f:x => esc(stamp(x.started_at))},
+      {h:"Outcome", k:"outcome", f:x => `<span class="out-${esc(x.outcome)}">${esc(x.outcome || "—")}</span>`},
+      {h:"Cost", k:"cost_usd", r:1, f:x => `<span class="num">${money(x.cost_usd)}</span>`},
+      {h:"Tools", k:"tool_calls", r:1, f:x => plain(x.tool_calls, 0)},
+      {h:"New", k:"strategies_proposed", r:1, f:x => plain(x.strategies_proposed, 0)},
+      {h:"Time", k:"seconds", r:1, f:x => x.seconds == null ? '<span class="mut">—</span>' : `<span class="num">${Math.round(x.seconds/60*10)/10}m</span>`},
+    ], r.runs, {redraw: loadRuns, empty: "No agent runs yet."});
+  } catch (e) {}
+}
+
+async function loadStrategies(){
+  try { A.strategies = (await get("/api/research/strategies")).rows; renderStrategies(); } catch (e) {}
+}
+function renderStrategies(){
+  const n = k => A.strategies.filter(s => s.kind === k).length;
+  chips($("#stChips"), [["all", `All ${A.strategies.length}`], ["ai", `AI ${n("ai")}`], ["team", `Team ${n("team")}`], ["builtin", `Built-in ${n("builtin")}`]],
+        A.stV, k => { A.stV = k; renderStrategies(); });
+  const q = $("#stQ").value.trim().toLowerCase();
+  const rows = A.strategies.filter(s => (A.stV === "all" || s.kind === A.stV)
+      && (!q || [s.name, s.description, s.rationale].some(v => String(v || "").toLowerCase().includes(q))))
+    .sort((a, b) => (b.kind === "ai") - (a.kind === "ai") || String(b.created_at || "").localeCompare(String(a.created_at || "")));
+  $("#sgrid").innerHTML = rows.map(s => {
+    const best = s.best, v = s.verdicts || {};
+    const params = Object.entries(s.params || {}).map(([k, x]) => `${k}=${x}`).join(", ");
+    return `<div class="scard"><h4>${esc(s.name)}${src(s.kind)}</h4><div class="d">${esc(s.description || "")}</div>
+      ${s.rationale && s.kind === "ai" ? `<div class="why" title="Click to expand the agent's reasoning" onclick="this.classList.toggle('open')">${esc(s.rationale)}</div>` : ""}
+      <div class="pm" style="margin-top:7px">${esc(params)}</div>
+      <div class="row"><span>Tested on <b>${s.tests}</b></span><span>Beat B&amp;H <b>${s.beat}</b></span>
+        <span>Watch <b>${v.Watch || 0}</b></span><span>Recommended <b>${v.Recommended || 0}</b></span></div>
+      ${best ? `<div class="row"><span>Best: <b>${esc(best.Symbol)}</b> ${tfPill(best.Timeframe)} ${pct(best["Return %"])} vs ${pct(best["Buy & Hold %"])} (${pts(best["Outperformance (pts)"])} pts) ${grade(best.Robustness)}</span></div>` : '<div class="row"><span>Not tested yet</span></div>'}
+    </div>`; }).join("") || '<div class="empty">No strategies match.</div>';
+  $("#c-strat").textContent = A.strategies.length;
+}
+$("#stQ").oninput = renderStrategies;
+
+async function command(name){
+  try { renderStatus(await post(`/api/research/agent/${name}`)); pollEvents(); }
+  catch (e) { toast(e.message); }
+}
+$("#bStart").onclick = () => command("start");
+$("#bPause").onclick = () => command("pause");
+$("#bStop").onclick = () => { if (A.status && A.status.state === "running" && !confirm("Stop cancels the run in progress. Continue?")) return; command("stop"); };
+$("#bNow").onclick = () => command("run-now");
+
+/* settings drawer */
+function setDrawer(open){ $("#setDrawer").classList.toggle("open", open); $("#scrim").classList.toggle("open", open);
+  if (open && A.status) { const s = A.status.settings;
+    $("#fInt").value = s.interval_minutes; $("#fShort").value = s.shortlist_size; $("#fNew").value = s.max_new_strategies;
+    $("#fBud").value = s.budget_usd; $("#fDay").value = s.daily_budget_usd; $("#fModel").value = s.model;
+    $("#fTurns").value = s.max_turns; $("#fFocus").value = s.focus || ""; $("#sMsg").textContent = ""; } }
+$("#bSet").onclick = () => setDrawer(true); $("#sClose").onclick = () => setDrawer(false);
+$("#scrim").addEventListener("click", () => setDrawer(false));
+$("#intPresets").innerHTML = [[60,"1 h"],[240,"4 h"],[720,"12 h"],[1440,"Daily"]].map(([m, l]) => `<button class="chip" data-m="${m}">${l}</button>`).join("");
+$("#intPresets").querySelectorAll(".chip").forEach(b => b.onclick = () => { $("#fInt").value = b.dataset.m; });
+$("#sSave").onclick = async () => {
+  const body = {interval_minutes: +$("#fInt").value, shortlist_size: +$("#fShort").value, max_new_strategies: +$("#fNew").value,
+                budget_usd: +$("#fBud").value, daily_budget_usd: +$("#fDay").value, model: $("#fModel").value,
+                max_turns: +$("#fTurns").value, focus: $("#fFocus").value};
+  try { await post("/api/research/agent/settings", body); $("#sMsg").innerHTML = '<span class="pos">Saved — applies from the next run.</span>'; pollStatus(); pollEvents(); }
+  catch (e) { $("#sMsg").innerHTML = `<span class="neg">${esc(e.message)}</span>`; }
+};
+
+pollStatus(); pollEvents(); loadRuns(); loadStrategies();
+setInterval(() => { if (!document.hidden) { pollStatus(); pollEvents(); } }, 3000);
+setInterval(() => { if (!document.hidden) loadRuns(); }, 20000);
+
+
+/* ===================== Quality × tested edge ===================== */
+const Q = {data: null, open: null};
+const QCLS = {"Best trading candidate": "best", "Good company, no trading edge": "hold",
+              "Edge exists, weaker company": "risk", "Skip": "skip"};
+const qColor = v => v == null ? "var(--ink-3)" : v >= 85 ? "var(--green)" : v >= 70 ? "var(--blue)" : v >= 55 ? "var(--amber)" : "var(--red)";
+const qBar = v => v == null ? '<span class="mut">—</span>'
+  : `<span class="qbar"><span class="num" style="color:${qColor(v)};font-weight:700">${v.toFixed(1)}</span><span class="b"><i style="width:${v}%;background:${qColor(v)}"></i></span></span>`;
+const LENS_SHORT = {fundamentals: "Fund", valuation: "Val", technicals: "Tech", management: "Mgmt", options: "Opt"};
+const lensTxt = L => Object.keys(LENS_SHORT).map(k =>
+  `<span>${LENS_SHORT[k]} <b>${L[k] == null ? "—" : L[k].toFixed(0)}</b></span>`).join(" · ");
+
+async function loadQuality(){
+  try { Q.data = await get("/api/research/quality"); renderQuality(); } catch (e) {}
+}
+function renderQuality(){
+  const d = Q.data; if (!d) return;
+  const rows = d.rows;
+  $("#c-qual").textContent = rows.length;
+  const w = d.lens_weights, asOf = rows[0] ? rows[0]["As of"] : "—";
+  $("#qIntro").innerHTML = `<span><b>Quality</b> = Rahul's lenses on FMP data, as of <b>${esc(asOf)}</b></span>
+    <span>· weights: Fundamentals ${w.fundamentals*100}% · Technicals ${w.technicals*100}% · Valuation ${w.valuation*100}% · Management ${w.management*100}% · Options ${w.options*100}%</span>
+    <span>· Management and Options not scored yet (weights rescaled over the rest)</span>
+    <span>· <b>Strong quality</b> = score ≥ ${d.strong_threshold} · <b>Tested edge</b> = FTMO verdict ${d.edge_verdicts.join(" or ")}</span>`;
+  const chips = list => list.map(r => `<span class="qchip" data-s="${esc(r.Stock)}">${esc(r.Stock)} <span>${r.Quality == null ? "—" : r.Quality.toFixed(0)}</span></span>`).join("") || '<span class="mut">—</span>';
+  const cell = g => { const rs = rows.filter(r => r.Grid === g.label);
+    return `<div class="qcell ${QCLS[g.label]}"><h5>${esc(g.label)}</h5><p>${esc(g.meaning)}</p>${chips(rs)}</div>`; };
+  const g = k => d.grid.find(x => x.key === k);
+  const untested = rows.filter(r => r.Grid === "Not tested yet");
+  $("#qGrid").innerHTML = `
+    <div></div><div class="qaxis">Tested edge ✓<br>a rule beat Buy &amp; Hold</div><div class="qaxis">No tested edge<br>holding won</div>
+    <div class="qaxis">Strong quality<br>≥ ${d.strong_threshold}</div>${cell(g("11"))}${cell(g("10"))}
+    <div class="qaxis">Weaker quality<br>&lt; ${d.strong_threshold}</div>${cell(g("01"))}${cell(g("00"))}
+    <div></div><div class="qnot"><b>Not tested yet:</b> ${untested.length ? untested.map(r => `<span class="qchip" data-s="${esc(r.Stock)}">${esc(r.Stock)} <span>${r.Quality == null ? "—" : r.Quality.toFixed(0)}</span></span> ${esc(r["Grid meaning"])}`).join("<br>") : "none"}</div>`;
+  $("#qGrid").querySelectorAll(".qchip").forEach(c => c.onclick = () => { Q.open = c.dataset.s; renderQuality();
+    const el = document.querySelector(`#qT tr[data-s="${CSS.escape(c.dataset.s)}"]`); if (el) el.scrollIntoView({block: "center", behavior: "smooth"}); });
+  const head = `<thead><tr><th>Stock</th><th class="r">Quality score</th><th>Bucket</th><th>Lens scores</th><th>FTMO tested result</th><th>Verdict</th><th>Grid</th></tr></thead>`;
+  const body = rows.map(r => {
+    const f = r.FTMO;
+    const ftmo = f.tested ? `${esc(f.strategy)} ${tfPill(f.timeframe)}<span class="pm">${pct(f.return_pct)} vs B&amp;H ${pct(f.bh_pct)} · ${pts(f.outperformance)} pts</span>`
+                          : `<span class="mut">${esc(f.reason)}</span>`;
+    const main = `<tr class="click" data-s="${esc(r.Stock)}"><td><span class="sym">${esc(r.Stock)}</span><span class="co">${esc(r.Company || r.Sector || "")}</span></td>
+      <td class="r">${qBar(r.Quality)}</td><td>${esc(r.Bucket || "—")}</td><td class="lens">${lensTxt(r.Lenses)}</td>
+      <td>${ftmo}</td><td>${f.tested ? verdict(f.verdict) : '<span class="mut">—</span>'}</td>
+      <td><span class="pill ${({"best":"p-rec","hold":"p-hold","risk":"p-watch","skip":"p-rej"})[QCLS[r.Grid]] || "p-none"}">${esc(r.Grid)}</span></td></tr>`;
+    if (Q.open !== r.Stock) return main;
+    const k = r.Key, L = r.Lenses;
+    const card = (name, key) => `<div class="c"><h6><span>${name}</span><span style="color:${qColor(L[key])}">${L[key] == null ? "—" : L[key].toFixed(1)}</span></h6>
+        <ul>${(r.Why[key] || []).map(x => `<li>${esc(x)}</li>`).join("") || "<li>—</li>"}</ul></div>`;
+    const detail = `<tr class="qdetail"><td colspan="7"><div class="qd">${card("Fundamentals (35%)", "fundamentals")}${card("Valuation (5%)", "valuation")}${card("Technicals (35%)", "technicals")}</div>
+      <div class="qkeys"><span>Quarter <b>${esc(k.latest_quarter || "—")}</b></span><span>Revenue growth <b>${pct(k.revenue_growth_pct)}</b></span>
+        <span>Net margin <b>${plain(k.net_margin_pct)}%</b></span><span>Operating margin <b>${plain(k.operating_margin_pct)}%</b></span>
+        <span>Free cash flow <b>$${plain(k.fcf_b, 2)}B</b></span><span>Forward P/E <b>${plain(k.forward_pe)}</b> vs peers <b>${plain(k.peer_median_pe)}</b></span>
+        <span>Price <b>$${plain(k.price, 2)}</b></span><span>vs 200-day <b>${pct(k.vs_200d_pct)}</b></span><span>RSI <b>${plain(k.rsi14)}</b></span>
+        <span>3M <b>${pct(k.change_3m_pct)}</b></span><span>1Y <b>${pct(k.change_1y_pct)}</b></span></div>
+      <div class="qnote">Peers: ${esc((k.peers || []).join(", ") || "—")} (${esc(k.peer_source || "")}) · Not scored: Management (${esc(r.Notes.missing.management)}), Options (${esc(r.Notes.missing.options)}) · ${esc(r.Source)}</div>
+      ${f.tested ? `<div class="qnote">FTMO: ${esc(f.reason)}</div>` : ""}</td></tr>`;
+    return main + detail;
+  }).join("") || '<tr><td colspan="7" class="empty">No quality scores yet. Run: python -m research_agent quality import FILE</td></tr>';
+  $("#qT").innerHTML = head + "<tbody>" + body + "</tbody>";
+  $("#qT").querySelectorAll("tbody tr.click").forEach(tr => tr.onclick = () => { Q.open = Q.open === tr.dataset.s ? null : tr.dataset.s; renderQuality(); });
+}
+loadQuality();
+
+load();
+</script>
+</body>
+</html>

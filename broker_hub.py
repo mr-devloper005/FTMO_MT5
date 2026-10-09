@@ -154,6 +154,16 @@ class OrderRequest(BaseModel):
 # the browser keeps showing the old one.
 NO_CACHE = {"Cache-Control": "no-store, must-revalidate", "Pragma": "no-cache"}
 
+# AI Research dashboard (/research + /api/research/*). Read-only output layer
+# over research_agent's store; registered before the /api/{broker_key}/...
+# catch-alls. Optional: a research import problem must never stop the terminal.
+try:
+    from research_agent.web import autostart as research_autostart, router as research_router
+    app.include_router(research_router)
+    research_autostart()            # restarts the separate research worker if it was left on
+except Exception as _research_err:                      # noqa: BLE001
+    logging.getLogger("broker_hub").warning("AI Research dashboard disabled: %s", _research_err)
+
 
 @app.get("/", response_class=HTMLResponse)
 async def terminal() -> HTMLResponse:

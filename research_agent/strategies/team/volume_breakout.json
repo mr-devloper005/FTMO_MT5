@@ -1,0 +1,14 @@
+{
+  "name": "volume_breakout",
+  "description": "Breakout with participation: buy a close above the prior 50-day high on volume at least 1.5x its 20-day average; exit on a close below the prior 20-day low.",
+  "params": {"entry_lookback": 50, "exit_lookback": 20, "volume_period": 20, "volume_mult": 1.5},
+  "long_entry": {"all": [
+    {"left": {"ind": "close"}, "op": ">", "right": {"ind": "highest", "period": "$entry_lookback"}},
+    {"left": {"ind": "volume"}, "op": ">", "right": {"ind": "volume_sma", "period": "$volume_period", "mult": "$volume_mult"}}
+  ]},
+  "long_exit": {"any": [
+    {"left": {"ind": "close"}, "op": "<", "right": {"ind": "lowest", "period": "$exit_lookback"}}
+  ]},
+  "short_entry": null,
+  "short_exit": null
+}

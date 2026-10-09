@@ -1,0 +1,18 @@
+# Systematic pipeline settings. Every key is optional; omitted keys use the
+# defaults in systematic/config.py (the Lab's canonical run).
+
+timeframes: ["1d"]          # paper trading supports daily bars only
+bars: 600                   # Lab canonical window
+allow_short: true           # Lab canonical
+candidates_per_symbol: 3    # screened rules per symbol that go to full validation
+
+# Promotion. Only these grades may be paper-traded. Lowering to FRAGILE is
+# possible for exploration, and every report then labels the run EXPLORATORY.
+min_grade: MODERATE
+max_positions: 5            # matches ftmo.max_concurrent_positions
+
+# Paper execution
+max_entry_age_bars: 1       # enter only on a fresh signal
+max_gross_exposure: 1.0     # gross notional <= 1.0 x equity
+# commission_per_unit / slippage_ticks: omit to use the Lab's own cost model,
+# so paper results stay comparable to the validation that promoted them.

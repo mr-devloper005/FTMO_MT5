@@ -34,3 +34,11 @@ study/lab/cache/
 
 # --- OS ----------------------------------------------------------------
 .DS_Store
+
+# systematic paper-trading runtime state (ledger, events, caches, reports)
+systematic/state/
+# research agent runtime state (sqlite, daily caches, exports, reports, transcripts)
+research_agent/state/
+
+# company-knowledge RAG POC runtime state (raw SEC downloads, rag.db, eval runs)
+rag/state/

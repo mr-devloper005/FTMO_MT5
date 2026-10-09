@@ -1,0 +1,38 @@
+{
+  "initial_capital": "100000.0",
+  "created_at": "2026-09-26T17:40:12+00:00",
+  "realized_pnl": "0",
+  "commissions": "2.970",
+  "next_ticket": 2,
+  "positions": {
+    "GIS": {
+      "ticket": 1,
+      "side": "LONG",
+      "quantity": "594",
+      "avg_price": "33.64999938964844",
+      "last_price": "33.63999938964844",
+      "opened_at": "2026-09-26T17:40:12+00:00",
+      "strategy": "MEAN_REVERSION",
+      "note": "signal on the latest bar",
+      "entry_commission": "2.970",
+      "marked_at": "2026-09-26T17:56:41+00:00"
+    }
+  },
+  "trades": [],
+  "equity_history": [
+    {
+      "at": "2026-09-26T17:40:12+00:00",
+      "balance": "99997.03",
+      "equity": "99991.09",
+      "positions": 1
+    },
+    {
+      "at": "2026-09-26T17:56:41+00:00",
+      "balance": "99997.03",
+      "equity": "99991.09",
+      "positions": 1
+    }
+  ],
+  "risk_state": "NORMAL",
+  "halted": null
+}

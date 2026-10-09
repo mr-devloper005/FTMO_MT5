@@ -1,0 +1,14 @@
+{
+  "name": "rsi2_pullback",
+  "description": "Connors-style: in a long-term uptrend (close above the 200-day SMA), buy when 2-day RSI is deeply oversold; sell when price closes back above the 5-day SMA.",
+  "params": {"rsi_period": 2, "trend_period": 200, "oversold": 10, "exit_period": 5},
+  "long_entry": {"all": [
+    {"left": {"ind": "close"}, "op": ">", "right": {"ind": "sma", "period": "$trend_period"}},
+    {"left": {"ind": "rsi", "period": "$rsi_period"}, "op": "<", "right": {"value": "$oversold"}}
+  ]},
+  "long_exit": {"any": [
+    {"left": {"ind": "close"}, "op": ">", "right": {"ind": "sma", "period": "$exit_period"}}
+  ]},
+  "short_entry": null,
+  "short_exit": null
+}

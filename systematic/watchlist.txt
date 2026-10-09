@@ -1,0 +1,14 @@
+# Team watchlist: one ticker per line. Replace this sample with the team's stocks.
+# Anything after a '#' is a note. Futures (/NQ) are not supported by the paper broker.
+#
+# Sample: liquid US names already in the Lab's cache.
+NVDA
+MSFT
+META
+AMD
+MU
+TSM
+AMAT
+CSCO
+SPY
+QQQ
