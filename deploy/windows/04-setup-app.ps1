@@ -1,14 +1,20 @@
-# Step 4 - install the code, the Python environment and restore the data from the Mac transfer.
+# Step 4 - install the code, the Python environment and (optionally) restore the data from the Mac transfer.
+#
+# A. From the Mac transfer folder (USB; works without GitHub access):
 #   powershell -ExecutionPolicy Bypass -File .\04-setup-app.ps1 -Transfer D:\ftmo-transfer-20261011-120000 -SecretsFile E:\.env.windows
+# B. From a GitHub clone (fresh, empty research data; packages from PyPI):
+#   git clone https://github.com/<owner>/FTMO_MT5.git C:\ftmo\app
+#   powershell -ExecutionPolicy Bypass -File C:\ftmo\app\deploy\windows\04-setup-app.ps1 -SecretsFile C:\ftmo\secrets\.env.windows
 #
 # -Transfer     the folder written on the Mac by `python -m research_agent transfer-export`
 #               (ftmo.bundle + research.db + state zips + ftmo_rag.dump + manifest.json [+ wheels\]).
-# -SecretsFile  the filtered .env.windows (research keys only) - carried separately, e.g. a USB stick.
-# -Online       install Python packages from PyPI instead of the offline wheels\ folder.
+#               Leave it out to install from the checkout already at C:\ftmo\app (B).
+# -SecretsFile  the filtered .env.windows (research keys only) - carried separately, never committed.
+# -Online       install Python packages from PyPI instead of the offline wheels\ folder (always so in B).
 #
 # Safe to re-run: an existing checkout is not overwritten and the restore refuses to replace data.
 
-param([Parameter(Mandatory = $true)][string]$Transfer,
+param([string]$Transfer = $null,
       [Parameter(Mandatory = $true)][string]$SecretsFile,
       [switch]$Online,
       [switch]$SkipTests)
@@ -17,20 +23,33 @@ Assert-Admin
 
 $git = Find-Exe 'git.exe' @('C:\Program Files\Git\cmd\git.exe')
 if (-not $git) { throw 'git not found (01-install-prereqs.ps1)' }
-$bundle = Join-Path $Transfer 'ftmo.bundle'
-foreach ($f in @($bundle, (Join-Path $Transfer 'manifest.json'), $SecretsFile)) {
+$required = @($SecretsFile)
+if ($Transfer) {
+    $bundle = Join-Path $Transfer 'ftmo.bundle'
+    $required += @($bundle, (Join-Path $Transfer 'manifest.json'))
+} else {
+    $Online = $true                                  # no transfer folder = no offline wheels
+    if (-not (Test-Path (Join-Path $AppDir '.git'))) {
+        throw "no -Transfer folder given and $AppDir is not a git checkout. Clone the repo there first: git clone <repo url> $AppDir"
+    }
+}
+foreach ($f in $required) {
     if (-not (Test-Path $f)) { throw "missing $f" }
 }
 foreach ($d in @($FtmoRoot, $LogDir, $BackupDir)) { if (-not (Test-Path $d)) { New-Item -ItemType Directory -Path $d -Force | Out-Null } }
 
 # ---- 1. code -------------------------------------------------------------------------------
-Invoke-Native -Exe $git -Arguments @('bundle', 'verify', $bundle) | Out-Null
-if (-not (Test-Path (Join-Path $AppDir '.git'))) {
-    Write-FtmoLog "cloning the code from $bundle into $AppDir"
-    Invoke-Native -Exe $git -Arguments @('clone', '--branch', 'master', $bundle, $AppDir) | Out-Null
-    Invoke-Native -Exe $git -Arguments @('-C', $AppDir, 'remote', 'rename', 'origin', 'bundle') | Out-Null
+if ($Transfer) {
+    Invoke-Native -Exe $git -Arguments @('bundle', 'verify', $bundle) | Out-Null
+    if (-not (Test-Path (Join-Path $AppDir '.git'))) {
+        Write-FtmoLog "cloning the code from $bundle into $AppDir"
+        Invoke-Native -Exe $git -Arguments @('clone', '--branch', 'master', $bundle, $AppDir) | Out-Null
+        Invoke-Native -Exe $git -Arguments @('-C', $AppDir, 'remote', 'rename', 'origin', 'bundle') | Out-Null
+    } else {
+        Write-FtmoLog "$AppDir already has a checkout - leaving it (use deploy.ps1 to update code)"
+    }
 } else {
-    Write-FtmoLog "$AppDir already has a checkout - leaving it (use deploy.ps1 to update code)"
+    Write-FtmoLog "installing from the existing checkout in $AppDir (no transfer folder: research data starts empty)"
 }
 Invoke-Native -Exe $git -Arguments @('-C', $AppDir, 'config', 'core.longpaths', 'true') | Out-Null
 
@@ -58,9 +77,9 @@ if (-not (Test-Path $Python)) {
     Write-FtmoLog "created $VenvDir with $py312"
 }
 $lock = Join-Path $AppDir 'deploy\windows\requirements-research.lock.txt'
-$wheels = Join-Path $Transfer 'wheels'
 $pipArgs = @('-m', 'pip', 'install', '--disable-pip-version-check', '-r', $lock)
-if (-not $Online) {
+if (-not $Online) {                                  # only reachable with -Transfer (B forces -Online)
+    $wheels = Join-Path $Transfer 'wheels'
     if (-not (Test-Path $wheels)) { throw "no offline wheels in $wheels - re-export with --wheels on the Mac, or pass -Online" }
     $pipArgs += @('--no-index', '--find-links', $wheels)
 }
@@ -70,9 +89,13 @@ Invoke-Native -Exe $Python -Arguments @('-m', 'pip', 'check') -WorkDir $AppDir |
 
 # ---- 4. database schema + data -------------------------------------------------------------
 Invoke-Rag @('db-init') | Out-Null
-$code = Invoke-Agent @('restore', '--from', $Transfer) -Ok @(0, 1, 3)
-if ($code -eq 3) { Write-FtmoLog 'restore refused: data already present on this PC (kept as is). Use restore --replace only on purpose.' 'WARN' }
-elseif ($code -ne 0) { throw 'restore failed - see the output above' }
+if ($Transfer) {
+    $code = Invoke-Agent @('restore', '--from', $Transfer) -Ok @(0, 1, 3)
+    if ($code -eq 3) { Write-FtmoLog 'restore refused: data already present on this PC (kept as is). Use restore --replace only on purpose.' 'WARN' }
+    elseif ($code -ne 0) { throw 'restore failed - see the output above' }
+} else {
+    Invoke-Agent @('status') | Out-Null              # creates an empty research.db
+}
 Invoke-Rag @('db-check') | Out-Null
 
 # ---- 5. self-test ----------------------------------------------------------------------------
