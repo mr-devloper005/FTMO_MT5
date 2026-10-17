@@ -65,8 +65,9 @@ def test_live_tsla_ingest_dedupe_retrieve_and_answer_evidence(live, cfg, store, 
 
     # transcripts: on a plan that includes them (Ultimate), the latest call is stored once and searchable;
     # on a plan that refuses them the refusal is recorded honestly
+    # (the second ingest skips the call when the dates are fresh, so read the latest real fetch)
     logged = store.db.execute("SELECT outcome FROM rag.fetch_log WHERE endpoint='earning-call-transcript-dates' "
-                              "ORDER BY fetched_at DESC LIMIT 1").fetchone()
+                              "AND outcome <> 'skipped' ORDER BY fetched_at DESC LIMIT 1").fetchone()
     assert logged and logged["outcome"] in ("unsupported", "ok")
     if logged["outcome"] == "ok":
         assert first.get("transcripts_added") == 1 and not again.get("transcripts_added")

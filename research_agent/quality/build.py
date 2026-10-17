@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from research_agent.config import Settings
-from research_agent.quality import inputs, lenses as L, model
+from research_agent.quality import inputs, lenses as L, mcs, model
 from research_agent.store import Store, now
 
 SCHEMA = """
@@ -43,17 +43,22 @@ def score_snapshot(snapshot: Dict[str, Any], today: Optional[date] = None) -> Di
         fs = inputs.peer_comp(raw, {p: snapshot["peers"][p] for p in raw.get("peers", []) if p in snapshot["peers"]}, today)
         ta = inputs.technicals(raw)
         F, V, T = L.fundamentals_score(co), L.valuation_score(co, fs, ta), L.technicals_score(ta)
-        lenses = {"fundamentals": F, "valuation": V, "technicals": T, "management": None, "options": None}
+        M = mcs.management_lens(sym)                 # None unless a guidance ledger exists for the stock
+        lenses = {"fundamentals": F, "valuation": V, "technicals": T, "management": M and M["score"],
+                  "options": None}
         comp = model.composite(lenses)
+        why = {"fundamentals": L.fundamentals_rationale(co, F), "valuation": L.valuation_rationale(co, fs, ta, V),
+               "technicals": L.technicals_rationale(ta, T)}
+        if M:
+            why["management"] = M["why"]
+        missing = {"options": "no options data source yet (not in FMP; Massive plan lacks chains)"}
+        if not M:
+            missing["management"] = "no guidance ledger yet (research_agent/quality/ledgers/<SYMBOL>.json)"
         out[sym] = {
-            "lenses": lenses, "composite": comp, "bucket": model.bucket(comp),
-            "why": {"fundamentals": L.fundamentals_rationale(co, F), "valuation": L.valuation_rationale(co, fs, ta, V),
-                    "technicals": L.technicals_rationale(ta, T)},
+            "lenses": lenses, "composite": comp, "bucket": model.bucket(comp), "why": why,
             "inputs": {"sector": raw["sector"], "fundamentals": co["fundamentals"], "valuation": fs, "technicals": ta,
                        "peer_source": raw.get("peer_source")},
-            "notes": {"technicals": inputs.TECHNICAL_NOTES,
-                      "missing": {"management": "phase 2 (earnings-call transcripts)",
-                                  "options": "no options data source yet (not in FMP; Massive plan lacks chains)"}},
+            "notes": {"technicals": inputs.TECHNICAL_NOTES, "missing": missing},
         }
     return out
 
@@ -81,7 +86,7 @@ def load(settings: Settings) -> List[Dict[str, Any]]:
 
 
 def import_snapshot(settings: Settings, path: Path, as_of: str, today: Optional[date] = None) -> Dict[str, Any]:
-    snapshot = json.loads(Path(path).read_text())
+    snapshot = json.loads(Path(path).read_text(encoding="utf-8"))
     results = score_snapshot(snapshot, today)
     n = save(settings, results, as_of=as_of, source=f"FMP snapshot {Path(path).name}")
     return {"stored": n, "symbols": sorted(results), "as_of": as_of}

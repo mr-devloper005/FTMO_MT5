@@ -119,13 +119,13 @@ def group(candles: List[Candle], seconds: int, factor: int) -> List[Candle]:
 def _fetch(symbol: str, base_tf: str, days: int) -> List[Candle]:
     key = CACHE / f"{symbol.strip('/')}_{base_tf}_{days}.json"
     if key.exists():
-        raw = json.loads(key.read_text())
+        raw = json.loads(key.read_text(encoding="utf-8"))
     else:
         end = date.today()
         got = _PROVIDER.get_history(symbol, base_tf, end - timedelta(days=days), end)
         raw = [[c.timestamp, c.open, c.high, c.low, c.close, c.volume or 0]
                for c in got.candles]
-        key.write_text(json.dumps(raw))
+        key.write_text(json.dumps(raw), encoding="utf-8")
     return [Candle(timestamp=t, open=o, high=h, low=lo, close=cl, volume=v)
             for t, o, h, lo, cl, v in raw]
 

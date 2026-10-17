@@ -205,7 +205,7 @@ def download(symbol: str, settings: Settings, client: Optional[SecClient] = None
             path = folder / name
             client.get(f.url(name), path)
             docs.append({**asdict(f), "file": name, "path": str(path), "source_url": f.url(name)})
-        (folder / "meta.json").write_text(json.dumps(asdict(f), indent=1))
+        (folder / "meta.json").write_text(json.dumps(asdict(f), indent=1), encoding="utf-8")
         log(f"  {symbol} {f.form:5} filed {f.filing_date}  {f.fiscal_quarter or '?'} FY{f.fiscal_year or '?'}"
             f"  {len(list(names))} file(s)")
     return docs

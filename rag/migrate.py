@@ -149,7 +149,7 @@ def migrate(settings: Optional[Settings] = None, sqlite_path: Optional[Path] = N
     report["ok"] = not report["failures"] and report["verification"]["ok"]
     report["finished_at"] = datetime.now().isoformat(timespec="seconds")
     out = settings.migrations_dir / f"migration_{datetime.now():%Y%m%d_%H%M%S}.json"
-    out.write_text(json.dumps(report, indent=1, default=str))
+    out.write_text(json.dumps(report, indent=1, default=str), encoding="utf-8")
     report["report_file"] = str(out)
     return report
 

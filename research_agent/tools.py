@@ -293,7 +293,7 @@ def write_report(ctx: ToolContext, args: Dict) -> Dict:
     slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60] or "report"
     path = ctx.settings.reports_dir / f"{ctx.run_id}-{slug}.md"           # fixed folder, our name
     ctx.settings.reports_dir.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"# {title}\n\n{body}\n")
+    path.write_text(f"# {title}\n\n{body}\n", encoding="utf-8")
     return {"path": str(path), "chars": len(body)}
 
 

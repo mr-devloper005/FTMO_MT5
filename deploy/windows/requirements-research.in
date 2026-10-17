@@ -1,0 +1,28 @@
+# Top-level packages the FTMO AI Research Agent + RAG need on Windows (research only:
+# no broker hub, no MT5 bridge, no broker SDKs). Versions = the Mac's known-good set.
+# The fully pinned, Windows-verified lock is requirements-research.lock.txt (generated
+# from this file by deploy/windows/lock_requirements.py).
+beautifulsoup4==4.15.0
+claude-agent-sdk==0.2.152
+fastapi==0.141.1
+uvicorn==0.52.1
+fastembed==0.9.0
+gspread==6.2.1
+lxml==6.1.1
+numpy==2.5.2
+openpyxl==3.1.5
+psycopg[binary]==3.3.4
+psycopg-pool==3.3.1
+pydantic==2.13.4
+python-dotenv==1.2.2
+PyYAML==6.0.3
+requests==2.34.2
+structlog==26.1.0
+yfinance==1.6.0
+onnxruntime==1.30.0  # fastembed runtime: same version as tested on the Mac
+# Windows-specific needs
+tzdata==2025.3        # zoneinfo has no system time-zone database on Windows
+psutil==7.1.0         # process liveness / termination that works on Windows and macOS
+# tests on the Windows box
+pytest==9.1.1
+httpx==0.28.1

@@ -16,6 +16,14 @@
     control       start | pause | stop | run-now | status  — same commands as the Control Center
     sheets-sync   push the four report tabs to the configured Google Sheet
     quality       score an FMP snapshot with Rahul's lenses and store it (quality import FILE --as-of DATE)
+    mcs           management credibility from guidance ledgers (mcs score [SYMBOL ...] | mcs extract FILE)
+
+  operations (24/7 PC):
+    health        research.db, worker, RAG database, disk, model cache (exit 0 ok / 1 degraded / 2 down)
+    maintenance   prune old daily price caches (keep 3 days) and rotate the worker log
+    backup        consistent backup (research.db, state, RAG schema dump) + checksum manifest
+    restore       restore a backup / transfer folder (refuses to overwrite data without --replace)
+    transfer-export  everything a new PC needs: git bundle + data + embedding model (+ wheels)
 
 Research only: nothing here can place an order.
 """
@@ -57,13 +65,17 @@ def _table(rows, cols) -> None:
 
 
 def main(argv=None) -> int:
+    from research_agent.oscompat import utf8_stdio
+    utf8_stdio()                                   # Windows consoles / redirected logs: research text is UTF-8
+    from research_agent.ops import load_research_env
+    load_research_env()                            # services have no login shell: research keys from .env
     ap = argparse.ArgumentParser(prog="python -m research_agent", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--state", default=str(DEFAULT_STATE), help="state folder (db, cache, exports, reports)")
     ap.add_argument("--workers", type=int, help="parallel processes (default 8)")
     ap.add_argument("--bars", type=int, help="daily bars per backtest (default 2500 ≈ 10y)")
     ap.add_argument("--target-pts", dest="target_outperformance_pts", type=float,
-                    help="outperformance vs Buy & Hold, in % points, needed for Recommended (default 50)")
+                    help="outperformance vs Buy & Hold, in %% points, needed for Recommended (default 50)")
     ap.add_argument("--promote-grade", choices=["FRAGILE", "MODERATE", "ROBUST"])
     sub = ap.add_subparsers(dest="cmd", required=True)
 
@@ -96,7 +108,24 @@ def main(argv=None) -> int:
     p = sub.add_parser("control"); p.add_argument("action", choices=["start", "pause", "stop", "run-now", "status"])
     p = sub.add_parser("quality"); p.add_argument("action", choices=["import", "show"])
     p.add_argument("file", nargs="?"); p.add_argument("--as-of", default=None)
+    p = sub.add_parser("mcs"); p.add_argument("action", choices=["score", "extract"])
+    p.add_argument("args", nargs="*", help="score: symbols (default: every ledger) · extract: transcript FILE")
+    p.add_argument("--period", help="extract: the period the guidance is for, e.g. 'FQ1 FY27'")
+    p.add_argument("--delivery-weight", type=float, default=0.6, help="score: weight on delivery (rest: accuracy)")
+    p.add_argument("--json", action="store_true", help="score: full JSON instead of the table")
     p = sub.add_parser("sheets-sync"); p.add_argument("--sheet", help="Google Sheet URL or ID to save first")
+    p = sub.add_parser("health"); p.add_argument("--min-free-gb", type=float, default=5.0)
+    p = sub.add_parser("maintenance"); p.add_argument("--keep-cache-days", type=int, default=3)
+    p = sub.add_parser("backup"); p.add_argument("--dest", required=True); p.add_argument("--keep", type=int, default=14)
+    p.add_argument("--no-rag-db", action="store_true", help="skip the PostgreSQL dump")
+    p = sub.add_parser("restore"); p.add_argument("--from", dest="src", required=True)
+    p.add_argument("--replace", action="store_true", help="overwrite existing data (it is backed up first)")
+    p.add_argument("--no-rag-db", action="store_true")
+    p.add_argument("--rag-state", help="where to unpack rag/state files (default: the live rag/state); use a temp\n"
+                   "folder with --state and --no-rag-db for a test restore")
+    p = sub.add_parser("transfer-export"); p.add_argument("--out", required=True)
+    p.add_argument("--secrets-dir", help="where to write the filtered .env.windows (keep it apart from --out)")
+    p.add_argument("--wheels", help="offline Windows wheelhouse to include (deploy/windows/lock_requirements.py)")
     a = ap.parse_args(argv)
     s = _settings(a)
 
@@ -123,7 +152,7 @@ def main(argv=None) -> int:
         _table(catalog.catalog(s, a.kinds), ["name", "kind", "description"])
     elif a.cmd == "propose":
         from research_agent import catalog
-        _print(catalog.propose(s, json.loads(Path(a.file).read_text()), a.rationale, author="human"))
+        _print(catalog.propose(s, json.loads(Path(a.file).read_text(encoding="utf-8")), a.rationale, author="human"))
     elif a.cmd == "backtest":
         from research_agent import pipeline
         syms = [x.strip().upper() for x in a.symbols.split(",") if x.strip()]
@@ -185,11 +214,51 @@ def main(argv=None) -> int:
             _print(build.import_snapshot(s, Path(a.file), as_of=a.as_of or "unknown"))
         else:
             _table(views.quality(s)["rows"], ["Stock", "Quality", "Bucket", "Grid"])
+    elif a.cmd == "mcs":
+        from research_agent.quality import mcs, mcs_extract
+        if a.action == "extract":
+            if not a.args:
+                ap.error("mcs extract needs a transcript FILE (saved FMP response or plain text)")
+            _print(mcs_extract.draft_period(mcs_extract.load_transcript(Path(a.args[0])), a.period or "?"))
+        else:
+            w = {"delivery": a.delivery_weight, "accuracy": round(1 - a.delivery_weight, 4)}
+            results = [mcs.score_ledger(mcs.load_ledger(sym), w) for sym in (a.args or mcs.available())]
+            if a.json:
+                _print(results)
+            for r in ([] if a.json else results):
+                print(f"\n{r['symbol']}  MCS {r['average']} ({r['rating']}), 95% interval {r['interval_95']}, "
+                      f"latest 4 quarters {r['latest_4q']}")
+                _table([{"Quarter": p["period"], "Delivery": p.get("delivery"), "Accuracy": p.get("accuracy"),
+                         "MCS": p["mcs"], "Rating": p.get("rating"), "Rolling 4Q": p.get("rolling_4q"),
+                         "Flags": "; ".join(p.get("flags", []))} for p in r["periods"]],
+                       ["Quarter", "Delivery", "Accuracy", "MCS", "Rating", "Rolling 4Q", "Flags"])
     elif a.cmd == "sheets-sync":
         from research_agent import sheets
         if a.sheet:
             sheets.set_sheet(s, a.sheet)
         _print(sheets.sync(s))
+    elif a.cmd in ("health", "maintenance", "backup", "restore", "transfer-export"):
+        from research_agent import ops
+        if a.cmd == "health":
+            h = ops.health(s, min_free_gb=a.min_free_gb)
+            _print(h)
+            return {"ok": 0, "degraded": 1}.get(h["status"], 2)
+        if a.cmd == "maintenance":
+            _print(ops.maintenance(s, a.keep_cache_days))
+        elif a.cmd == "backup":
+            _print(ops.backup(Path(a.dest), s, keep=a.keep, include_rag_db=not a.no_rag_db))
+        elif a.cmd == "restore":
+            try:
+                r = ops.restore(Path(a.src), s, replace=a.replace, restore_rag_db=not a.no_rag_db,
+                                rag_state_dir=Path(a.rag_state) if a.rag_state else None)
+            except ops.RefusedRestore as e:
+                print(f"refused: {e}", file=sys.stderr)
+                return 3
+            _print(r)
+            return 0 if r["ok"] else 1
+        else:
+            _print(ops.transfer_export(Path(a.out), s, secrets_dir=Path(a.secrets_dir) if a.secrets_dir else None,
+                                       wheel_dir=Path(a.wheels) if a.wheels else None))
     return 0
 
 

@@ -112,6 +112,7 @@ PYTHONPATH=. venv/bin/python3 -m research_agent leaderboard
 PYTHONPATH=. venv/bin/python3 -m research_agent ui            # dashboard + Agent Control Center on :8602 (also /research in the hub)
 PYTHONPATH=. venv/bin/python3 -m research_agent control status   # 24/7 worker: start|pause|stop|run-now|status (worker = separate process)
 PYTHONPATH=. venv/bin/python3 -m research_agent sheets-sync   # push Summary/Leaderboard/Strategy Tests/Screening to Google Sheets
+PYTHONPATH=. venv/bin/python3 -m research_agent mcs score MU   # management credibility (MCS v2) from research_agent/quality/ledgers/<SYM>.json
 PYTHONPATH=. venv/bin/python3 -m pytest tests/test_research_agent.py -q
 
 # replay the paper cycle over real past bars (proves fill/exit/risk plumbing, NOT an edge)

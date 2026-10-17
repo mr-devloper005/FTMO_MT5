@@ -37,7 +37,7 @@ def builtin() -> List[Dict[str, Any]]:
 def team_specs() -> List[Dict[str, Any]]:
     out = []
     for f in sorted(TEAM_STRATEGIES.glob("*.json")):
-        spec = ss.validate(json.loads(f.read_text()))      # a broken team file should fail loudly
+        spec = ss.validate(json.loads(f.read_text(encoding="utf-8")))      # a broken team file should fail loudly
         out.append({"name": ss.registered_name(spec, "TEAM"), "kind": "team", "spec": spec,
                     "description": spec["description"], "params": spec["params"], "file": f.name})
     return out
@@ -56,7 +56,7 @@ def sync(settings: Settings) -> Dict[str, int]:
 
 def _log(settings: Settings, entry: Dict[str, Any]) -> None:
     settings.ensure_dirs()
-    with settings.strategy_log.open("a") as fh:
+    with settings.strategy_log.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps({"at": now(), **entry}, default=str) + "\n")
 
 

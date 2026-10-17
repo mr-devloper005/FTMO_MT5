@@ -42,14 +42,14 @@ Be concise: at most 8 sentences."""
 # ------------------------------------------------------------------ baseline A context
 def fmp_context(symbol: str) -> str:
     parts = []
-    inc = json.loads(FMP_INCOME.read_text())
+    inc = json.loads(FMP_INCOME.read_text(encoding="utf-8"))
     cols = inc["columns"]
     rows = inc["stocks"].get(symbol, [])
     if rows:
         parts.append("FMP income-statement, quarterly (USD):\n" + " | ".join(cols) + "\n"
                      + "\n".join(" | ".join(str(v) for v in r) for r in rows))
     if QUALITY_SNAPSHOT.exists():
-        snap = json.loads(QUALITY_SNAPSHOT.read_text())["stocks"].get(symbol, {})
+        snap = json.loads(QUALITY_SNAPSHOT.read_text(encoding="utf-8"))["stocks"].get(symbol, {})
         keep = {k: snap[k] for k in ("estimates", "ratios_ttm", "quote", "quote_change", "cashflow_q", "balance_q")
                 if k in snap}
         if keep:
@@ -155,7 +155,7 @@ def run(settings: Optional[Settings] = None, only: Optional[str] = None, systems
         log=print) -> Dict[str, Any]:
     settings = settings or Settings()
     settings.ensure_dirs()
-    qs = json.loads(QUESTIONS.read_text())["questions"]
+    qs = json.loads(QUESTIONS.read_text(encoding="utf-8"))["questions"]
     if only:
         keep = {x.strip() for x in only.split(",")}
         qs = [q for q in qs if q["id"] in keep]
@@ -182,6 +182,6 @@ def run(settings: Optional[Settings] = None, only: Optional[str] = None, systems
         rows.append(row)
     result = {"run_at": datetime.now().isoformat(timespec="seconds"), "summary": summarize(rows), "rows": rows}
     path = settings.eval_dir / f"eval_{datetime.now():%Y%m%d_%H%M%S}.json"
-    path.write_text(json.dumps(result, indent=1, default=str))
+    path.write_text(json.dumps(result, indent=1, default=str), encoding="utf-8")
     result["saved_to"] = str(path)
     return result

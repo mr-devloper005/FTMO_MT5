@@ -79,7 +79,7 @@ def load_settings(path: Optional[Path] = None, **overrides) -> Settings:
     data = {}
     p = Path(path) if path else DEFAULT_SETTINGS
     if p.exists():
-        data = yaml.safe_load(p.read_text()) or {}
+        data = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
     known = {f.name for f in fields(Settings)}
     unknown = sorted(set(data) - known)
     if unknown:
@@ -89,7 +89,7 @@ def load_settings(path: Optional[Path] = None, **overrides) -> Settings:
 
 
 def load_ftmo_config(path: Path = FTMO_YAML) -> FTMOConfig:
-    raw = (yaml.safe_load(Path(path).read_text()) or {}).get("ftmo", {})
+    raw = (yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}).get("ftmo", {})
     return FTMOConfig(**{k: v for k, v in raw.items() if k in FTMOConfig.model_fields})
 
 

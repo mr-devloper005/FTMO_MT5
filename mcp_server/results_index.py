@@ -189,7 +189,7 @@ def _unprefix_full(r: Dict) -> Dict:
 
 def _rows_from_json(path: str) -> List[Dict]:
     try:
-        data = json.load(open(path))
+        data = json.load(open(path, encoding="utf-8"))
     except Exception:
         return []
     if not isinstance(data, list):
@@ -223,7 +223,7 @@ def _rows_from_json(path: str) -> List[Dict]:
 def _rows_from_csv(path: str) -> List[Dict]:
     out = []
     try:
-        for row in csv.DictReader(open(path)):
+        for row in csv.DictReader(open(path, newline="", encoding="utf-8")):
             def num(k):
                 try:
                     return float(row[k])

@@ -56,7 +56,7 @@ def leaderboard(settings: Settings, run_id: str, symbols: List[str]) -> List[Dic
 
 
 def _csv(rows: List[Dict[str, Any]], path: Path) -> Path:
-    with path.open("w", newline="") as fh:
+    with path.open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=COLUMNS, extrasaction="ignore")
         w.writeheader()
         for r in rows:
@@ -191,7 +191,7 @@ def build(settings: Settings, run_id: str, symbols: List[str], run_stats: Dict[s
            rag_assessment.strip() or "(not recorded)", ""]
     base = settings.reports_dir / f"{run_id}-fixed-5-stock-research"
     paths = {"markdown": str(base.with_suffix(".md"))}
-    Path(paths["markdown"]).write_text("\n".join(md))
+    Path(paths["markdown"]).write_text("\n".join(md), encoding="utf-8")
     exp = settings.exports_dir / f"research-{run_id}"
     paths["csv"] = str(_csv(rows, exp.with_suffix(".csv")))
     try:

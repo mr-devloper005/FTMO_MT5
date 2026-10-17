@@ -41,14 +41,14 @@ def _config_path(settings: Settings) -> Path:
 
 def _load(settings: Settings) -> Dict[str, Any]:
     try:
-        return json.loads(_config_path(settings).read_text())
+        return json.loads(_config_path(settings).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
 
 
 def _save(settings: Settings, data: Dict[str, Any]) -> None:
     settings.ensure_dirs()
-    _config_path(settings).write_text(json.dumps(data, indent=2))
+    _config_path(settings).write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
 def credentials_path(settings: Settings) -> Path:
@@ -95,7 +95,7 @@ def status(settings: Settings) -> Dict[str, Any]:
 def _service_account_email(path: Path) -> Optional[str]:
     """The address to share the Sheet with. Only this public field is read from the key file."""
     try:
-        return json.loads(path.read_text()).get("client_email")
+        return json.loads(path.read_text(encoding="utf-8")).get("client_email")
     except (OSError, ValueError, AttributeError):
         return None
 

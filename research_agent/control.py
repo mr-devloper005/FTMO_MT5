@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import json
 import os
-import signal
 import subprocess
 import sys
 import threading
@@ -27,6 +26,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from research_agent import oscompat
 from research_agent.config import DEFAULT_STATE, REPO, Settings
 from research_agent.store import Store, now
 
@@ -171,27 +171,27 @@ class Control:
         r = r or self.row()
         if not r["pid"] or not r["heartbeat_at"]:
             return False
-        try:
-            os.kill(r["pid"], 0)
-        except (ProcessLookupError, PermissionError):
+        # Never os.kill(pid, 0): on Windows that TERMINATES the process (see oscompat). The command
+        # line check rejects a recycled PID; this process (an in-process worker) is alive by definition.
+        if r["pid"] != os.getpid() and not oscompat.pid_alive(r["pid"], must_contain="research_agent"):
             return False
         age = (datetime.now(timezone.utc) - _parse(r["heartbeat_at"])).total_seconds()
         return age < HEARTBEAT_STALE_S
 
     def spawn_worker(self) -> int:
         """Start `python -m research_agent worker` as its own session, with a scrubbed environment."""
-        keep = ("PATH", "HOME", "USER", "LOGNAME", "LANG", "LC_ALL", "TMPDIR", "SHELL",
-                "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "LAB_CACHE_DIR",
-                "GOOGLE_SERVICE_ACCOUNT_FILE", "RESEARCH_SHEET_ID")
-        env = {k: os.environ[k] for k in keep if k in os.environ}
+        env = oscompat.child_env(WORKER_ENV)                  # broker credentials are never in this list
         env["PYTHONPATH"] = str(REPO)
         env["RESEARCH_AGENT_STATE"] = str(self.settings.state_dir)
         env["PYTHONUNBUFFERED"] = "1"
+        env["PYTHONUTF8"] = "1"                               # UTF-8 files and stdout on Windows too
         self.settings.ensure_dirs()
-        log = (self.settings.state_dir / "worker.log").open("a")
-        proc = subprocess.Popen([sys.executable, "-m", "research_agent", "worker"], cwd=str(REPO), env=env,
-                                stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
-                                start_new_session=True)
+        log_path = self.settings.state_dir / "worker.log"
+        rotate_log(log_path)
+        with log_path.open("a", encoding="utf-8") as log:    # the child keeps its own handle
+            proc = subprocess.Popen([sys.executable, "-m", "research_agent", "worker"], cwd=str(REPO), env=env,
+                                    stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
+                                    **oscompat.spawn_kwargs())
         # Reap it when it exits, so a dead worker never lingers as a zombie that still "has" a pid.
         threading.Thread(target=proc.wait, name="research-worker-reaper", daemon=True).start()
         self.update(status="starting", pid=proc.pid, heartbeat_at=now())
@@ -295,13 +295,42 @@ class Control:
         }
 
 
+# Environment the worker process gets. Everything else (broker credentials in particular) is dropped.
+WORKER_ENV = (
+    "PATH", "HOME", "USER", "LOGNAME", "LANG", "LC_ALL", "TMPDIR", "SHELL",
+    "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_GIT_BASH_PATH",
+    "LAB_CACHE_DIR", "GOOGLE_SERVICE_ACCOUNT_FILE", "RESEARCH_SHEET_ID",
+    # company research (RAG): also read from the FTMO .env file when not set here
+    "POSTGRES_HOST", "POSTGRES_PORT", "POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD",
+    "FMP_API_KEY", "SEC_USER_AGENT", "RAG_MODEL_CACHE",
+    # office networks: proxy and certificate settings
+    "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "REQUESTS_CA_BUNDLE", "SSL_CERT_FILE",
+    "PYTHONUTF8", "PYTHONIOENCODING",
+)
+
+
 def control(settings: Optional[Settings] = None) -> Control:
     return Control(settings or Settings(state_dir=Path(os.getenv("RESEARCH_AGENT_STATE", DEFAULT_STATE))))
 
 
 def stop_process(pid: int) -> None:
-    """Last resort for a worker that ignores Stop (used by tests and the CLI)."""
+    """Last resort for a worker that ignores Stop (used by tests and the CLI): the worker and
+    everything it started (the Claude CLI, backtest pool processes). Works on Windows too."""
+    oscompat.terminate_tree(pid)
+
+
+def rotate_log(path: Path, max_bytes: int = 20 * 1024 * 1024, keep: int = 3) -> bool:
+    """worker.log -> worker.log.1 -> ... when it grows past ``max_bytes``. Called before a worker
+    starts, when nothing writes the file. On Windows a file another process still holds cannot be
+    renamed; then rotation is skipped (logged next time) rather than failing the start."""
     try:
-        os.killpg(os.getpgid(pid), signal.SIGTERM)
-    except (ProcessLookupError, PermissionError):
-        pass
+        if not path.exists() or path.stat().st_size < max_bytes:
+            return False
+        for i in range(keep - 1, 0, -1):
+            src, dst = path.with_name(f"{path.name}.{i}"), path.with_name(f"{path.name}.{i + 1}")
+            if src.exists():
+                os.replace(src, dst)
+        os.replace(path, path.with_name(f"{path.name}.1"))
+        return True
+    except OSError:
+        return False

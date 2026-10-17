@@ -99,6 +99,14 @@ def research_sheets_sync() -> Dict[str, Any]:
         raise HTTPException(400, f"{type(e).__name__}: {str(e)[:400]}") from e
 
 
+# ---------------------------------------------------------------- health (24/7 PC monitoring)
+@router.get("/api/research/health")
+def research_health() -> Dict[str, Any]:
+    """Read-only. 'ok' | 'degraded' | 'down' plus the reasons; used by the Windows health-check task."""
+    from research_agent import ops
+    return ops.health(_settings())
+
+
 # ---------------------------------------------------------------- quality (Rahul's lenses) x tested edge
 @router.get("/api/research/quality")
 def research_quality() -> Dict[str, Any]:

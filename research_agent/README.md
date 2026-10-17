@@ -130,6 +130,25 @@ Google Sheet setup (one time):
 3. Create a Sheet and share it, as Editor, with the service account's email. The dashboard's Google Sheet panel shows that email.
 4. Paste the Sheet URL into the panel, or run `sheets-sync --sheet <url>`, or set `RESEARCH_SHEET_ID`.
 
+## Management credibility (`quality/mcs.py`)
+
+The Management lens of the quality engine. It replaces the dashboard's "Beat = 1, Hit = 0.5, Miss = 0" score, which ranked a sandbagged guide above an accurate one and, for 88 of 93 stocks, graded guidance its own script had invented.
+
+- **Ledger, one per company:** `quality/ledgers/<SYMBOL>.json`. It holds the guidance given on call N, the actuals reported on call N+1, and forward commitments logged when they were made. Every number carries its source (FMP transcript, press release or prepared remarks).
+- **Score per quarter:** 60% *delivery* (kept 1, partly kept 0.5, not kept 0) plus 40% *accuracy* (100 inside the guided range, minus 4 points per 1% outside it, doubled for a shortfall).
+- **Market credit:** when management attributes a surprise to price, accuracy is graded mainly on what it controls.
+- **EPS** is shown but not scored, because it would count the same surprise a third time.
+- **Discretionary spending:** opex decided after the guide is graded out of the score and flagged.
+- **Pending commitments** are never scored.
+- **Drafting a ledger:** `mcs extract` parses guidance sentences from a saved transcript into draft items, which must be checked against the press release. This repo's FMP key cannot read transcripts (HTTP 402), so save them from the FMP connector.
+
+```bash
+PYTHONPATH=. venv/bin/python3 -m research_agent mcs score                 # every ledger
+PYTHONPATH=. venv/bin/python3 -m research_agent mcs score MU --json
+PYTHONPATH=. venv/bin/python3 -m research_agent mcs extract transcript.json --period "FQ1 FY27"
+PYTHONPATH=. venv/bin/python3 -m pytest tests/test_mcs.py -q
+```
+
 ## Verdict policy (`ranking.py`, fixed and in code)
 
 **Outperformance** = strategy return − Buy & Hold return over the same bars, in **percentage points**. For example, +130% against +80% is 50 points.

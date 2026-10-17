@@ -67,6 +67,10 @@ research = [
     "claude-agent-sdk",
     "openpyxl>=3.1",
     "gspread>=6",
+    "fastapi",                # research dashboard / API (python -m research_agent ui)
+    "uvicorn",
+    "psutil>=5.9",            # worker liveness/termination that also works on Windows
+    "tzdata",                 # zoneinfo on Windows has no system time-zone database
 ]
 # rag/: company-knowledge RAG POC (SEC filings -> local embeddings -> PostgreSQL + pgvector). Research only.
 rag = [

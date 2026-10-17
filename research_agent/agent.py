@@ -98,7 +98,7 @@ async def run_agent(settings: Settings, shortlist_size: int = 15, max_new_strate
 
     def log(entry: Dict[str, Any]) -> None:
         entry = {"at": now(), "run_id": run_id, **entry}
-        with transcript.open("a") as fh:
+        with transcript.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(entry, default=str) + "\n")
         if on_event:
             try:

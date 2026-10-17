@@ -2,6 +2,8 @@
 # .env holds live MT5 + broker credentials. Never commit it.
 .env
 .env.local
+.env.windows
+.env.*.local
 *.pem
 *.key
 

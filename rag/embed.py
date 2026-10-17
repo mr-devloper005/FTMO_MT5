@@ -1,19 +1,32 @@
 """Local embeddings (fastembed / ONNX, CPU). No API key, no per-call cost, and the
-model (~130 MB) is cached after the first download."""
+model (~130 MB) is cached after the first download.
+
+The model lives in a persistent folder (``RAG_MODEL_CACHE`` or ``rag/state/models``), not
+fastembed's default temp folder: Windows' Storage Sense / temp cleanup would otherwise delete
+it and the 24/7 PC would need Hugging Face access again. The folder can be copied to a machine
+without internet access."""
 from __future__ import annotations
 
+import os
 from functools import lru_cache
+from pathlib import Path
 from typing import List
 
 import numpy as np
 
-from rag.config import EMBED_MODEL, QUERY_PREFIX
+from rag.config import EMBED_MODEL, QUERY_PREFIX, STATE
+
+
+def model_cache_dir() -> Path:
+    return Path(os.environ.get("RAG_MODEL_CACHE") or (STATE / "models"))
 
 
 @lru_cache(maxsize=1)
 def _model():
     from fastembed import TextEmbedding
-    return TextEmbedding(EMBED_MODEL)
+    cache = model_cache_dir()
+    cache.mkdir(parents=True, exist_ok=True)
+    return TextEmbedding(EMBED_MODEL, cache_dir=str(cache))
 
 
 def _unit(v: np.ndarray) -> np.ndarray:

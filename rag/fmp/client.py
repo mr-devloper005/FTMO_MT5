@@ -140,4 +140,4 @@ class FmpClient:
         path = self.raw_dir / sym / f"{endpoint.replace('/', '_')}__{tag}.json"
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({"endpoint": endpoint, "params": params, "fetched_at": time.time(),
-                                    "url": public_url(endpoint, params), "body": body}))
+                                    "url": public_url(endpoint, params), "body": body}), encoding="utf-8")

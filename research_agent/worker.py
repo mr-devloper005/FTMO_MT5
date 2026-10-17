@@ -28,11 +28,11 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-import signal
+
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional
 
-from research_agent import agent
+from research_agent import agent, oscompat
 from research_agent.config import Settings
 from research_agent.control import (MAX_CONSECUTIVE_FAILURES, STAGE_OF, STAGES, Control, _iso, _parse)
 from research_agent.pipeline import new_run_id
@@ -73,8 +73,7 @@ class Worker:
         if not self.claim():
             return
         loop = asyncio.get_running_loop()
-        for sig in (signal.SIGTERM, signal.SIGINT):
-            loop.add_signal_handler(sig, self._on_signal)
+        oscompat.install_stop_handlers(loop, self._on_signal)   # POSIX signals / Windows Ctrl+C, Ctrl+Break
         try:
             while True:
                 if await self.tick():

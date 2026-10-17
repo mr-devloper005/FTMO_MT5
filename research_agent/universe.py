@@ -88,7 +88,7 @@ def refresh(settings: Settings, text: Optional[str] = None) -> Dict[str, object]
         text = fetch_listing()
     archive = settings.state_dir / "universe"
     archive.mkdir(parents=True, exist_ok=True)
-    (archive / f"nasdaqlisted-{date.today().isoformat()}.txt").write_text(text)
+    (archive / f"nasdaqlisted-{date.today().isoformat()}.txt").write_text(text, encoding="utf-8")
 
     rows = parse_listing(text)
     kept, dropped = common_stocks(rows)

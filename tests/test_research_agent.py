@@ -693,10 +693,37 @@ def test_daily_budget_blocks_new_runs(settings, ctl, monkeypatch):
 
 
 def test_single_worker_instance(settings, ctl):
-    import os as _os
+    import subprocess as _sp
     from research_agent import worker as W
-    ctl.update(pid=_os.getppid(), heartbeat_at=W.now(), status="running")   # a live "other" worker
-    assert W.Worker(settings).claim() is False
+    # a live "other" worker: a real process whose command line names research_agent
+    other = _sp.Popen([sys.executable, "-c", "import time; time.sleep(60)", "research_agent", "worker"])
+    try:
+        ctl.update(pid=other.pid, heartbeat_at=W.now(), status="running")
+        assert W.Worker(settings).claim() is False
+        ctl.update(pid=_unrelated_pid(), heartbeat_at=W.now(), status="running")   # recycled PID: not ours
+        assert W.Worker(settings).claim() is True
+    finally:
+        other.kill()
+        other.wait()
+
+
+def _unrelated_pid() -> int:
+    import subprocess as _sp
+    p = _sp.Popen([sys.executable, "-c", "import time; time.sleep(60)"])
+    _UNRELATED.append(p)
+    return p.pid
+
+
+_UNRELATED: list = []
+
+
+@pytest.fixture(autouse=True)
+def _reap_unrelated():
+    yield
+    while _UNRELATED:
+        p = _UNRELATED.pop()
+        p.kill()
+        p.wait()
 
 
 def test_worker_gets_no_broker_credentials(settings, monkeypatch):
