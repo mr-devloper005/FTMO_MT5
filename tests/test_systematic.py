@@ -6,6 +6,7 @@ real one. Nothing touches a network or a broker.
 import asyncio
 import json
 import subprocess
+import os
 import sys
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -23,6 +24,18 @@ from systematic.trader import Cycle, desired_position
 from systematic.universe import load_watchlist
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def _clean_env():
+    """A minimal environment for a clean child Python. Windows cannot even import asyncio without
+    SYSTEMROOT (WinError 10106), so its essentials are kept; nothing else (no broker keys) is."""
+    env = {"PYTHONPATH": str(REPO)}
+    if os.name == "nt":
+        keep = {"SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "TEMP", "TMP", "PATH", "PATHEXT", "COMSPEC"}
+        env.update({k: v for k, v in os.environ.items() if k.upper() in keep})
+    else:
+        env["PATH"] = "/usr/bin:/bin"
+    return env
 DAY = 86400
 
 
@@ -46,13 +59,13 @@ def test_package_never_loads_a_broker_or_the_live_loop():
         "sys.exit(1 if bad else 0)\n"
     )
     r = subprocess.run([sys.executable, "-c", code], cwd=REPO, capture_output=True, text=True,
-                       env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin"})
+                       env=_clean_env())
     assert r.returncode == 0, f"order-capable modules were imported: {r.stdout} {r.stderr[-400:]}"
 
 
 def test_no_source_file_imports_a_broker():
     for path in (REPO / "systematic").glob("*.py"):
-        for line in path.read_text().splitlines():
+        for line in path.read_text(encoding="utf-8").splitlines():
             s = line.strip()
             if s.startswith(("import ", "from ")):
                 assert not any(f in s for f in FORBIDDEN), f"{path.name}: {s}"
@@ -61,13 +74,13 @@ def test_no_source_file_imports_a_broker():
 # ---------------------------------------------------------------- inputs
 def test_watchlist_parsing(tmp_path):
     f = tmp_path / "w.txt"
-    f.write_text("# team list\nnvda  # from Priya\n\nMSFT\nNVDA\nBRK-B\n")
+    f.write_text("# team list\nnvda  # from Priya\n\nMSFT\nNVDA\nBRK-B\n", encoding="utf-8")
     assert load_watchlist(f) == ["NVDA", "MSFT", "BRK-B"]
 
 
 def test_watchlist_rejects_futures(tmp_path):
     f = tmp_path / "w.txt"
-    f.write_text("AAPL\n/NQ\n")
+    f.write_text("AAPL\n/NQ\n", encoding="utf-8")
     with pytest.raises(ValueError):
         load_watchlist(f)
 
@@ -241,7 +254,7 @@ def test_full_cycle_open_hold_close_through_risk_agent(tmp_path, monkeypatch):
     r3 = asyncio.run(make_cycle(tmp_path, candles, monkeypatch).run(empty))       # demoted -> closed
     assert [a["kind"] for a in r3["actions"]] == ["CLOSE"] and r3["positions"] == {}
 
-    events = (tmp_path / "paper" / "events" / "events.jsonl").read_text().splitlines()
+    events = (tmp_path / "paper" / "events" / "events.jsonl").read_text(encoding="utf-8").splitlines()
     kinds = [json.loads(e)["__type__"] for e in events]
     for k in ("SignalGenerated", "RiskChecked", "OrderFilled", "PositionClosed"):
         assert k in kinds, f"missing {k} in the paper event log"
@@ -253,10 +266,10 @@ def test_breach_halts_flattens_and_stays_halted(tmp_path, monkeypatch):
     asyncio.run(make_cycle(tmp_path, candles, monkeypatch).run(rk))              # open TST
 
     ledger = tmp_path / "paper" / "ledger.json"
-    s = json.loads(ledger.read_text())
+    s = json.loads(ledger.read_text(encoding="utf-8"))
     s["realized_pnl"] = "-11000"                   # past the 10% max-loss limit
     s["positions"]["TST"]["last_price"] = s["positions"]["TST"]["avg_price"]
-    ledger.write_text(json.dumps(s))
+    ledger.write_text(json.dumps(s), encoding="utf-8")
 
     empty = {"generatedAt": rk["generatedAt"], "promoted": []}
     r = asyncio.run(make_cycle(tmp_path, candles, monkeypatch).run(empty))

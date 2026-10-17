@@ -7,12 +7,25 @@ from __future__ import annotations
 
 import math
 import subprocess
+import os
 import sys
 from pathlib import Path
 
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def _clean_env():
+    """A minimal environment for a clean child Python. Windows cannot even import asyncio without
+    SYSTEMROOT (WinError 10106), so its essentials are kept; nothing else (no broker keys) is."""
+    env = {"PYTHONPATH": str(REPO)}
+    if os.name == "nt":
+        keep = {"SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "TEMP", "TMP", "PATH", "PATHEXT", "COMSPEC"}
+        env.update({k: v for k, v in os.environ.items() if k.upper() in keep})
+    else:
+        env["PATH"] = "/usr/bin:/bin"
+    return env
 sys.path.insert(0, str(REPO))
 
 from research_agent import config, universe                        # noqa: E402
@@ -211,7 +224,7 @@ def test_team_specs_load_and_proposals_are_logged(settings):
     ok = catalog.propose(settings, GOOD_SPEC, "Dips inside an uptrend mean-revert faster than trend breaks.")
     again = catalog.propose(settings, GOOD_SPEC, "Same idea proposed twice by the agent in one run.")
     assert ok["accepted"] and not ok["duplicate"] and again["duplicate"]
-    log = [_json.loads(l) for l in settings.strategy_log.read_text().splitlines()]
+    log = [_json.loads(l) for l in settings.strategy_log.read_text(encoding="utf-8").splitlines()]
     assert [e["event"] for e in log] == ["rejected", "accepted", "duplicate"]
     names = catalog.install_all(settings)
     assert ok["name"] in names and len(names) == 3
@@ -323,7 +336,7 @@ def test_leaderboard_ranks_and_exports(settings, tmp_path):
     assert rows[0]["Robustness"] == "MODERATE (60/100)" and rows[0]["Rank"] == 1
     assert len(ranking.leaderboard(settings, best_per_stock=True)) == 2
     out = export.export(settings, rows, ranking.summary(rows))
-    with open(out["csv"]) as fh:
+    with open(out["csv"], encoding="utf-8") as fh:
         got = list(_csv.reader(fh))
     assert got[0][:10] == ["Rank", "Stock", "Strategy", "Timeframe", "Return %", "Buy & Hold %",
                            "Outperformance (pts)", "Robustness", "Verdict", "Reason"]
@@ -349,7 +362,7 @@ def test_import_boundary_in_a_clean_process():
         "import mcp_server.results_index\n"
         "print(json.dumps(sorted(sys.modules)))\n")
     out = subprocess.run([sys.executable, "-c", code], cwd=REPO, capture_output=True, text=True, timeout=120,
-                         env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin"})
+                         env=_clean_env())
     assert out.returncode == 0, out.stderr[-2000:]
     import json as _json
     mods = _json.loads(out.stdout.strip().splitlines()[-1])
@@ -360,7 +373,7 @@ def test_import_boundary_in_a_clean_process():
 def test_no_source_file_names_a_forbidden_module():
     import re as _re
     pat = _re.compile(r"^\s*(from|import)\s+(" + "|".join(_re.escape(f) for f in FORBIDDEN) + r")\b", _re.M)
-    hits = [p.name for p in (REPO / "research_agent").rglob("*.py") if pat.search(p.read_text())]
+    hits = [p.name for p in (REPO / "research_agent").rglob("*.py") if pat.search(p.read_text(encoding="utf-8"))]
     assert not hits, hits
 
 
@@ -734,14 +747,16 @@ def test_worker_gets_no_broker_credentials(settings, monkeypatch):
         def wait(self):
             return 0
     def fake_popen(cmd, **kw):
-        seen.update(cmd=cmd, env=kw["env"], session=kw.get("start_new_session"))
+        seen.update(cmd=cmd, env=kw["env"], session=kw.get("start_new_session"), flags=kw.get("creationflags"))
         return P()
     monkeypatch.setattr(control.subprocess, "Popen", fake_popen)
     monkeypatch.setenv("TASTYTRADE_CLIENT_SECRET", "x")
     monkeypatch.setenv("MT5_PASSWORD", "x")
     monkeypatch.setenv("WEBULL_APP_SECRET", "x")
     control.Control(settings).spawn_worker()
-    assert seen["cmd"][-2:] == ["research_agent", "worker"] and seen["session"] is True
+    assert seen["cmd"][-2:] == ["research_agent", "worker"]
+    # detached from the parent: a new session on POSIX, a new process group without a console on Windows
+    assert bool(seen["flags"]) if os.name == "nt" else seen["session"] is True
     assert not [k for k in seen["env"] if any(w in k for w in ("TASTY", "MT5", "WEBULL", "BROKER", "IB_"))]
     assert seen["env"]["RESEARCH_AGENT_STATE"] == str(settings.state_dir)
 
@@ -778,7 +793,7 @@ def test_ten_timeframes_are_defined_once_and_supported_by_the_lab():
     lit = _re.compile(r"""["'](?:%s)["']""" % "|".join(_re.escape(tf) for tf in windows.TIMEFRAMES))
     files = [p for p in (REPO / "research_agent").rglob("*") if p.suffix in (".py", ".html")
              and "state" not in p.parts and p.name != "config.py"]
-    hits = [f"{p.name}: {m.group(0)}" for p in files for m in lit.finditer(p.read_text())]
+    hits = [f"{p.name}: {m.group(0)}" for p in files for m in lit.finditer(p.read_text(encoding="utf-8"))]
     assert not hits, hits
 
 
