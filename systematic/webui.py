@@ -17,6 +17,7 @@ clearing a halt (which still demands a name and an explicit confirm).
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import threading
@@ -43,7 +44,7 @@ app = FastAPI(title="Systematic paper trading")
 def _safe(path_str: str, must_exist: bool = False) -> Path:
     """Every path the browser sends must stay inside the repo."""
     p = (REPO / path_str).resolve() if not Path(path_str).is_absolute() else Path(path_str).resolve()
-    if not str(p).startswith(str(REPO.resolve())):
+    if not p.is_relative_to(REPO.resolve()):          # a string prefix test also accepts C:\repo2
         raise HTTPException(400, "path must be inside the repo")
     if must_exist and not p.exists():
         raise HTTPException(404, f"not found: {path_str}")
@@ -92,7 +93,7 @@ class Job:
         try:
             proc = subprocess.Popen(
                 self.cmd, cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True, bufsize=1, env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin:/usr/local/bin"})
+                text=True, encoding="utf-8", errors="replace", bufsize=1, env=_child_env())
             for line in proc.stdout:                       # type: ignore[union-attr]
                 self.lines.append(line.rstrip())
             proc.wait()
@@ -111,20 +112,39 @@ class Job:
 JOB = Job()
 PY = [sys.executable]
 
+# Windows needs these for sockets, SSL, temp files and finding programs; without SYSTEMROOT a child
+# Python cannot even open a network connection. Nothing else (no broker credentials) is passed on.
+_WINDOWS_ENV = ("SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PATHEXT", "TEMP", "TMP", "USERPROFILE",
+                "APPDATA", "LOCALAPPDATA", "PROGRAMDATA", "HOMEDRIVE", "HOMEPATH", "NUMBER_OF_PROCESSORS")
+
+
+def _child_env(environ: Optional[Dict[str, str]] = None, windows: Optional[bool] = None) -> Dict[str, str]:
+    """A scrubbed environment for jobs started from the panel: repo on PYTHONPATH, UTF-8 output."""
+    environ = os.environ if environ is None else environ
+    windows = os.name == "nt" if windows is None else windows
+    env = {"PYTHONPATH": str(REPO), "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
+    if windows:
+        upper = {k.upper(): v for k, v in environ.items()}       # Windows names are case-insensitive
+        env.update({k: upper[k] for k in _WINDOWS_ENV if k in upper})
+        env["PATH"] = upper.get("PATH", "")
+    else:
+        env["PATH"] = "/usr/bin:/bin:/usr/local/bin"            # cross-platform: the POSIX branch
+    return env
+
 
 # --------------------------------------------------------------- reading
 def _ledger(state: Path) -> Dict:
     f = state / "paper" / "ledger.json"
     if not f.exists():
         return {}
-    return json.loads(f.read_text())
+    return json.loads(f.read_text(encoding="utf-8"))
 
 
 def _ranking(state: Path) -> Dict:
     f = state / "ranking.json"
     if not f.exists():
         return {}
-    return json.loads(f.read_text())
+    return json.loads(f.read_text(encoding="utf-8"))
 
 
 def _D(v) -> Decimal:
@@ -251,12 +271,12 @@ async def report(state: str, name: str) -> JSONResponse:
     f = _safe(state) / "reports" / name
     if not f.exists():
         raise HTTPException(404, "no such report")
-    return JSONResponse({"name": name, "text": f.read_text()}, headers=NO_CACHE)
+    return JSONResponse({"name": name, "text": f.read_text(encoding="utf-8")}, headers=NO_CACHE)
 
 
 @app.get("/api/watchlist")
 async def get_watchlist(path: str) -> JSONResponse:
-    return JSONResponse({"path": path, "text": _safe(path, must_exist=True).read_text()}, headers=NO_CACHE)
+    return JSONResponse({"path": path, "text": _safe(path, must_exist=True).read_text(encoding="utf-8")}, headers=NO_CACHE)
 
 
 class WatchlistIn(BaseModel):
@@ -270,7 +290,7 @@ async def put_watchlist(body: WatchlistIn) -> JSONResponse:
     if p.suffix != ".txt":
         raise HTTPException(400, "watchlists are .txt files")
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(body.text)
+    p.write_text(body.text, encoding="utf-8")
     # Parse it back so a typo surfaces here, not three minutes into a run.
     from systematic.universe import load_watchlist
     try:
@@ -337,13 +357,13 @@ class SymbolsIn(BaseModel):
 
 
 def _write_symbols(f: Path, syms: List[str], keep_header: str = "") -> None:
-    f.write_text((keep_header + "\n" if keep_header else "") + "\n".join(syms) + "\n")
+    f.write_text((keep_header + "\n" if keep_header else "") + "\n".join(syms) + "\n", encoding="utf-8")
 
 
 def _read_symbols(f: Path) -> tuple:
     """(header comment block, symbols) so edits keep the file's notes."""
     header, syms = [], []
-    for line in f.read_text().splitlines() if f.exists() else []:
+    for line in f.read_text(encoding="utf-8").splitlines() if f.exists() else []:
         t = line.split("#", 1)[0].strip().split()
         if t:
             syms.append(t[0].upper())
@@ -408,7 +428,7 @@ def new_watchlist(body: NewListIn) -> JSONResponse:
     if f.exists():
         raise HTTPException(400, f"{safe_name}.txt already exists")
     f.parent.mkdir(parents=True, exist_ok=True)
-    f.write_text(f"# {body.name.strip()}\n")
+    f.write_text(f"# {body.name.strip()}\n", encoding="utf-8")
     return JSONResponse({"path": str(f.relative_to(REPO))}, headers=NO_CACHE)
 
 

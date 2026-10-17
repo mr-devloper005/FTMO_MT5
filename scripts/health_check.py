@@ -39,18 +39,18 @@ def notify(title: str, message: str) -> None:
 
 def load_prev_state() -> dict:
     try:
-        return json.loads(STATE_FILE.read_text())
+        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
     except Exception:
         return {}
 
 
 def save_state(state: dict) -> None:
-    STATE_FILE.write_text(json.dumps(state))
+    STATE_FILE.write_text(json.dumps(state), encoding="utf-8")
 
 
 def log(line: str) -> None:
     LOG_FILE.parent.mkdir(exist_ok=True)
-    with LOG_FILE.open("a") as f:
+    with LOG_FILE.open("a", encoding="utf-8") as f:
         f.write(line + "\n")
 
 

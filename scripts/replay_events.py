@@ -230,7 +230,7 @@ def validate_event_store(store_dir: str) -> tuple[bool, List[str]]:
 
     for event_file in event_files:
         try:
-            with open(event_file, "r") as f:
+            with open(event_file, "r", encoding="utf-8") as f:
                 for line in f:
                     if not line.strip():
                         continue
@@ -308,7 +308,7 @@ def load_events(
     # Load events
     for event_file in sorted(store_path.glob("*.jsonl")) + sorted(store_path.glob("*.json")):
         try:
-            with open(event_file, "r") as f:
+            with open(event_file, "r", encoding="utf-8") as f:
                 for line in f:
                     if not line.strip():
                         continue
@@ -360,7 +360,7 @@ def export_to_csv(events: List[Dict[str, Any]], output_path: str) -> None:
             fieldnames.update(event.keys())
         fieldnames = sorted(list(fieldnames))
 
-        with open(output_path, "w", newline="") as f:
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(events)
@@ -377,7 +377,7 @@ def export_to_json(events: List[Dict[str, Any]], output_path: str) -> None:
     logger = structlog.get_logger()
 
     try:
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(events, f, indent=2, default=str)
 
         logger.info("events_exported_json", path=output_path, count=len(events))
@@ -441,7 +441,7 @@ def export_to_html(events: List[Dict[str, Any]], output_path: str) -> None:
         </html>
         """
 
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(html)
 
         logger.info("events_exported_html", path=output_path, count=len(events))

@@ -52,14 +52,10 @@ if (-not ($secrets['ANTHROPIC_API_KEY'] -or $secrets['CLAUDE_CODE_OAUTH_TOKEN'])
 
 # ---- 3. Python environment -----------------------------------------------------------------
 if (-not (Test-Path $Python)) {
-    $py = Find-Exe 'py.exe' @('C:\Windows\py.exe')
-    if ($py) { Invoke-Native -Exe $py -Arguments @('-3.12', '-m', 'venv', $VenvDir) | Out-Null }
-    else {
-        $py312 = Find-Exe 'python.exe' @('C:\Program Files\Python312\python.exe')
-        if (-not $py312) { throw 'Python 3.12 not found (01-install-prereqs.ps1)' }
-        Invoke-Native -Exe $py312 -Arguments @('-m', 'venv', $VenvDir) | Out-Null
-    }
-    Write-FtmoLog "created $VenvDir"
+    $py312 = Find-Python312
+    if (-not $py312) { throw 'Python 3.12 not found (01-install-prereqs.ps1, or set FTMO_PYTHON)' }
+    Invoke-Native -Exe $py312 -Arguments @('-m', 'venv', $VenvDir) | Out-Null
+    Write-FtmoLog "created $VenvDir with $py312"
 }
 $lock = Join-Path $AppDir 'deploy\windows\requirements-research.lock.txt'
 $wheels = Join-Path $Transfer 'wheels'

@@ -441,3 +441,22 @@ def clean_env() -> Generator[None, None, None]:
     yield
     os.environ.clear()
     os.environ.update(original_env)
+
+
+# ============================================================================
+# Global state isolation
+# ============================================================================
+
+
+@pytest.fixture(autouse=True)
+def _restore_lab_price_cache():
+    """The research agent points the Lab's loader at a daily cache (systematic.data.use_daily_cache),
+    which is process-global. Put it back after every test so suites can share one pytest process:
+    without this, mcp_server/test_server.py run after tests/test_research_agent.py finds no cached bars."""
+    from ftmo_mt5.lab import windows
+    saved = windows.CACHE
+    yield
+    if windows.CACHE != saved:
+        windows.CACHE = saved
+        with windows._lock:
+            windows._memory.clear()

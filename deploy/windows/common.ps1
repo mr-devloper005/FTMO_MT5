@@ -19,7 +19,7 @@ $EnvFile     = Join-Path $AppDir '.env'                  # research keys only (f
 $ServiceName = 'FTMO-Research'
 $UiPort      = 8602                                      # bound to 127.0.0.1 only
 $HealthUrl   = "http://127.0.0.1:$UiPort/api/research/health"
-$PgService   = 'postgresql-x64-16'
+$PgService   = if ($env:PG_SERVICE) { $env:PG_SERVICE } else { 'postgresql-x64-16' }   # e.g. postgresql-x64-17
 $PgBin       = if ($env:PG_BIN) { $env:PG_BIN } else { 'C:\Program Files\PostgreSQL\16\bin' }
 $ServiceUser = 'ftmo-svc'                                # local, non-admin account the service runs as
 $TaskFolder  = '\FTMO\'
@@ -50,6 +50,29 @@ function Find-Exe {
     $cmd = Get-Command $Name -ErrorAction SilentlyContinue
     if ($cmd) { return $cmd.Source }
     foreach ($g in $Guesses) { if (Test-Path $g) { return $g } }
+    return $null
+}
+
+# A Python 3.12 interpreter: $env:FTMO_PYTHON, then the py launcher, then python.exe on PATH, then the
+# python.org default. Each candidate is asked for its version, so a launcher without 3.12 is skipped.
+function Find-Python312 {
+    $cands = @()
+    if ($env:FTMO_PYTHON) { $cands += $env:FTMO_PYTHON }
+    $py = Find-Exe 'py.exe' @('C:\Windows\py.exe')
+    if ($py) {
+        $ErrorActionPreference = 'Continue'
+        $exe = & $py -3.12 -c 'import sys; print(sys.executable)' 2>$null
+        if ($LASTEXITCODE -eq 0 -and $exe) { $cands += "$exe".Trim() }
+    }
+    $onPath = Find-Exe 'python.exe'
+    if ($onPath) { $cands += $onPath }
+    $cands += 'C:\Program Files\Python312\python.exe'
+    foreach ($c in $cands) {
+        if (-not (Test-Path $c)) { continue }
+        $ErrorActionPreference = 'Continue'
+        $v = & $c -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>$null
+        if ($LASTEXITCODE -eq 0 -and "$v".Trim() -eq '3.12') { return $c }
+    }
     return $null
 }
 

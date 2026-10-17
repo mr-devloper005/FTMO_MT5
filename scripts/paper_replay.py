@@ -98,12 +98,12 @@ def main() -> None:
             elif a["kind"] in ("HALT", "RISK_STATE"):
                 print(f"{day}  {a['kind']}: {a}")
 
-    ledger = json.loads((out / "paper" / "ledger.json").read_text())
+    ledger = json.loads((out / "paper" / "ledger.json").read_text(encoding="utf-8"))
     last = (ledger["equity_history"] or [{}])[-1]
     equity = float(last.get("equity", ledger["initial_capital"]))
     start = float(ledger["initial_capital"])
     events = out / "paper" / "events"
-    n_events = sum(1 for f in events.rglob("*.jsonl") for _ in f.open()) if events.exists() else 0
+    n_events = sum(1 for f in events.rglob("*.jsonl") for _ in f.open(encoding="utf-8")) if events.exists() else 0
     print(f"\n--- replay summary (plumbing check, NOT a forward test) ---")
     print(f"fills {fills} · closes {closes} · rejections {rejects} · stale-signal waits {waits}")
     print(f"closed trades {len(ledger['trades'])} · commissions ${ledger['commissions']}")

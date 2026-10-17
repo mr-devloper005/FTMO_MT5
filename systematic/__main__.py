@@ -37,7 +37,7 @@ def _research(args, settings) -> dict:
     candidates = research.validate_candidates(screened, settings, progress=lambda m: print("  " + m))
     ranking = research.rank(candidates, settings)
     settings.state_dir.mkdir(parents=True, exist_ok=True)
-    (settings.state_dir / "ranking.json").write_text(json.dumps(ranking, indent=2, default=str))
+    (settings.state_dir / "ranking.json").write_text(json.dumps(ranking, indent=2, default=str), encoding="utf-8")
     path = report.write(settings.state_dir, "research", report.research_report(ranking, screened, symbols))
     print(f"\nGrades: {ranking['gradeTally']}")
     print(f"Promoted (floor {ranking['minGrade']}): " +
@@ -69,7 +69,7 @@ def _status(settings) -> None:
     if not ledger.exists():
         print("No paper account yet. Run `research`, then `cycle`.")
         return
-    s = json.loads(ledger.read_text())
+    s = json.loads(ledger.read_text(encoding="utf-8"))
     last = (s["equity_history"] or [{}])[-1]
     print(f"Equity ${last.get('equity', s['initial_capital'])} | risk state {s['risk_state']} | "
           f"{len(s['positions'])} open | {len(s['trades'])} closed trades")

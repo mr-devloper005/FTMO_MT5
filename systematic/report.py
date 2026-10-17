@@ -77,5 +77,5 @@ def write(state_dir: Path, kind: str, text: str) -> Path:
     d.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
     p = d / f"{stamp}-{kind}.md"
-    p.write_text(text)
+    p.write_text(text, encoding="utf-8")
     return p

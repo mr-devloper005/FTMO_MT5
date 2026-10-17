@@ -272,4 +272,4 @@ def load_ranking(state_dir: Path) -> Dict:
     p = Path(state_dir) / "ranking.json"
     if not p.exists():
         raise FileNotFoundError("No ranking yet. Run `python -m systematic research` first.")
-    return json.loads(p.read_text())
+    return json.loads(p.read_text(encoding="utf-8"))
