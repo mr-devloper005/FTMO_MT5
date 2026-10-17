@@ -24,8 +24,12 @@ if (-not $svc) { throw "PostgreSQL service $PgService not found" }
 if ($svc.StartType -ne 'Automatic') { Set-Service -Name $PgService -StartupType Automatic }
 if ($svc.Status -ne 'Running') { Start-Service $PgService }
 
-$sec = Read-Host -AsSecureString "Password of the PostgreSQL superuser 'postgres'"
-$env:PGPASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec))
+if ($env:FTMO_PG_SUPERUSER_PASSWORD) {          # unattended installs (CI rehearsal); never printed
+    $env:PGPASSWORD = $env:FTMO_PG_SUPERUSER_PASSWORD
+} else {
+    $sec = Read-Host -AsSecureString "Password of the PostgreSQL superuser 'postgres'"
+    $env:PGPASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec))
+}
 try {
     $ErrorActionPreference = 'Continue'      # psql NOTICEs on stderr are not failures; exit codes are checked
     # The role password travels in an environment variable read by psql's \getenv, and psql

@@ -183,7 +183,7 @@ def test_extracts_to_ranges_and_approximate_guides():
 
 def test_load_transcript_accepts_a_saved_fmp_response(tmp_path):
     f = tmp_path / "t.json"
-    f.write_text('[{"symbol": "MU", "period": "Q4", "year": 2024, "date": "2024-09-25", "content": "%s"}]' % CALL)
+    f.write_text('[{"symbol": "MU", "period": "Q4", "year": 2024, "date": "2024-09-25", "content": "%s"}]' % CALL, encoding="utf-8")
     t = mcs_extract.load_transcript(f)
     draft = mcs_extract.draft_period(t, "FQ1 FY25")
     assert draft["guided_on"] == "2024-09-25" and {i["metric"] for i in draft["items"]} >= {"revenue", "eps"}

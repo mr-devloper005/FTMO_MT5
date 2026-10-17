@@ -22,7 +22,7 @@ def load_env():
     env_path = Path(__file__).parent.parent / ".env"
     if not env_path.exists():
         return False
-    with open(env_path) as f:
+    with open(env_path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
@@ -55,7 +55,7 @@ def validate_config():
         print(f"  FAIL: Config file not found: {config_path}")
         return False
 
-    with open(config_path) as f:
+    with open(config_path, encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
     ftmo = cfg.get("ftmo", {})

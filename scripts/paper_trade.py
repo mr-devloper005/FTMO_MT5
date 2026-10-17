@@ -359,7 +359,7 @@ def _generate_html_report(results: dict, output_path: str) -> None:
     </html>
     """
 
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
 
@@ -367,7 +367,7 @@ def _generate_csv_report(results: dict, output_path: str) -> None:
     """Generate CSV report."""
     import csv
 
-    with open(output_path, "w", newline="") as f:
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["Metric", "Value"])
 

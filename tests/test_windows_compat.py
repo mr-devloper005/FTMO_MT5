@@ -60,6 +60,8 @@ def _text_io_without_encoding(path: Path):
                 mode_node = args[1] if len(args) > 1 else None
             else:                                               # Path.open(mode)
                 mode_node = args[0] if args else None
+            if isinstance(f, ast.Attribute) and len(args) > 3:  # not a file open: e.g. PaperBroker.open(symbol, side, …)
+                continue
             mode_node = next((k.value for k in node.keywords if k.arg == "mode"), mode_node)
             mode = mode_node.value if isinstance(mode_node, ast.Constant) else "r"
             if isinstance(mode, str) and "b" not in mode:
@@ -88,6 +90,63 @@ def test_no_posix_only_calls_outside_the_compat_layer():
             if POSIX_ONLY.search(code) and "cross-platform" not in note:     # a reviewed per-OS list
                 hits.append(f"{p.relative_to(REPO)}:{i}: {line.strip()}")
     assert not hits, "POSIX-only calls (use research_agent.oscompat): " + "; ".join(hits)
+
+
+# The rest of what can run on the Windows PC: the systematic paper pipeline and the operator scripts.
+EXTENDED_DIRS = ["systematic", "scripts"]
+
+
+def extended_sources():
+    return [p for d in EXTENDED_DIRS for p in (REPO / d).rglob("*.py")
+            if "state" not in p.parts and not p.name.startswith("state")]
+
+
+def _docstring_lines(tree: ast.AST) -> set:
+    lines = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.body:
+            first = node.body[0]
+            if isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant) and isinstance(first.value.value, str):
+                lines.update(range(first.lineno, first.end_lineno + 1))
+    return lines
+
+
+def test_systematic_and_scripts_name_utf8_for_text_io():
+    offenders = {str(p.relative_to(REPO)): _text_io_without_encoding(p) for p in extended_sources()}
+    offenders = {k: v for k, v in offenders.items() if v}
+    assert not offenders, f"text I/O without encoding= (cp1252 on Windows): {offenders}"
+
+
+def test_systematic_and_scripts_have_no_posix_only_code():
+    """Usage examples in docstrings may say venv/bin/python3; code may not."""
+    hits = []
+    for p in extended_sources():
+        text = p.read_text(encoding="utf-8")
+        docs = _docstring_lines(ast.parse(text))
+        for i, line in enumerate(text.splitlines(), 1):
+            code, _, note = line.partition("#")
+            if i not in docs and POSIX_ONLY.search(code) and "cross-platform" not in note:
+                hits.append(f"{p.relative_to(REPO)}:{i}: {line.strip()}")
+    assert not hits, "POSIX-only code: " + "; ".join(hits)
+
+
+def test_systematic_panel_jobs_get_a_working_windows_environment():
+    from systematic import webui
+    env = webui._child_env({"SystemRoot": r"C:\Windows", "Path": r"C:\Python312;C:\Windows", "TEMP": r"C:\T",
+                            "TT_PASSWORD": "secret", "MT5_PASSWORD": "secret"}, windows=True)
+    assert env["SYSTEMROOT"] == r"C:\Windows" and env["PATH"] == r"C:\Python312;C:\Windows" and env["TEMP"] == r"C:\T"
+    assert env["PYTHONUTF8"] == "1" and not any(k.startswith(("TT_", "MT5_")) for k in env)
+    posix = webui._child_env({"TT_PASSWORD": "x"}, windows=False)
+    assert posix["PATH"].startswith("/usr/bin") and "TT_PASSWORD" not in posix
+
+
+def test_systematic_panel_path_guard_rejects_sibling_folders():
+    from fastapi import HTTPException
+    from systematic import webui
+    sibling = webui.REPO.resolve().parent / (webui.REPO.resolve().name + "2") / "x.txt"
+    with pytest.raises(HTTPException):
+        webui._safe(str(sibling))
+    assert webui._safe("systematic/watchlist.txt").name == "watchlist.txt"
 
 
 # ------------------------------------------------------------------ the process-control layer

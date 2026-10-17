@@ -26,7 +26,7 @@ def load_watchlist(path: Path = DEFAULT_WATCHLIST) -> List[str]:
         raise FileNotFoundError(f"Watchlist not found: {p}")
     symbols: List[str] = []
     bad: List[str] = []
-    for line in p.read_text().splitlines():
+    for line in p.read_text(encoding="utf-8").splitlines():
         token = line.split("#", 1)[0].strip().split()
         if not token:
             continue

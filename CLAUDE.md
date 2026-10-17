@@ -67,6 +67,8 @@ study/lab/      ad-hoc research scripts + cached Yahoo data + results_index.db
 .claude/skills/ 6 project skills (lab-research, add-strategy, start-terminal, add-broker, manager-report, cross-review)
 ```
 
+**On the Windows research PC?** Follow `deploy/windows/SETUP_WITH_CLAUDE_CODE.md`. That PC runs the research side only (dashboard + worker on 127.0.0.1:8602, RAG, MCS); never the broker hub, the MT5 bridge or `ftmo_mt5.main`, and never broker credentials.
+
 **Ignore `_archive/`.** It holds the retired `src/nehanth` package. Earlier versions of this file pointed at it; that was wrong. `pyproject.toml`'s console script still names `nehanth.main:main` and is **broken** — run `python -m ftmo_mt5.main` instead.
 
 ---

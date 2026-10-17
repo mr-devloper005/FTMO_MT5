@@ -69,7 +69,7 @@ class PaperBroker:
         self.slippage_ticks = D(slippage_ticks)
         self.margin_rate = D(margin_rate)
         if self.path.exists():
-            self.state = json.loads(self.path.read_text())
+            self.state = json.loads(self.path.read_text(encoding="utf-8"))
         else:
             self.state = {
                 "initial_capital": str(D(initial_capital)),
@@ -84,7 +84,7 @@ class PaperBroker:
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(self.state, indent=2))
+        tmp.write_text(json.dumps(self.state, indent=2), encoding="utf-8")
         os.replace(tmp, self.path)
 
     # ---------------- state ----------------

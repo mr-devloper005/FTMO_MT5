@@ -7,9 +7,14 @@ embedding model), plus scheduled health checks, nightly backups and daily mainte
 What does **not** run on the PC: the broker hub (:8600), the MT5 bridge, any broker credentials.
 Nothing here can place an order.
 
-> Status: scripts are prepared and tested on macOS (see the end of this file). **Nothing has been
-> deployed to the Windows PC yet.** Items that can only be proven on Windows are listed in
-> [WINDOWS_VERIFICATION.md](WINDOWS_VERIFICATION.md).
+> Status: scripts are prepared and tested on macOS and on GitHub's Windows runner
+> (`.github/workflows/windows.yml`: test suites plus a full install rehearsal of steps 02-05).
+> **Nothing has been deployed to the Windows PC yet.** Items that can only be proven on the PC are
+> listed in [WINDOWS_VERIFICATION.md](WINDOWS_VERIFICATION.md).
+>
+> Two install routes: **A** from a Mac transfer folder (below; works without GitHub on the PC), or
+> **B** from a GitHub clone with Claude Code on the PC doing the work: see
+> [SETUP_WITH_CLAUDE_CODE.md](SETUP_WITH_CLAUDE_CODE.md).
 
 ## Layout on the PC
 
